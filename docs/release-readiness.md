@@ -1,6 +1,6 @@
 # Release Readiness
 
-Release readiness validates package artifacts before any publish process exists. It is intentionally a review flow only: it does not publish to NuGet.org or any other registry.
+Release readiness validates package artifacts before publication. The standard local helper flow remains review-only, while the dedicated release workflow handles secure publication controls.
 
 ## Local validation flow
 
@@ -58,8 +58,10 @@ The release workflow in `.github/workflows/release.yml` adds secure-release cont
 
 - dependency vulnerability gate (`dotnet list ... --vulnerable --include-transitive --format json` + `eng/check-vulnerabilities.py`);
 - CycloneDX SBOM generation to `artifacts/sbom/StateMachineLibrary.cdx.json`;
-- provenance attestation for package and SBOM artifacts via `actions/attest-build-provenance`;
-- gated NuGet publication through protected `nuget-prod` environment approval and environment-scoped `NUGET_API_KEY` secret.
+- author signing of `.nupkg` artifacts via `dotnet nuget sign` using environment-scoped signing certificate secrets (`NUGET_SIGN_CERT_PFX_B64`, `NUGET_SIGN_CERT_PASSWORD`) and RFC3161 timestamping;
+- signature verification of signed `.nupkg` artifacts via `dotnet nuget verify --all`;
+- provenance attestation for signed package and SBOM artifacts via `actions/attest-build-provenance`;
+- gated NuGet publication through protected `nuget-prod` environment approval and environment-scoped secrets.
 
 ## Graph rendering feature notes
 

@@ -20,8 +20,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      id-token: write
-      attestations: write
     steps:
       - uses: actions/checkout@v4
 
@@ -56,16 +54,6 @@ jobs:
       - name: generate cyclonedx sbom
         run: dotnet CycloneDX StateMachineLibrary.sln --configuration Release --exclude-test-projects --output-format Json --output artifacts/sbom --filename StateMachineLibrary.cdx.json
 
-      - name: attest nuget packages provenance
-        uses: actions/attest-build-provenance@v2
-        with:
-          subject-path: artifacts/packages/*
-
-      - name: attest sbom provenance
-        uses: actions/attest-build-provenance@v2
-        with:
-          subject-path: artifacts/sbom/StateMachineLibrary.cdx.json
-
       - name: upload package artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -87,6 +75,8 @@ jobs:
     environment: nuget-prod
     permissions:
       contents: read
+      id-token: write
+      attestations: write
     steps:
       - uses: actions/setup-dotnet@v4
         with:
@@ -97,6 +87,88 @@ jobs:
         with:
           name: nuget-release-candidates
           path: artifacts/packages
+
+      - name: download security artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: security-supply-chain-evidence
+          path: artifacts
+
+      - name: validate signing and publish secrets
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+          NUGET_SIGN_CERT_PFX_B64: ${{ secrets.NUGET_SIGN_CERT_PFX_B64 }}
+          NUGET_SIGN_CERT_PASSWORD: ${{ secrets.NUGET_SIGN_CERT_PASSWORD }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "${NUGET_API_KEY:-}" ]; then
+            echo "NUGET_API_KEY is required in nuget-prod environment" >&2
+            exit 1
+          fi
+
+          if [ -z "${NUGET_SIGN_CERT_PFX_B64:-}" ]; then
+            echo "NUGET_SIGN_CERT_PFX_B64 is required in nuget-prod environment" >&2
+            exit 1
+          fi
+
+          if [ -z "${NUGET_SIGN_CERT_PASSWORD:-}" ]; then
+            echo "NUGET_SIGN_CERT_PASSWORD is required in nuget-prod environment" >&2
+            exit 1
+          fi
+
+      - name: author-sign packages
+        env:
+          NUGET_SIGN_CERT_PFX_B64: ${{ secrets.NUGET_SIGN_CERT_PFX_B64 }}
+          NUGET_SIGN_CERT_PASSWORD: ${{ secrets.NUGET_SIGN_CERT_PASSWORD }}
+          NUGET_TIMESTAMP_URL: ${{ secrets.NUGET_TIMESTAMP_URL }}
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+
+          nupkgs=(artifacts/packages/*.nupkg)
+          if [ ${#nupkgs[@]} -eq 0 ]; then
+            echo "No .nupkg files found to sign" >&2
+            exit 1
+          fi
+
+          cert_path="$(mktemp -u).pfx"
+          trap 'rm -f "$cert_path"' EXIT
+
+          umask 077
+          echo "$NUGET_SIGN_CERT_PFX_B64" | base64 --decode > "$cert_path"
+
+          timestamp_url="${NUGET_TIMESTAMP_URL:-http://timestamp.digicert.com}"
+          dotnet nuget sign "${nupkgs[@]}" \
+            --certificate-path "$cert_path" \
+            --certificate-password "$NUGET_SIGN_CERT_PASSWORD" \
+            --timestamper "$timestamp_url" \
+            --hash-algorithm SHA256 \
+            --timestamp-hash-algorithm SHA256 \
+            --overwrite
+
+      - name: verify signed packages
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+
+          nupkgs=(artifacts/packages/*.nupkg)
+          if [ ${#nupkgs[@]} -eq 0 ]; then
+            echo "No .nupkg files found to verify" >&2
+            exit 1
+          fi
+
+          dotnet nuget verify --all "${nupkgs[@]}"
+
+      - name: attest signed nuget packages provenance
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: artifacts/packages/*
+
+      - name: attest sbom provenance
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: artifacts/sbom/StateMachineLibrary.cdx.json
 
       - name: publish packages to nuget
         env:

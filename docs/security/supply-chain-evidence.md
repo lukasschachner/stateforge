@@ -29,12 +29,11 @@
 - Targeted SLSA level: L1 minimum where feasible for release candidates; aim for L2+ over time.
 - Build platform and isolation: GitHub Actions hosted runners via `.github/workflows/ci.yml` (readiness) and `.github/workflows/release.yml` (release pipeline).
 - Provenance generation tool and storage location: `actions/attest-build-provenance@v2` in release workflow for package and SBOM artifacts.
-- Signing and verification approach: Not configured yet.
+- Signing and verification approach: Author signing in release workflow via `dotnet nuget sign` with protected environment secrets and timestamping; signature verification enforced via `dotnet nuget verify --all`.
 - Gaps to next level and planned mitigations:
-  - Add provenance/attestation generation for package artifacts.
-  - Decide artifact signing strategy.
+  - Operate signing certificate lifecycle controls (rotation/revocation/recovery) with documented runbooks.
   - Consider pinning GitHub Actions to immutable SHAs for release workflows.
-  - Add SBOM generation and retention.
+  - Add external publication/retention process for SBOM and VEX artifacts.
 
 ## OpenSSF Scorecard
 
@@ -45,7 +44,7 @@
 ## Build and Distribution Integrity
 
 - CI build provenance recorded: Partial in CI; release workflow generates attestations for artifacts.
-- Release artefacts signed: Not configured.
+- Release artefacts signed: Configured in release workflow for `.nupkg` artifacts before publication.
 - Distribution channel verified (registry, store, internal mirror): Release workflow supports NuGet publication through protected `nuget-prod` environment approval and environment-scoped secret.
 
 ## Cross-References
@@ -56,8 +55,8 @@
 
 ## Follow-Up
 
-- Open risks: release artifact signing and immutable action SHA pinning are not yet implemented; VEX records must be produced per public release.
-- Required mitigations and owners: Maintainers should issue per-release VEX statements, decide signing strategy, optionally add OpenSSF Scorecard automation, and evaluate SHA-pinning for release-critical workflows before broad public package publication.
+- Open risks: immutable action SHA pinning is not yet implemented; VEX records must be produced per public release; signing certificate operational controls must be maintained.
+- Required mitigations and owners: Maintainers should issue per-release VEX statements, operate certificate lifecycle controls, optionally add OpenSSF Scorecard automation, and evaluate SHA-pinning for release-critical workflows before broad public package publication.
 - Re-evaluation trigger: public release candidate, package publication workflow, dependency changes, supply-chain incident, or repository visibility change.
 
 ## Feature Evidence: Completion Transitions (2026-05-12)

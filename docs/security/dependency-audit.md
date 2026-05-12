@@ -54,9 +54,9 @@ Static dependency audits are supplementary, not a replacement for continuous mon
 
 - Open risks:
   - VEX records and advisory triage cadence are not yet populated for a real public release.
-  - Release artifact signing policy/implementation is not configured.
+  - Signing certificate lifecycle/rotation and secure recovery process must be operated and periodically tested.
   - GitHub Actions are version-pinned by major version, not immutable SHA.
-- Required mitigations and owners: Maintainers should operate VEX issuance per release, decide signing strategy, and consider SHA-pinning release-critical GitHub Actions before public package publication.
+- Required mitigations and owners: Maintainers should operate VEX issuance per release, maintain certificate lifecycle controls, and consider SHA-pinning release-critical GitHub Actions before public package publication.
 - Next audit trigger: dependency change, release workflow change, public NuGet release candidate, or security advisory affecting .NET/Roslyn/test/build dependencies.
 
 ## Feature Audit: Completion Transitions (2026-05-12)

@@ -59,8 +59,8 @@
 
 ## Follow-Up
 
-- Open findings: Per-release VEX records and release artifact signing are not yet implemented; OpenSSF Scorecard review is not yet automated.
-- Required mitigations and owners: Maintainers should issue VEX statements each public release, finalize signing policy, and continue release security tasks in package-affecting specs before public package publication.
+- Open findings: Per-release VEX records are not yet implemented; signing certificate lifecycle controls and OpenSSF Scorecard review are not yet automated.
+- Required mitigations and owners: Maintainers should issue VEX statements each public release, operate certificate lifecycle controls, and continue release security tasks in package-affecting specs before public package publication.
 - Re-review trigger: dependency additions, package/publication workflow changes, new HTTP/API/auth features, new serialization/storage providers, telemetry exporter changes, or public release readiness review.
 
 ## Feature Review: Completion Transitions (2026-05-12)
