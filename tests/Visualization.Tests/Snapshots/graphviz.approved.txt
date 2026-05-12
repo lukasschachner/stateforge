@@ -1,0 +1,11 @@
+digraph "Order flow" {
+  rankdir=LR;
+  "n_73746174652D63616E63656C6C6564" [label="Cancelled", shape=doublecircle];
+  "n_73746174652D63726561746564" [label="Created", shape=circle];
+  "n_73746174652D70616964" [label="Paid", shape=circle];
+  "n_73746174652D73686970706564" [label="Shipped", shape=doublecircle];
+  "n_73746174652D63726561746564" -> "n_73746174652D63616E63656C6C6564" [label="Cancel"];
+  "n_73746174652D63726561746564" -> "n_73746174652D70616964" [label="Pay"];
+  "n_73746174652D70616964" -> "n_73746174652D63616E63656C6C6564" [label="Cancel"];
+  "n_73746174652D70616964" -> "n_73746174652D73686970706564" [label="Ship"];
+}

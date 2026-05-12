@@ -1,0 +1,13 @@
+# Public API snapshot for Visualization.PlantUML
+class StateMachineLibrary.Visualization.PlantUML.PlantUmlPublicApi
+  ctor ()
+
+static class StateMachineLibrary.Visualization.PlantUML.Rendering.PlantUmlGraphRenderer
+  method System.String Render<TState, TEvent>(DefinitionGraph<TState, TEvent> graph, StateMachineLibrary.Visualization.PlantUML.Rendering.PlantUmlRenderOptions options)
+
+class StateMachineLibrary.Visualization.PlantUML.Rendering.PlantUmlRenderOptions
+  ctor ()
+  property System.Boolean IncludeMetadata {get;set;}
+  property System.String DiagramTitle {get;set;}
+  property System.String Indentation {get;set;}
+  property System.String NewLine {get;set;}

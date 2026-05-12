@@ -1,0 +1,29 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  release-readiness:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: restore
+        run: dotnet restore StateMachineLibrary.sln
+      - name: build
+        run: dotnet build StateMachineLibrary.sln --configuration Release --no-restore
+      - name: test
+        run: dotnet test StateMachineLibrary.sln --configuration Release --no-build
+      - name: format
+        run: dotnet format StateMachineLibrary.sln --verify-no-changes
+      - name: pack
+        run: dotnet pack StateMachineLibrary.sln --configuration Release --no-build --output artifacts/packages
+      - name: upload package artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuget-release-candidates
+          path: artifacts/packages/*

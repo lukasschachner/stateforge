@@ -1,0 +1,38 @@
+# Public API snapshot for OpenTelemetry
+class StateMachineLibrary.OpenTelemetry.OpenTelemetryPublicApi
+  ctor ()
+
+static class StateMachineLibrary.OpenTelemetry.StateMachineTelemetryNames
+  field System.String ActivitySourceName
+  field System.String AttemptIdAttribute
+  field System.String CommittedAttribute
+  field System.String ErrorMessageAttribute
+  field System.String ErrorTypeAttribute
+  field System.String EventAttribute
+  field System.String EventTypeAttribute
+  field System.String LifecyclePhaseAttribute
+  field System.String MachineNameAttribute
+  field System.String MeterName
+  field System.String OutcomeAttribute
+  field System.String ResultingStateAttribute
+  field System.String SourceStateAttribute
+  field System.String TargetStateAttribute
+  field System.String TransitionActivityName
+  field System.String TransitionAttemptsInstrumentName
+  field System.String TransitionDurationInstrumentName
+  field System.String TransitionKindAttribute
+
+class StateMachineLibrary.OpenTelemetry.StateMachineTelemetryObserver<TState, TEvent> : ITransitionObserver<TState, TEvent>, System.IDisposable
+  ctor ()
+  ctor (StateMachineLibrary.OpenTelemetry.StateMachineTelemetryOptions options)
+  method System.Threading.Tasks.ValueTask ObserveAsync(TransitionObservation<TState, TEvent> observation, System.Threading.CancellationToken cancellationToken)
+  method System.Void Dispose()
+
+class StateMachineLibrary.OpenTelemetry.StateMachineTelemetryOptions
+  ctor ()
+  property System.Boolean RecordExceptionDetails {get;set;}
+  property System.Func<System.Object, System.String> EventFormatter {get;set;}
+  property System.Func<System.Object, System.String> StateFormatter {get;set;}
+  property System.String ActivitySourceName {get;set;}
+  property System.String InstrumentationVersion {get;set;}
+  property System.String MeterName {get;set;}

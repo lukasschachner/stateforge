@@ -1,0 +1,12 @@
+using StateMachineLibrary.SourceGenerators.Declarations;
+
+namespace StateMachineLibrary.SourceGenerators.Emission;
+
+public static class MetadataEmitter
+{
+    public static string Emit(IEnumerable<MetadataEntry> metadata)
+    {
+        return string.Concat(metadata.Select(m =>
+            ".WithMetadata(" + ConditionReferenceEmitter.Literal(m.Key) + ", " + m.ValueExpression + ")"));
+    }
+}

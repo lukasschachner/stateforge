@@ -1,0 +1,13 @@
+# Public API snapshot for Visualization.Graphviz
+class StateMachineLibrary.Visualization.Graphviz.GraphvizPublicApi
+  ctor ()
+
+static class StateMachineLibrary.Visualization.Graphviz.Rendering.GraphvizDotRenderer
+  method System.String Render<TState, TEvent>(DefinitionGraph<TState, TEvent> graph, StateMachineLibrary.Visualization.Graphviz.Rendering.GraphvizRenderOptions options)
+
+class StateMachineLibrary.Visualization.Graphviz.Rendering.GraphvizRenderOptions
+  ctor ()
+  property System.Boolean IncludeMetadata {get;set;}
+  property System.String DiagramTitle {get;set;}
+  property System.String Indentation {get;set;}
+  property System.String NewLine {get;set;}

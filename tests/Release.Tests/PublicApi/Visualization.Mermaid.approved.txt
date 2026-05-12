@@ -1,0 +1,13 @@
+# Public API snapshot for Visualization.Mermaid
+class StateMachineLibrary.Visualization.Mermaid.MermaidPublicApi
+  ctor ()
+
+static class StateMachineLibrary.Visualization.Mermaid.Rendering.MermaidGraphRenderer
+  method System.String Render<TState, TEvent>(DefinitionGraph<TState, TEvent> graph, StateMachineLibrary.Visualization.Mermaid.Rendering.MermaidRenderOptions options)
+
+class StateMachineLibrary.Visualization.Mermaid.Rendering.MermaidRenderOptions
+  ctor ()
+  property System.Boolean IncludeMetadata {get;set;}
+  property System.String DiagramTitle {get;set;}
+  property System.String Indentation {get;set;}
+  property System.String NewLine {get;set;}

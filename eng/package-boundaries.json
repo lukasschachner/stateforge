@@ -1,0 +1,219 @@
+{
+  "packages": [
+    {
+      "packageId": "StateMachineLibrary.Core",
+      "allowedDependencies": [],
+      "forbiddenDependencyPatterns": [
+        "Hosting",
+        "Logging",
+        "DependencyInjection",
+        "System.Text.Json",
+        "Newtonsoft",
+        "EntityFramework",
+        "Sql",
+        "Npgsql",
+        "Mongo",
+        "Visualization",
+        "Graphviz",
+        "PlantUML",
+        "SourceGenerators",
+        "Persistence",
+        "OpenTelemetry"
+      ],
+      "forbiddenFilePatterns": [
+        ".git/",
+        ".github/",
+        ".idea/",
+        "obj/",
+        "tests/",
+        "samples/",
+        "specs/",
+        "StateMachineLibrary.sln"
+      ],
+      "analyzerAssetsRequired": false
+    },
+    {
+      "packageId": "StateMachineLibrary.SourceGenerators",
+      "allowedDependencies": [
+        "Microsoft.CodeAnalysis.CSharp private build-time asset"
+      ],
+      "forbiddenDependencyPatterns": [
+        "StateMachineLibrary.Persistence",
+        "StateMachineLibrary.OpenTelemetry",
+        "StateMachineLibrary.Visualization"
+      ],
+      "forbiddenFilePatterns": [
+        ".git/",
+        ".github/",
+        ".idea/",
+        "obj/",
+        "tests/",
+        "samples/",
+        "specs/",
+        "StateMachineLibrary.sln"
+      ],
+      "analyzerAssetsRequired": true
+    },
+    {
+      "packageId": "StateMachineLibrary.Persistence",
+      "allowedDependencies": [
+        "StateMachineLibrary.Core"
+      ],
+      "forbiddenDependencyPatterns": [
+        "Hosting",
+        "Logging",
+        "DependencyInjection",
+        "System.Text.Json",
+        "Newtonsoft",
+        "EntityFramework",
+        "Sql",
+        "Npgsql",
+        "Mongo",
+        "Visualization",
+        "Graphviz",
+        "PlantUML",
+        "OpenTelemetry"
+      ],
+      "forbiddenFilePatterns": [
+        ".git/",
+        ".github/",
+        ".idea/",
+        "obj/",
+        "tests/",
+        "samples/",
+        "specs/",
+        "StateMachineLibrary.sln"
+      ],
+      "analyzerAssetsRequired": false
+    },
+    {
+      "packageId": "StateMachineLibrary.OpenTelemetry",
+      "allowedDependencies": [
+        "StateMachineLibrary.Core"
+      ],
+      "forbiddenDependencyPatterns": [
+        "Hosting",
+        "Logging",
+        "DependencyInjection",
+        "OpenTelemetry.Exporter",
+        "EntityFramework",
+        "Sql",
+        "Npgsql",
+        "Mongo",
+        "Visualization",
+        "Graphviz",
+        "PlantUML"
+      ],
+      "forbiddenFilePatterns": [
+        ".git/",
+        ".github/",
+        ".idea/",
+        "obj/",
+        "tests/",
+        "samples/",
+        "specs/",
+        "StateMachineLibrary.sln"
+      ],
+      "analyzerAssetsRequired": false
+    },
+    {
+      "packageId": "StateMachineLibrary.Visualization.Mermaid",
+      "allowedDependencies": [
+        "StateMachineLibrary.Core"
+      ],
+      "forbiddenDependencyPatterns": [
+        "Hosting",
+        "Logging",
+        "DependencyInjection",
+        "System.Text.Json",
+        "Newtonsoft",
+        "EntityFramework",
+        "Sql",
+        "Npgsql",
+        "Mongo",
+        "OpenTelemetry",
+        "Persistence",
+        "SourceGenerators",
+        "Visualization.Graphviz",
+        "Visualization.PlantUML"
+      ],
+      "forbiddenFilePatterns": [
+        ".git/",
+        ".github/",
+        ".idea/",
+        "obj/",
+        "tests/",
+        "samples/",
+        "specs/",
+        "StateMachineLibrary.sln"
+      ],
+      "analyzerAssetsRequired": false
+    },
+    {
+      "packageId": "StateMachineLibrary.Visualization.Graphviz",
+      "allowedDependencies": [
+        "StateMachineLibrary.Core"
+      ],
+      "forbiddenDependencyPatterns": [
+        "Hosting",
+        "Logging",
+        "DependencyInjection",
+        "System.Text.Json",
+        "Newtonsoft",
+        "EntityFramework",
+        "Sql",
+        "Npgsql",
+        "Mongo",
+        "OpenTelemetry",
+        "Persistence",
+        "SourceGenerators",
+        "Visualization.Mermaid",
+        "Visualization.PlantUML"
+      ],
+      "forbiddenFilePatterns": [
+        ".git/",
+        ".github/",
+        ".idea/",
+        "obj/",
+        "tests/",
+        "samples/",
+        "specs/",
+        "StateMachineLibrary.sln"
+      ],
+      "analyzerAssetsRequired": false
+    },
+    {
+      "packageId": "StateMachineLibrary.Visualization.PlantUML",
+      "allowedDependencies": [
+        "StateMachineLibrary.Core"
+      ],
+      "forbiddenDependencyPatterns": [
+        "Hosting",
+        "Logging",
+        "DependencyInjection",
+        "System.Text.Json",
+        "Newtonsoft",
+        "EntityFramework",
+        "Sql",
+        "Npgsql",
+        "Mongo",
+        "OpenTelemetry",
+        "Persistence",
+        "SourceGenerators",
+        "Visualization.Mermaid",
+        "Visualization.Graphviz"
+      ],
+      "forbiddenFilePatterns": [
+        ".git/",
+        ".github/",
+        ".idea/",
+        "obj/",
+        "tests/",
+        "samples/",
+        "specs/",
+        "StateMachineLibrary.sln"
+      ],
+      "analyzerAssetsRequired": false
+    }
+  ]
+}

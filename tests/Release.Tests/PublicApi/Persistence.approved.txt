@@ -1,0 +1,213 @@
+# Public API snapshot for Persistence
+class StateMachineLibrary.Persistence.Diagnostics.PersistenceDiagnostics
+  ctor (System.String summary, System.String code, System.Exception exception, System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Persistence.Snapshots.SnapshotValidationIssue> validationIssues, System.String affectedElement)
+  property StateMachineLibrary.Persistence.Diagnostics.PersistenceDiagnostics None {get;}
+  property System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Persistence.Snapshots.SnapshotValidationIssue> ValidationIssues {get;}
+  property System.Exception Exception {get;}
+  property System.String AffectedElement {get;}
+  property System.String Code {get;}
+  property System.String Summary {get;}
+
+static class StateMachineLibrary.Persistence.Execution.PersistentStateLoader
+  method ValueTask<SnapshotLoadResult<TState>> ReloadAsync<TState, TEvent>(StateMachineDefinition<TState, TEvent> definition, System.String instanceId, IStateSnapshotStore<TState> store, System.Threading.CancellationToken cancellationToken)
+
+class StateMachineLibrary.Persistence.Execution.PersistentStateMachineRuntime<TState, TEvent> : System.IAsyncDisposable
+  property IStateSnapshotStore<TState> Store {get;}
+  property StateMachineDefinition<TState, TEvent> Definition {get;}
+  property StateMachineLibrary.Core.Execution.ConcurrencyMode ConcurrencyMode {get;}
+  property System.String InstanceId {get;}
+  method StateMachineLibrary.Persistence.Execution.PersistentStateMachineRuntime<TState, TEvent> Create(StateMachineDefinition<TState, TEvent> definition, System.String instanceId, IStateSnapshotStore<TState> store, StateMachineLibrary.Core.Execution.ConcurrencyMode concurrencyMode, ITransitionPersistenceObserver<TState, TEvent> observer)
+  method System.Threading.Tasks.ValueTask DisposeAsync()
+  method ValueTask<TransitionPersistenceOutcome<TState, TEvent>> ApplyAndPersistAsync(TEvent event, System.Threading.CancellationToken cancellationToken)
+
+enum StateMachineLibrary.Persistence.Execution.TransitionPersistenceCategory : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  field StateMachineLibrary.Persistence.Execution.TransitionPersistenceCategory Cancelled
+  field StateMachineLibrary.Persistence.Execution.TransitionPersistenceCategory ConcurrentStateChange
+  field StateMachineLibrary.Persistence.Execution.TransitionPersistenceCategory InvalidSnapshot
+  field StateMachineLibrary.Persistence.Execution.TransitionPersistenceCategory MissingSnapshot
+  field StateMachineLibrary.Persistence.Execution.TransitionPersistenceCategory NotAttempted
+  field StateMachineLibrary.Persistence.Execution.TransitionPersistenceCategory ObservationFailure
+  field StateMachineLibrary.Persistence.Execution.TransitionPersistenceCategory ObservedOnly
+  field StateMachineLibrary.Persistence.Execution.TransitionPersistenceCategory Persisted
+  field StateMachineLibrary.Persistence.Execution.TransitionPersistenceCategory StorageFailure
+  enum Cancelled
+  enum ConcurrentStateChange
+  enum InvalidSnapshot
+  enum MissingSnapshot
+  enum NotAttempted
+  enum ObservationFailure
+  enum ObservedOnly
+  enum Persisted
+  enum StorageFailure
+
+class StateMachineLibrary.Persistence.Execution.TransitionPersistenceOutcome<TState, TEvent>
+  property CommittedSnapshot<TState> CommittedSnapshot {get;}
+  property ProposedSnapshot<TState, TEvent> ProposedSnapshot {get;}
+  property StateMachineLibrary.Persistence.Diagnostics.PersistenceDiagnostics Diagnostics {get;}
+  property StateMachineLibrary.Persistence.Execution.TransitionPersistenceCategory PersistenceCategory {get;}
+  property StateMachineLibrary.Persistence.Snapshots.PersistenceVersion? ExpectedVersion {get;}
+  property StateSnapshot<TState> LoadedSnapshot {get;}
+  property TransitionOutcome<TState, TEvent> TransitionOutcome {get;}
+  method StateMachineLibrary.Persistence.Execution.TransitionPersistenceOutcome<TState, TEvent> Cancelled(TransitionOutcome<TState, TEvent> transitionOutcome, StateMachineLibrary.Persistence.Diagnostics.PersistenceDiagnostics diagnostics, StateSnapshot<TState> loadedSnapshot, ProposedSnapshot<TState, TEvent> proposedSnapshot, StateMachineLibrary.Persistence.Snapshots.PersistenceVersion? expectedVersion)
+  method StateMachineLibrary.Persistence.Execution.TransitionPersistenceOutcome<TState, TEvent> ConcurrentStateChange(TransitionOutcome<TState, TEvent> transitionOutcome, ProposedSnapshot<TState, TEvent> proposedSnapshot, StateMachineLibrary.Persistence.Snapshots.PersistenceVersion expectedVersion, StateMachineLibrary.Persistence.Diagnostics.PersistenceDiagnostics diagnostics, StateSnapshot<TState> loadedSnapshot)
+  method StateMachineLibrary.Persistence.Execution.TransitionPersistenceOutcome<TState, TEvent> InvalidSnapshot(StateMachineLibrary.Persistence.Diagnostics.PersistenceDiagnostics diagnostics, StateSnapshot<TState> loadedSnapshot)
+  method StateMachineLibrary.Persistence.Execution.TransitionPersistenceOutcome<TState, TEvent> MissingSnapshot(StateMachineLibrary.Persistence.Diagnostics.PersistenceDiagnostics diagnostics)
+  method StateMachineLibrary.Persistence.Execution.TransitionPersistenceOutcome<TState, TEvent> ObservationFailure(TransitionOutcome<TState, TEvent> transitionOutcome, StateMachineLibrary.Persistence.Diagnostics.PersistenceDiagnostics diagnostics, StateSnapshot<TState> loadedSnapshot, ProposedSnapshot<TState, TEvent> proposedSnapshot, StateMachineLibrary.Persistence.Snapshots.PersistenceVersion? expectedVersion)
+  method StateMachineLibrary.Persistence.Execution.TransitionPersistenceOutcome<TState, TEvent> ObservedOnly(TransitionOutcome<TState, TEvent> transitionOutcome, StateSnapshot<TState> loadedSnapshot, StateMachineLibrary.Persistence.Diagnostics.PersistenceDiagnostics diagnostics)
+  method StateMachineLibrary.Persistence.Execution.TransitionPersistenceOutcome<TState, TEvent> Persisted(TransitionOutcome<TState, TEvent> transitionOutcome, CommittedSnapshot<TState> committedSnapshot, StateMachineLibrary.Persistence.Snapshots.PersistenceVersion expectedVersion, StateSnapshot<TState> loadedSnapshot, ProposedSnapshot<TState, TEvent> proposedSnapshot)
+  method StateMachineLibrary.Persistence.Execution.TransitionPersistenceOutcome<TState, TEvent> StorageFailure(TransitionOutcome<TState, TEvent> transitionOutcome, StateMachineLibrary.Persistence.Diagnostics.PersistenceDiagnostics diagnostics, StateSnapshot<TState> loadedSnapshot, ProposedSnapshot<TState, TEvent> proposedSnapshot, StateMachineLibrary.Persistence.Snapshots.PersistenceVersion? expectedVersion)
+
+interface StateMachineLibrary.Persistence.Hooks.ITransitionPersistenceObserver<TState, TEvent>
+  method System.Threading.Tasks.ValueTask<StateMachineLibrary.Persistence.Hooks.ObservationResult> ObserveAsync(TransitionPersistenceContext<TState, TEvent> context, System.Threading.CancellationToken cancellationToken)
+
+enum StateMachineLibrary.Persistence.Hooks.ObservationCategory : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  field StateMachineLibrary.Persistence.Hooks.ObservationCategory Cancelled
+  field StateMachineLibrary.Persistence.Hooks.ObservationCategory Failure
+  field StateMachineLibrary.Persistence.Hooks.ObservationCategory Success
+  enum Cancelled
+  enum Failure
+  enum Success
+
+class StateMachineLibrary.Persistence.Hooks.ObservationResult
+  property StateMachineLibrary.Persistence.Diagnostics.PersistenceDiagnostics Diagnostics {get;}
+  property StateMachineLibrary.Persistence.Hooks.ObservationCategory Category {get;}
+  method StateMachineLibrary.Persistence.Hooks.ObservationResult Cancelled(StateMachineLibrary.Persistence.Diagnostics.PersistenceDiagnostics diagnostics)
+  method StateMachineLibrary.Persistence.Hooks.ObservationResult Failure(StateMachineLibrary.Persistence.Diagnostics.PersistenceDiagnostics diagnostics)
+  method StateMachineLibrary.Persistence.Hooks.ObservationResult Success(StateMachineLibrary.Persistence.Diagnostics.PersistenceDiagnostics diagnostics)
+
+class StateMachineLibrary.Persistence.Hooks.TransitionPersistenceContext<TState, TEvent>
+  ctor (StateSnapshot<TState> loadedSnapshot, ProposedSnapshot<TState, TEvent> proposedSnapshot, TransitionOutcome<TState, TEvent> transitionOutcome, StateMachineLibrary.Persistence.Snapshots.PersistenceVersion? expectedVersion, SnapshotSaveResult<TState> persistenceResult)
+  property ProposedSnapshot<TState, TEvent> ProposedSnapshot {get;}
+  property SnapshotSaveResult<TState> PersistenceResult {get;}
+  property StateMachineLibrary.Persistence.Snapshots.PersistenceVersion? ExpectedVersion {get;}
+  property StateSnapshot<TState> LoadedSnapshot {get;}
+  property TransitionOutcome<TState, TEvent> TransitionOutcome {get;}
+
+static class StateMachineLibrary.Persistence.PersistenceDefinitionExtensions
+  method System.String GetPersistenceDefinitionId<TState, TEvent>(StateMachineDefinition<TState, TEvent> definition)
+
+static class StateMachineLibrary.Persistence.PersistenceMetadataKeys
+  field System.String DefinitionId
+
+static class StateMachineLibrary.Persistence.PersistencePublicApi
+
+class StateMachineLibrary.Persistence.Snapshots.CommittedSnapshot<TState>
+  ctor (StateSnapshot<TState> snapshot)
+  ctor (System.String instanceId, System.String definitionId, TState activeState, StateMachineLibrary.Persistence.Snapshots.PersistenceVersion committedVersion, StateMachineLibrary.Persistence.Snapshots.PersistencePropertyBag properties)
+  property StateMachineLibrary.Persistence.Snapshots.PersistencePropertyBag Properties {get;}
+  property StateMachineLibrary.Persistence.Snapshots.PersistenceVersion CommittedVersion {get;}
+  property StateMachineLibrary.Persistence.Snapshots.PersistenceVersion Version {get;}
+  property StateSnapshot<TState> Snapshot {get;}
+  property System.String DefinitionId {get;}
+  property System.String InstanceId {get;}
+  property TState ActiveState {get;}
+
+class StateMachineLibrary.Persistence.Snapshots.PersistencePropertyBag : System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<System.String, System.Object>>, System.Collections.Generic.IReadOnlyCollection<System.Collections.Generic.KeyValuePair<System.String, System.Object>>, System.Collections.Generic.IReadOnlyDictionary<System.String, System.Object>, System.Collections.IEnumerable
+  ctor ()
+  ctor (System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<System.String, System.Object>> items)
+  property StateMachineLibrary.Persistence.Snapshots.PersistencePropertyBag Empty {get;}
+  property System.Collections.Generic.IEnumerable<System.Object> Values {get;}
+  property System.Collections.Generic.IEnumerable<System.String> Keys {get;}
+  property System.Int32 Count {get;}
+  property System.Object Item {get;}
+  method StateMachineLibrary.Persistence.Snapshots.PersistencePropertyBag With(System.String key, System.Object value)
+  method System.Boolean ContainsKey(System.String key)
+  method System.Boolean TryGetValue(System.String key, System.Object& value)
+  method System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<System.String, System.Object>> GetEnumerator()
+
+struct StateMachineLibrary.Persistence.Snapshots.PersistenceVersion : System.IEquatable<StateMachineLibrary.Persistence.Snapshots.PersistenceVersion>
+  ctor (System.Object value, System.String displayValue)
+  property System.Object Value {get;}
+  property System.String DisplayValue {get;}
+  method StateMachineLibrary.Persistence.Snapshots.PersistenceVersion From(System.Object value, System.String displayValue)
+  method System.String ToString()
+
+class StateMachineLibrary.Persistence.Snapshots.ProposedSnapshot<TState, TEvent>
+  ctor (StateSnapshot<TState> snapshot, StateMachineLibrary.Persistence.Snapshots.PersistenceVersion previousVersion, TransitionOutcome<TState, TEvent> transitionOutcome)
+  ctor (System.String instanceId, System.String definitionId, TState activeState, StateMachineLibrary.Persistence.Snapshots.PersistenceVersion version, StateMachineLibrary.Persistence.Snapshots.PersistenceVersion previousVersion, TransitionOutcome<TState, TEvent> transitionOutcome, StateMachineLibrary.Persistence.Snapshots.PersistencePropertyBag properties)
+  property StateMachineLibrary.Persistence.Snapshots.PersistencePropertyBag Properties {get;}
+  property StateMachineLibrary.Persistence.Snapshots.PersistenceVersion PreviousVersion {get;}
+  property StateMachineLibrary.Persistence.Snapshots.PersistenceVersion Version {get;}
+  property StateSnapshot<TState> Snapshot {get;}
+  property System.String DefinitionId {get;}
+  property System.String InstanceId {get;}
+  property TState ActiveState {get;}
+  property TransitionOutcome<TState, TEvent> TransitionOutcome {get;}
+
+class StateMachineLibrary.Persistence.Snapshots.SnapshotValidationIssue : System.IEquatable<StateMachineLibrary.Persistence.Snapshots.SnapshotValidationIssue>
+  ctor (System.String Code, System.String Message, System.String AffectedElement)
+  property System.String AffectedElement {get;set;}
+  property System.String Code {get;set;}
+  property System.String Message {get;set;}
+
+class StateMachineLibrary.Persistence.Snapshots.SnapshotValidationResult
+  property System.Boolean IsValid {get;}
+  property System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Persistence.Snapshots.SnapshotValidationIssue> Issues {get;}
+  method StateMachineLibrary.Persistence.Snapshots.SnapshotValidationResult FromIssues(System.Collections.Generic.IEnumerable<StateMachineLibrary.Persistence.Snapshots.SnapshotValidationIssue> issues)
+  method StateMachineLibrary.Persistence.Snapshots.SnapshotValidationResult Invalid(StateMachineLibrary.Persistence.Snapshots.SnapshotValidationIssue[] issues)
+  method StateMachineLibrary.Persistence.Snapshots.SnapshotValidationResult Valid()
+
+class StateMachineLibrary.Persistence.Snapshots.StateSnapshot<TState>
+  ctor (System.String instanceId, System.String definitionId, TState activeState, StateMachineLibrary.Persistence.Snapshots.PersistenceVersion version, StateMachineLibrary.Persistence.Snapshots.PersistencePropertyBag properties)
+  property StateMachineLibrary.Persistence.Snapshots.PersistencePropertyBag Properties {get;}
+  property StateMachineLibrary.Persistence.Snapshots.PersistenceVersion Version {get;}
+  property System.String DefinitionId {get;}
+  property System.String InstanceId {get;}
+  property TState ActiveState {get;}
+
+static class StateMachineLibrary.Persistence.Snapshots.StateSnapshotValidator
+  method StateMachineLibrary.Persistence.Snapshots.SnapshotValidationResult Validate<TState, TEvent>(StateMachineDefinition<TState, TEvent> definition, StateSnapshot<TState> snapshot, System.String expectedDefinitionId)
+
+interface StateMachineLibrary.Persistence.Storage.IStateSnapshotStore<TState>
+  method ValueTask<SnapshotLoadResult<TState>> LoadAsync(System.String instanceId, System.String definitionId, System.Threading.CancellationToken cancellationToken)
+  method ValueTask<SnapshotSaveResult<TState>> SaveAsync(StateMachineLibrary.Persistence.Snapshots.PersistenceVersion expectedVersion, StateSnapshot<TState> proposedSnapshot, System.Threading.CancellationToken cancellationToken)
+
+enum StateMachineLibrary.Persistence.Storage.SnapshotLoadCategory : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  field StateMachineLibrary.Persistence.Storage.SnapshotLoadCategory Cancelled
+  field StateMachineLibrary.Persistence.Storage.SnapshotLoadCategory InvalidSnapshot
+  field StateMachineLibrary.Persistence.Storage.SnapshotLoadCategory Loaded
+  field StateMachineLibrary.Persistence.Storage.SnapshotLoadCategory MissingSnapshot
+  field StateMachineLibrary.Persistence.Storage.SnapshotLoadCategory StorageFailure
+  enum Cancelled
+  enum InvalidSnapshot
+  enum Loaded
+  enum MissingSnapshot
+  enum StorageFailure
+
+class StateMachineLibrary.Persistence.Storage.SnapshotLoadResult<TState>
+  property StateMachineLibrary.Persistence.Diagnostics.PersistenceDiagnostics Diagnostics {get;}
+  property StateMachineLibrary.Persistence.Storage.SnapshotLoadCategory Category {get;}
+  property StateSnapshot<TState> Snapshot {get;}
+  method StateMachineLibrary.Persistence.Storage.SnapshotLoadResult<TState> Cancelled(StateMachineLibrary.Persistence.Diagnostics.PersistenceDiagnostics diagnostics)
+  method StateMachineLibrary.Persistence.Storage.SnapshotLoadResult<TState> InvalidSnapshot(StateMachineLibrary.Persistence.Diagnostics.PersistenceDiagnostics diagnostics)
+  method StateMachineLibrary.Persistence.Storage.SnapshotLoadResult<TState> Loaded(StateSnapshot<TState> snapshot)
+  method StateMachineLibrary.Persistence.Storage.SnapshotLoadResult<TState> MissingSnapshot(StateMachineLibrary.Persistence.Diagnostics.PersistenceDiagnostics diagnostics)
+  method StateMachineLibrary.Persistence.Storage.SnapshotLoadResult<TState> StorageFailure(StateMachineLibrary.Persistence.Diagnostics.PersistenceDiagnostics diagnostics)
+
+enum StateMachineLibrary.Persistence.Storage.SnapshotSaveCategory : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  field StateMachineLibrary.Persistence.Storage.SnapshotSaveCategory Cancelled
+  field StateMachineLibrary.Persistence.Storage.SnapshotSaveCategory ConcurrentStateChange
+  field StateMachineLibrary.Persistence.Storage.SnapshotSaveCategory InvalidSnapshot
+  field StateMachineLibrary.Persistence.Storage.SnapshotSaveCategory MissingSnapshot
+  field StateMachineLibrary.Persistence.Storage.SnapshotSaveCategory Saved
+  field StateMachineLibrary.Persistence.Storage.SnapshotSaveCategory StorageFailure
+  enum Cancelled
+  enum ConcurrentStateChange
+  enum InvalidSnapshot
+  enum MissingSnapshot
+  enum Saved
+  enum StorageFailure
+
+class StateMachineLibrary.Persistence.Storage.SnapshotSaveResult<TState>
+  property StateMachineLibrary.Persistence.Diagnostics.PersistenceDiagnostics Diagnostics {get;}
+  property StateMachineLibrary.Persistence.Snapshots.PersistenceVersion ExpectedVersion {get;}
+  property StateMachineLibrary.Persistence.Snapshots.PersistenceVersion? CurrentVersionHint {get;}
+  property StateMachineLibrary.Persistence.Storage.SnapshotSaveCategory Category {get;}
+  property StateSnapshot<TState> CommittedSnapshot {get;}
+  property StateSnapshot<TState> ProposedSnapshot {get;}
+  method StateMachineLibrary.Persistence.Storage.SnapshotSaveResult<TState> Cancelled(StateMachineLibrary.Persistence.Snapshots.PersistenceVersion expectedVersion, StateSnapshot<TState> proposedSnapshot, StateMachineLibrary.Persistence.Diagnostics.PersistenceDiagnostics diagnostics)
+  method StateMachineLibrary.Persistence.Storage.SnapshotSaveResult<TState> ConcurrentStateChange(StateMachineLibrary.Persistence.Snapshots.PersistenceVersion expectedVersion, StateSnapshot<TState> proposedSnapshot, StateMachineLibrary.Persistence.Snapshots.PersistenceVersion? currentVersionHint, StateMachineLibrary.Persistence.Diagnostics.PersistenceDiagnostics diagnostics)
+  method StateMachineLibrary.Persistence.Storage.SnapshotSaveResult<TState> InvalidSnapshot(StateMachineLibrary.Persistence.Snapshots.PersistenceVersion expectedVersion, StateSnapshot<TState> proposedSnapshot, StateMachineLibrary.Persistence.Diagnostics.PersistenceDiagnostics diagnostics)
+  method StateMachineLibrary.Persistence.Storage.SnapshotSaveResult<TState> MissingSnapshot(StateMachineLibrary.Persistence.Snapshots.PersistenceVersion expectedVersion, StateSnapshot<TState> proposedSnapshot, StateMachineLibrary.Persistence.Diagnostics.PersistenceDiagnostics diagnostics)
+  method StateMachineLibrary.Persistence.Storage.SnapshotSaveResult<TState> Saved(StateMachineLibrary.Persistence.Snapshots.PersistenceVersion expectedVersion, StateSnapshot<TState> proposedSnapshot, StateSnapshot<TState> committedSnapshot)
+  method StateMachineLibrary.Persistence.Storage.SnapshotSaveResult<TState> StorageFailure(StateMachineLibrary.Persistence.Snapshots.PersistenceVersion expectedVersion, StateSnapshot<TState> proposedSnapshot, StateMachineLibrary.Persistence.Diagnostics.PersistenceDiagnostics diagnostics)
