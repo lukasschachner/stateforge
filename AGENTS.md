@@ -110,7 +110,7 @@ Common commands:
 ```bash
 dotnet restore StateMachineLibrary.sln
 dotnet build StateMachineLibrary.sln --configuration Release --no-restore
-dotnet test StateMachineLibrary.sln --configuration Release --no-build
+dotnet test --solution StateMachineLibrary.sln --configuration Release --no-build
 dotnet format StateMachineLibrary.sln --verify-no-changes
 dotnet pack StateMachineLibrary.sln --configuration Release --no-build --output artifacts/packages
 ```
@@ -136,7 +136,7 @@ If a public API change is intentional:
 2. Update snapshots explicitly:
 
    ```bash
-   UPDATE_PUBLIC_API_SNAPSHOTS=1 dotnet test tests/Release.Tests/Release.Tests.csproj --filter PublicApi
+   UPDATE_PUBLIC_API_SNAPSHOTS=1 dotnet test --project tests/Release.Tests/Release.Tests.csproj --filter PublicApi
    ```
 
 3. Inspect the diff before committing.
@@ -292,17 +292,17 @@ Common patterns:
 Focused commands examples:
 
 ```bash
-dotnet test tests/Core.Tests/Core.Tests.csproj --filter Completion
-dotnet test tests/Core.Tests/Core.Tests.csproj --filter Parallel
-dotnet test tests/Visualization.Tests/Visualization.Tests.csproj --filter Rendering
-dotnet test tests/Release.Tests/Release.Tests.csproj --filter PublicApi
+dotnet test --project tests/Core.Tests/Core.Tests.csproj --filter Completion
+dotnet test --project tests/Core.Tests/Core.Tests.csproj --filter Parallel
+dotnet test --project tests/Visualization.Tests/Visualization.Tests.csproj --filter Rendering
+dotnet test --project tests/Release.Tests/Release.Tests.csproj --filter PublicApi
 ```
 
 Before considering a feature complete, run:
 
 ```bash
 dotnet format StateMachineLibrary.sln --verify-no-changes
-dotnet test StateMachineLibrary.sln
+dotnet test --solution StateMachineLibrary.sln
 dotnet pack StateMachineLibrary.sln --configuration Release --output artifacts/packages
 ```
 

@@ -1,5 +1,7 @@
 using StateMachineLibrary.Core.Definitions;
 
+#pragma warning disable CS8714
+
 namespace StateMachineLibrary.Core.Execution;
 
 /// <summary>Per-machine ordered region history records for history-enabled parallel composites.</summary>
@@ -97,3 +99,5 @@ internal sealed class ParallelHistoryStore<TState>
             entries.Count == 0 ? 0 : entries.Max(entry => entry.LastUpdatedSequence));
     }
 }
+
+#pragma warning restore CS8714

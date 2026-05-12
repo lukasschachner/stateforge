@@ -10,17 +10,20 @@ public sealed class ParallelHistoryMetadataRenderingTests
     [Fact]
     public void Visualization_adapters_consume_exported_parallel_history_metadata()
     {
-        var graph = StateMachineDefinition<State, Event>.Create(builder =>
+        var export = StateMachineDefinition<State, Event>.Create(builder =>
         {
             builder.ParallelComposite(State.Operational)
                 .WithHistory()
                 .Region("A", State.A1, State.A1, State.A2)
                 .Region("B", State.B1, State.B1);
-        }).ExportGraph().Graph;
+        }).ExportGraph();
 
-        Assert.Contains("history=Shallow", MermaidGraphRenderer.Render(graph));
-        Assert.Contains("history=Shallow", GraphvizDotRenderer.Render(graph));
-        Assert.Contains("history=Shallow", PlantUmlGraphRenderer.Render(graph));
+        Assert.True(export.Succeeded);
+        Assert.NotNull(export.Graph);
+
+        Assert.Contains("history=Shallow", MermaidGraphRenderer.Render(export.Graph!));
+        Assert.Contains("history=Shallow", GraphvizDotRenderer.Render(export.Graph!));
+        Assert.Contains("history=Shallow", PlantUmlGraphRenderer.Render(export.Graph!));
     }
 
     private enum State

@@ -8,7 +8,7 @@ New-Item -ItemType Directory -Force artifacts/packages | Out-Null
 
 dotnet restore StateMachineLibrary.sln
 dotnet build StateMachineLibrary.sln --configuration Release --no-restore
-dotnet test StateMachineLibrary.sln --configuration Release --no-build
+dotnet test --solution StateMachineLibrary.sln --configuration Release --no-build
 $HierarchyOutput = dotnet run --project samples/Core.HierarchySample/Core.HierarchySample.csproj --configuration Release --no-build
 $HierarchyOutput | Write-Host
 $HierarchyOutputText = $HierarchyOutput -join [Environment]::NewLine

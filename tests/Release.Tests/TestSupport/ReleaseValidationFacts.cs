@@ -8,7 +8,7 @@ internal static class ReleaseValidationFacts
     [
         "dotnet restore StateMachineLibrary.sln",
         "dotnet build StateMachineLibrary.sln --configuration Release --no-restore",
-        "dotnet test StateMachineLibrary.sln --configuration Release --no-build",
+        "dotnet test --solution StateMachineLibrary.sln --configuration Release --no-build",
         "dotnet format StateMachineLibrary.sln --verify-no-changes",
         "dotnet pack StateMachineLibrary.sln --configuration Release --no-build --output artifacts/packages"
     ];

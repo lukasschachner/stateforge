@@ -9,7 +9,7 @@ Run the same command categories used by CI:
 ```bash
 dotnet restore StateMachineLibrary.sln
 dotnet build StateMachineLibrary.sln --configuration Release --no-restore
-dotnet test StateMachineLibrary.sln --configuration Release --no-build
+dotnet test --solution StateMachineLibrary.sln --configuration Release --no-build
 dotnet run --project samples/Core.HierarchySample/Core.HierarchySample.csproj --configuration Release --no-build
 dotnet format StateMachineLibrary.sln --verify-no-changes
 dotnet pack StateMachineLibrary.sln --configuration Release --no-build --output artifacts/packages
@@ -41,7 +41,7 @@ If validation fails, review whether the public contract changed intentionally. F
 To regenerate approved snapshots after review:
 
 ```bash
-UPDATE_PUBLIC_API_SNAPSHOTS=1 dotnet test tests/Release.Tests/Release.Tests.csproj --configuration Release --filter PublicApi
+UPDATE_PUBLIC_API_SNAPSHOTS=1 dotnet test --project tests/Release.Tests/Release.Tests.csproj --configuration Release --filter PublicApi
 ```
 
 ## Package boundary checks
@@ -71,7 +71,7 @@ Release validation includes Core tests for history restore/fallback behavior, co
 
 ## Completion Transition Release Readiness
 
-Before release, validate completion transitions with focused Core execution/validation/introspection tests, visualization rendering tests, public API snapshots, `dotnet format StateMachineLibrary.sln --verify-no-changes`, full `dotnet test StateMachineLibrary.sln`, and `dotnet pack StateMachineLibrary.sln --configuration Release --output artifacts/packages`.
+Before release, validate completion transitions with focused Core execution/validation/introspection tests, visualization rendering tests, public API snapshots, `dotnet format StateMachineLibrary.sln --verify-no-changes`, full `dotnet test --solution StateMachineLibrary.sln`, and `dotnet pack StateMachineLibrary.sln --configuration Release --output artifacts/packages`.
 
 ## Source Generator Hierarchy and Regions Release Readiness
 

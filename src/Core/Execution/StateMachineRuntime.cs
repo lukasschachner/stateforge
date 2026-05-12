@@ -1,6 +1,8 @@
 using StateMachineLibrary.Core.Definitions;
 using StateMachineLibrary.Core.Introspection;
 
+#pragma warning disable CS8714
+
 namespace StateMachineLibrary.Core.Execution;
 
 /// <summary>State-owning runtime context for a reusable machine definition.</summary>
@@ -365,3 +367,5 @@ public sealed class StateMachineRuntime<TState, TEvent> : IAsyncDisposable
             .ToArray();
     }
 }
+
+#pragma warning restore CS8714

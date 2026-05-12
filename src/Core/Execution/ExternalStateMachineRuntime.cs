@@ -1,6 +1,8 @@
 using StateMachineLibrary.Core.Definitions;
 using StateMachineLibrary.Core.Introspection;
 
+#pragma warning disable CS8714
+
 namespace StateMachineLibrary.Core.Execution;
 
 /// <summary>Runtime context that reads and writes active state through application-owned accessors.</summary>
@@ -435,3 +437,5 @@ public sealed class ExternalStateMachineRuntime<TState, TEvent> : IAsyncDisposab
             .ToArray();
     }
 }
+
+#pragma warning restore CS8714

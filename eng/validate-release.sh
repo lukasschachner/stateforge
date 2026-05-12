@@ -9,7 +9,7 @@ mkdir -p artifacts/packages
 
 dotnet restore StateMachineLibrary.sln
 dotnet build StateMachineLibrary.sln --configuration Release --no-restore
-dotnet test StateMachineLibrary.sln --configuration Release --no-build
+dotnet test --solution StateMachineLibrary.sln --configuration Release --no-build
 hierarchy_output="$(dotnet run --project samples/Core.HierarchySample/Core.HierarchySample.csproj --configuration Release --no-build)"
 printf '%s\n' "$hierarchy_output"
 grep -q "History restored path: Reviewing -> LegalReview" <<< "$hierarchy_output"

@@ -44,7 +44,7 @@ To validate regression protection, temporarily remove or rename a public member 
 OpenTelemetry, or a Visualization package and run:
 
 ```bash
-dotnet test tests/Release.Tests/Release.Tests.csproj --configuration Release --filter PublicApi
+dotnet test --project tests/Release.Tests/Release.Tests.csproj --configuration Release --filter PublicApi
 ```
 
 The corresponding snapshot test must fail until the change is reviewed and the approved snapshot is intentionally
@@ -81,8 +81,8 @@ OpenTelemetry, and Visualization renderer packages emit symbol packages.
 Completion-transition release validation should run:
 
 ```bash
-dotnet test StateMachineLibrary.sln --filter Completion
-dotnet test StateMachineLibrary.sln --filter CorePublicApiSnapshotTests
+dotnet test --solution StateMachineLibrary.sln --filter Completion
+dotnet test --solution StateMachineLibrary.sln --filter CorePublicApiSnapshotTests
 dotnet format StateMachineLibrary.sln --verify-no-changes
 dotnet pack StateMachineLibrary.sln --configuration Release --output artifacts/packages
 ```

@@ -1,0 +1,90 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":semanticCommits",
+    ":maintainLockFilesWeekly"
+  ],
+  "timezone": "Europe/Berlin",
+  "enabledManagers": [
+    "nuget",
+    "github-actions",
+    "custom.regex"
+  ],
+  "labels": [
+    "dependencies"
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Update .NET local tool versions in dotnet-tools.json",
+      "managerFilePatterns": [
+        "/(^|/)dotnet-tools\\.json$/",
+        "/(^|/)\\.config/dotnet-tools\\.json$/"
+      ],
+      "matchStrings": [
+        "\\\"(?<depName>[^\\\"]+)\\\"\\s*:\\s*\\{\\s*\\\"version\\\"\\s*:\\s*\\\"(?<currentValue>[^\\\"]+)\\\""
+      ],
+      "datasourceTemplate": "nuget",
+      "versioningTemplate": "nuget"
+    }
+  ],
+  "rangeStrategy": "bump",
+  "rebaseWhen": "behind-base-branch",
+  "prCreation": "immediate",
+  "prConcurrentLimit": 6,
+  "prHourlyLimit": 2,
+  "packageRules": [
+    {
+      "matchManagers": [
+        "nuget"
+      ],
+      "matchUpdateTypes": [
+        "patch"
+      ],
+      "groupName": "nuget patch updates",
+      "automerge": true
+    },
+    {
+      "matchManagers": [
+        "nuget"
+      ],
+      "matchUpdateTypes": [
+        "minor"
+      ],
+      "groupName": "nuget minor updates"
+    },
+    {
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchUpdateTypes": [
+        "patch"
+      ],
+      "groupName": "github actions patch updates",
+      "automerge": true
+    },
+    {
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchUpdateTypes": [
+        "minor"
+      ],
+      "groupName": "github actions minor updates"
+    },
+    {
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "labels": [
+        "dependencies",
+        "major-update"
+      ],
+      "schedule": [
+        "before 5am on the first day of the month"
+      ]
+    }
+  ],
+  "gitAuthor": "Renovate Bot <20138976+lukasschachner@users.noreply.github.com>"
+}
