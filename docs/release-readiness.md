@@ -58,7 +58,7 @@ The release workflow in `.github/workflows/release.yml` adds secure-release cont
 
 - dependency vulnerability gate (`dotnet list ... --vulnerable --include-transitive --format json` + `eng/check-vulnerabilities.py`);
 - CycloneDX SBOM generation to `artifacts/sbom/StateMachineLibrary.cdx.json`;
-- author signing of `.nupkg` artifacts via `dotnet nuget sign` using environment-scoped signing certificate secrets (`NUGET_SIGN_CERT_PFX_B64`, `NUGET_SIGN_CERT_PASSWORD`) and RFC3161 timestamping;
+- author signing of `.nupkg` artifacts via `dotnet nuget sign` using environment-scoped signing certificate secrets (`NUGET_SIGN_CERT_PFX_B64`, `NUGET_SIGN_CERT_PASSWORD`) and RFC3161 timestamping (see `docs/security/signing.md`);
 - signature verification of signed `.nupkg` artifacts via `dotnet nuget verify --all`;
 - provenance attestation for signed package and SBOM artifacts via `actions/attest-build-provenance`;
 - gated NuGet publication through protected `nuget-prod` environment approval and environment-scoped secrets.

@@ -55,6 +55,7 @@
 - Dependency audit entry/section: `docs/security/dependency-audit.md`
 - ASVS verification entry (with Level): `docs/security/asvs-verification.md` — current baseline N/A because no web/API/auth surface.
 - Supply-chain evidence entry: `docs/security/supply-chain-evidence.md`
+- Signing runbook entry: `docs/security/signing.md`
 - CRA applicability entry: `docs/security/cra-applicability.md`
 
 ## Follow-Up

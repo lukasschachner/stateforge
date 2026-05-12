@@ -29,7 +29,7 @@
 - Targeted SLSA level: L1 minimum where feasible for release candidates; aim for L2+ over time.
 - Build platform and isolation: GitHub Actions hosted runners via `.github/workflows/ci.yml` (readiness) and `.github/workflows/release.yml` (release pipeline).
 - Provenance generation tool and storage location: `actions/attest-build-provenance@v2` in release workflow for package and SBOM artifacts.
-- Signing and verification approach: Author signing in release workflow via `dotnet nuget sign` with protected environment secrets and timestamping; signature verification enforced via `dotnet nuget verify --all`.
+- Signing and verification approach: Author signing in release workflow via `dotnet nuget sign` with protected environment secrets and timestamping; signature verification enforced via `dotnet nuget verify --all`. Operational details are defined in `docs/security/signing.md`.
 - Gaps to next level and planned mitigations:
   - Operate signing certificate lifecycle controls (rotation/revocation/recovery) with documented runbooks.
   - Consider pinning GitHub Actions to immutable SHAs for release workflows.
@@ -50,6 +50,7 @@
 ## Cross-References
 
 - Dependency audit: `docs/security/dependency-audit.md`
+- Signing runbook: `docs/security/signing.md`
 - ASVS verification (with Level): `docs/security/asvs-verification.md` — current baseline N/A.
 - CRA applicability (if release affects EU market reach): `docs/security/cra-applicability.md`
 

@@ -326,6 +326,7 @@ Security docs live under `docs/security/`:
 - `secure-coding-language-rules.md`
 - `dependency-audit.md`
 - `supply-chain-evidence.md`
+- `signing.md`
 - `asvs-verification.md`
 - `cra-applicability.md`
 - `msl-applicability.md`
