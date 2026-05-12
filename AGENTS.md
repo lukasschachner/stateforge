@@ -3,7 +3,8 @@
 Guidance for AI coding agents working in this repository.
 
 <!-- SPECKIT START -->
-For feature-specific implementation context, read the active Spec Kit plan referenced by `.specify/feature.json`, especially when implementing a `/speckit.*` task.
+Active Spec Kit plan: `specs/016-transition-conflict-diagnostics/plan.md`.
+For feature-specific implementation context, read this plan and the feature directory referenced by `.specify/feature.json`, especially when implementing a `/speckit.*` task.
 <!-- SPECKIT END -->
 
 ## Repository Overview

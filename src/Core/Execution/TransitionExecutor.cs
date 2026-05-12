@@ -81,7 +81,8 @@ internal sealed class TransitionExecutor<TState, TEvent>
                 currentState,
                 @event,
                 new TransitionDiagnostics("Machine definition has validation errors.",
-                    validationFindings: validation.Errors));
+                    validationFindings: validation.Errors,
+                    conflictDiagnostics: validation.ConflictDiagnostics));
             await observations.ObserveAsync(TransitionObservationKind.ValidationFailure, TransitionLifecyclePhase.None,
                 null, outcome, false, outcome.Diagnostics, currentState, cancellationToken).ConfigureAwait(false);
             await observations.OutcomeAsync(outcome, cancellationToken).ConfigureAwait(false);
@@ -267,7 +268,8 @@ internal sealed class TransitionExecutor<TState, TEvent>
                 currentState,
                 @event,
                 new TransitionDiagnostics("Machine definition has validation errors.",
-                    validationFindings: validation.Errors));
+                    validationFindings: validation.Errors,
+                    conflictDiagnostics: validation.ConflictDiagnostics));
 
         TransitionDefinition<TState, TEvent>? transition = null;
         HierarchySelectionDiagnostics? hierarchyDiagnostics = null;

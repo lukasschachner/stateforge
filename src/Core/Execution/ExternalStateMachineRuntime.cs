@@ -115,7 +115,8 @@ public sealed class ExternalStateMachineRuntime<TState, TEvent> : IAsyncDisposab
         if (!validation.IsValid)
             return TransitionOutcome<TState, TEvent>.ValidationFailure(currentLeaf, @event,
                 new TransitionDiagnostics("Machine definition has validation errors.",
-                    validationFindings: validation.Errors));
+                    validationFindings: validation.Errors,
+                    conflictDiagnostics: validation.ConflictDiagnostics));
 
         var owner = _activeStateShape.OwningCompositeState!;
         var parentTransition = new TransitionMatcher<TState, TEvent>(Definition).Match(owner, @event);
@@ -145,7 +146,7 @@ public sealed class ExternalStateMachineRuntime<TState, TEvent> : IAsyncDisposab
         var plannedShape = ActiveStateShape<TState>.Parallel(owner, plannedEntries, _activeStateShape.Sequence + 1);
         var parentIsCompletion = parentTransition is not null &&
                                  ParallelCompletionEvaluator.IsComplete(Definition, plannedShape);
-        var conflicts = ParallelConflictDetector.Detect(Definition, transitions, parentTransition, parentIsCompletion);
+        var conflicts = ParallelConflictDetector.Detect(Definition, transitions, parentTransition, parentIsCompletion, @event);
         if (conflicts.Count > 0)
             return TransitionOutcome<TState, TEvent>.ValidationFailure(currentLeaf, @event, conflicts[0]);
 
@@ -255,13 +256,20 @@ public sealed class ExternalStateMachineRuntime<TState, TEvent> : IAsyncDisposab
         if (_completionEpisodes.IsRecognized(completionScope) || !selector.HasCandidates(completionScope))
             return null;
 
-        var selected = await selector.SelectAsync(executorState, completionScope, cancellationToken).ConfigureAwait(false);
-        if (selected is null)
+        var selection = await selector.SelectWithDiagnosticsAsync(executorState, completionScope, cancellationToken)
+            .ConfigureAwait(false);
+        if (selection.IsAmbiguous)
+            return TransitionOutcome<TState, TEvent>.ValidationFailure(_activeStateShape.ActiveLeafState!, default!,
+                new TransitionDiagnostics(selection.ConflictDiagnostic!.Message, TransitionLifecyclePhase.Matching,
+                    conflictDiagnostics: [selection.ConflictDiagnostic]));
+
+        if (selection.Selected is null)
         {
             _completionEpisodes.MarkNoEligible(completionScope);
             return null;
         }
 
+        var selected = selection.Selected;
         _completionEpisodes.MarkSelected(completionScope);
         var before = _activeStateShape;
         if (isParallelCompletion)

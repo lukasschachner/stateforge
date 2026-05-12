@@ -70,3 +70,9 @@ Static dependency audits are supplementary, not a replacement for continuous mon
 - Dependency change: none. The implementation extends the existing Roslyn source-generator package and tests without adding NuGet, CI action, runtime, renderer, persistence, telemetry, hosting, network, or crypto dependencies.
 - Package-boundary expectation: SourceGenerators keeps Roslyn as a private build/analyzer asset and emits calls into Core APIs; Core still has no dependency on SourceGenerators.
 - Re-audit trigger: revisit if generated declaration support later adds a textual parser package, external files, analyzer packaging changes, or release workflow changes.
+
+## Feature review: 016-transition-conflict-diagnostics
+
+- Runtime dependency change: none. Core diagnostics use existing BCL/Core definition, validation, and execution types only.
+- Package-boundary expectation: Core remains dependency-light with no logging, UI, renderer, OpenTelemetry, persistence, hosting, workflow, network, or crypto dependency added.
+- Validation evidence: package-boundary release tests should continue to pass; public API snapshot changed intentionally for additive diagnostic types/properties.

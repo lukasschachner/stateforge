@@ -1,3 +1,4 @@
+using StateMachineLibrary.Core.Diagnostics;
 using StateMachineLibrary.Core.Validation;
 
 namespace StateMachineLibrary.Core.Execution;
@@ -12,7 +13,8 @@ public sealed class TransitionDiagnostics
         IReadOnlyList<ValidationFinding>? validationFindings = null,
         string? affectedElement = null,
         object? hierarchyMetadata = null,
-        object? parallelMetadata = null)
+        object? parallelMetadata = null,
+        IReadOnlyList<TransitionConflictDiagnostic>? conflictDiagnostics = null)
     {
         Summary = summary;
         Phase = phase;
@@ -21,6 +23,7 @@ public sealed class TransitionDiagnostics
         AffectedElement = affectedElement;
         HierarchyMetadata = hierarchyMetadata;
         ParallelMetadata = parallelMetadata;
+        ConflictDiagnostics = conflictDiagnostics ?? Array.Empty<TransitionConflictDiagnostic>();
     }
 
     public static TransitionDiagnostics None { get; } = new("Transition completed.");
@@ -39,6 +42,9 @@ public sealed class TransitionDiagnostics
 
     /// <summary>Optional parallel-region conflict or dispatch metadata.</summary>
     public object? ParallelMetadata { get; }
+
+    /// <summary>Structured machine-readable transition conflict diagnostics.</summary>
+    public IReadOnlyList<TransitionConflictDiagnostic> ConflictDiagnostics { get; }
 }
 
 internal sealed record HierarchySelectionDiagnostics(

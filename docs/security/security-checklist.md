@@ -79,3 +79,10 @@
 - Runtime boundary: Core validation remains authoritative for graph reachability, runtime/guard-dependent ambiguity, and active-state validity; generated code only emits existing Core builder calls.
 - Surface review: No authentication, authorization, cryptography, network I/O, user-controlled file I/O, serializer, persistence provider, hosted service, renderer, or background scheduler behavior was introduced.
 - Secure coding rule review: Implementation stayed in memory-safe C#/.NET and parses compiler syntax/semantic model data without executing user-authored DSL methods or callbacks during generation.
+
+## Feature review: 016-transition-conflict-diagnostics
+
+- CWE-20 / input validation: reviewed. Invalid definitions, region-boundary transitions, duplicate source scopes, invalid targets, and completion ambiguity retain validation findings and now add structured conflict diagnostics.
+- Safe diagnostics: reviewed. Structured diagnostics include state/event/region identifiers, transition IDs, guard display names, and participant roles only; no stack traces, environment variables, filesystem paths, secrets, callback internals, logging sinks, or serialized user payloads are added.
+- Runtime pre-commit behavior: reviewed. Parent/regional and completion conflicts are returned as non-committed outcomes before state writes.
+- New surfaces: additive Core result properties and diagnostic model types only; no auth, crypto, web/API, network, file I/O, telemetry exporter, renderer, persistence provider, or hosting surface introduced.

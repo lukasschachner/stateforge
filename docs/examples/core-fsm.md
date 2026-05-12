@@ -45,8 +45,22 @@ if (!validation.IsValid)
     {
         Console.WriteLine($"{finding.Severity}: {finding.Code}: {finding.Message}");
     }
+
+    foreach (var conflict in validation.ConflictDiagnostics)
+    {
+        Console.WriteLine($"{conflict.Kind}: {conflict.Message}");
+        foreach (var participant in conflict.Participants)
+        {
+            Console.WriteLine($" - {participant.Role}: {participant.TransitionId}");
+        }
+    }
 }
 ```
+
+`ConflictDiagnostics` is additive: existing `ValidationFinding` codes/messages and runtime
+`TransitionDiagnostics.Summary` remain available, while tools can branch on `TransitionConflictKind` values such as
+`DuplicateSourceScope`, `ParentRegionalConflict`, `CrossRegionBoundary`, `InvalidPostShape`, and `CompletionConflict`
+without parsing English text.
 
 ## Advanced multi-stage state transfer example
 

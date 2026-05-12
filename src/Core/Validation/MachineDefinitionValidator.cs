@@ -1,4 +1,5 @@
 using StateMachineLibrary.Core.Definitions;
+using StateMachineLibrary.Core.Diagnostics;
 using StateMachineLibrary.Core.Execution;
 
 namespace StateMachineLibrary.Core.Validation;
@@ -119,7 +120,8 @@ public static class MachineDefinitionValidator
         HierarchyReachabilityValidator.Validate(definition, findings);
         ParallelRegionReachabilityValidator.Validate(definition, findings);
 
-        return new ValidationResult(findings);
+        var conflictDiagnostics = TransitionConflictDiagnosticBuilder.BuildValidationDiagnostics(definition, findings);
+        return new ValidationResult(findings, conflictDiagnostics);
     }
 
     private sealed record TransitionKey<TState>(TState SourceState, string EventIdentity);

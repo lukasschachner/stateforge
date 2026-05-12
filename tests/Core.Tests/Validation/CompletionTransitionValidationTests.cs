@@ -1,4 +1,5 @@
 using StateMachineLibrary.Core.Definitions;
+using StateMachineLibrary.Core.Diagnostics;
 using StateMachineLibrary.Core.Tests.Completion;
 using StateMachineLibrary.Core.Validation;
 
@@ -38,5 +39,9 @@ public sealed class CompletionTransitionValidationTests
 
         Assert.False(validation.IsValid);
         Assert.Contains(validation.Errors, f => f.Code == CompletionTransitionValidationCodes.AmbiguousUnguarded);
+        var conflict = Assert.Single(validation.ConflictDiagnostics,
+            diagnostic => diagnostic.Kind == TransitionConflictKind.CompletionConflict);
+        Assert.Equal(CompletionState.Reviewing, conflict.CompletionScope);
+        Assert.Equal(2, conflict.Participants.Count);
     }
 }

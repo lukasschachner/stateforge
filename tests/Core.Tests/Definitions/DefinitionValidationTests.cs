@@ -1,4 +1,5 @@
 using StateMachineLibrary.Core.Definitions;
+using StateMachineLibrary.Core.Diagnostics;
 using StateMachineLibrary.Core.Validation;
 
 namespace Core.Tests.Definitions;
@@ -21,6 +22,8 @@ public class DefinitionValidationTests
 
         Assert.False(result.IsValid);
         Assert.Contains(result.Errors, f => f.Code == "TRANSITION003" && f.Message.Contains("Duplicate"));
+        Assert.Contains(result.ConflictDiagnostics,
+            diagnostic => diagnostic.Kind == TransitionConflictKind.DuplicateSourceScope);
     }
 
     [Fact]
@@ -35,6 +38,8 @@ public class DefinitionValidationTests
 
         Assert.False(result.IsValid);
         Assert.Contains(result.Errors, f => f.Code == "TRANSITION002");
+        Assert.Contains(result.ConflictDiagnostics,
+            diagnostic => diagnostic.Kind == TransitionConflictKind.InvalidPostShape);
     }
 
     [Fact]

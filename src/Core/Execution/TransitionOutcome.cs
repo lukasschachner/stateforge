@@ -1,4 +1,5 @@
 using StateMachineLibrary.Core.Definitions;
+using StateMachineLibrary.Core.Diagnostics;
 
 namespace StateMachineLibrary.Core.Execution;
 
@@ -44,6 +45,9 @@ public sealed class TransitionOutcome<TState, TEvent>
     public ActiveStateShape<TState> ActiveStateShape { get; }
     public IReadOnlyList<TransitionDefinition<TState, TEvent>> ParallelTransitions { get; }
     public IReadOnlyList<CompositeHistorySnapshot<TState>> HistorySnapshots { get; }
+
+    /// <summary>Structured machine-readable conflict diagnostics forwarded from <see cref="Diagnostics" />.</summary>
+    public IReadOnlyList<TransitionConflictDiagnostic> ConflictDiagnostics => Diagnostics.ConflictDiagnostics;
 
     public static TransitionOutcome<TState, TEvent> Success(TState previousState, TState resultingState, TEvent @event,
         TransitionDefinition<TState, TEvent> transition, ActiveStatePath<TState>? activeStatePath = null,

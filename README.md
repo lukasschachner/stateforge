@@ -333,6 +333,14 @@ Parallel regions stay inside the Core FSM boundary: they do not add workflow orc
 providers, event sourcing, image rendering, or a concurrent regional action scheduler. Graph export exposes
 renderer-neutral region metadata for optional visualization adapters.
 
+### Structured transition conflict diagnostics
+
+Validation results and non-success transition outcomes expose additive `ConflictDiagnostics` collections for tooling that
+needs stable categories without parsing readable summary text. Diagnostics use `TransitionConflictKind` values such as
+`DuplicateSourceScope`, `ParentRegionalConflict`, `CrossRegionBoundary`, `InvalidPostShape`, and `CompletionConflict`,
+plus ordered participants with transition IDs aligned to graph edge IDs where available. Existing validation findings and
+`TransitionDiagnostics.Summary` remain available for human-readable compatibility.
+
 ### Completion transitions
 
 Composite states can route automatically when they complete without inventing a user event:

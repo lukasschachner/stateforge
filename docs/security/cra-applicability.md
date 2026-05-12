@@ -49,3 +49,7 @@ Silent omission is not allowed: feature plans that affect distribution, EU marke
 
 - Distribution applicability: unchanged. The feature modifies an existing release-capable SourceGenerators package but does not add a publication workflow, distribution channel, commercial offering, or EU market-placement decision.
 - Release-impact rationale: public API snapshot and sample/release validation are required before release, but CRA applicability remains governed by the baseline pre-publication reassessment gate.
+
+## Feature review: 016-transition-conflict-diagnostics
+
+CRA applicability remains unchanged. The feature adds additive Core diagnostics and public API snapshot evidence but does not alter product distribution, vulnerability-handling workflow, networked behavior, or EU market-placement assumptions. Reassess before public package publication as usual.

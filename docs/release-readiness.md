@@ -38,6 +38,11 @@ Release tests compare generated public API snapshots with approved files under `
 
 If validation fails, review whether the public contract changed intentionally. For intentional changes, update the approved snapshot together with documentation or versioning notes. Do not update snapshots as a mechanical fix for an accidental breaking change.
 
+Structured transition conflict diagnostics intentionally add Core public API in `StateMachineLibrary.Core.Diagnostics` and
+additive `ConflictDiagnostics` properties on validation/runtime result types. Release review should confirm those
+additions remain dependency-light, renderer-neutral, and compatible with existing readable summaries before accepting the
+Core snapshot update.
+
 To regenerate approved snapshots after review:
 
 ```bash

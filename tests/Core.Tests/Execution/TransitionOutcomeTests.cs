@@ -34,5 +34,7 @@ public class TransitionOutcomeTests
 
         Assert.Equal(TransitionOutcomeCategory.NotPermitted, outcome.Category);
         Assert.Equal(OrderState.Created, outcome.ResultingState);
+        Assert.Empty(outcome.ConflictDiagnostics);
+        Assert.Empty(outcome.Diagnostics.ConflictDiagnostics);
     }
 }

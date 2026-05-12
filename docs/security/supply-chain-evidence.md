@@ -71,3 +71,9 @@
 - Package/dependency changes: none. SourceGenerators remains an analyzer package with existing Roslyn private build-time assets.
 - Release snapshot trigger: SourceGenerators public API snapshot requires review because advanced declaration model types, diagnostics, and reporter helpers are exposed from the generator assembly.
 - Supply-chain impact: no new package sources, build tools, CI actions, signing steps, external parsers, generated artifact ingestion, or distribution channels were introduced.
+
+## Feature review: 016-transition-conflict-diagnostics
+
+- Package/dependency changes: none expected; no package-boundary expansion.
+- Release snapshot trigger: Core public API snapshot updated for `StateMachineLibrary.Core.Diagnostics` types and additive `ConflictDiagnostics` properties.
+- SBOM/VEX/provenance impact: no dependency inventory change; normal release SBOM/provenance/signing evidence remains required before publication.

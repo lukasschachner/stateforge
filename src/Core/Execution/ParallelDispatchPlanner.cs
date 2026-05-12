@@ -20,7 +20,7 @@ internal sealed class ParallelDispatchPlanner<TState, TEvent>
             : new TransitionMatcher<TState, TEvent>(_definition).Match(shape.OwningCompositeState, @event);
         var postShape = selected.Length == 0 ? shape : shape;
         var parentIsCompletion = parent is not null && selected.Length > 0;
-        var conflicts = ParallelConflictDetector.Detect(_definition, selected, parent, parentIsCompletion);
+        var conflicts = ParallelConflictDetector.Detect(_definition, selected, parent, parentIsCompletion, @event);
         return new ParallelDispatchPlan<TState, TEvent>(@event, shape, selected, parent, conflicts,
             conflicts.Count == 0 ? postShape : null);
     }

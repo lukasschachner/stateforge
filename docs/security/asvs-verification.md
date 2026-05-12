@@ -51,3 +51,7 @@ Current baseline:
 ## Feature Review: Source Generator Hierarchy and Regions (2026-05-12)
 
 Selected Level: N/A. The feature extends a compile-time C# source generator and generated Core definitions only; it adds no web application, HTTP API, authentication, authorization, session management, or browser-facing service surface.
+
+## Feature review: 016-transition-conflict-diagnostics
+
+Selected Level: N/A. The feature adds in-process FSM validation/runtime diagnostic data only; it introduces no web application, HTTP API, authentication, authorization, session management, browser, or service endpoint surface.

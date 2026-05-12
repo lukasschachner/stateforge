@@ -339,6 +339,91 @@ enum StateMachineLibrary.Core.Definitions.TransitionTriggerKind : System.ICompar
   enum Completion
   enum Event
 
+class StateMachineLibrary.Core.Diagnostics.GuardOutcomeDiagnostic
+  ctor (System.Boolean wasEnabled, System.Collections.Generic.IEnumerable<System.String> conditionSummaries, System.String transitionId)
+  property System.Boolean WasEnabled {get;}
+  property System.Collections.Generic.IReadOnlyList<System.String> ConditionSummaries {get;}
+  property System.String TransitionId {get;}
+
+class StateMachineLibrary.Core.Diagnostics.InvalidActiveShapeDiagnostic
+  ctor (System.Object compositeState, System.String regionId, System.String regionName, System.String expectedShape, System.Collections.Generic.IEnumerable<System.Object> actualActiveStates, System.Collections.Generic.IEnumerable<System.String> missingRegions, System.Collections.Generic.IEnumerable<System.String> duplicateRegions)
+  property System.Collections.Generic.IReadOnlyList<System.Object> ActualActiveStates {get;}
+  property System.Collections.Generic.IReadOnlyList<System.String> DuplicateRegions {get;}
+  property System.Collections.Generic.IReadOnlyList<System.String> MissingRegions {get;}
+  property System.Object CompositeState {get;}
+  property System.String ExpectedShape {get;}
+  property System.String RegionId {get;}
+  property System.String RegionName {get;}
+
+class StateMachineLibrary.Core.Diagnostics.TransitionConflictDiagnostic
+  ctor (StateMachineLibrary.Core.Diagnostics.TransitionConflictKind kind, System.String message, StateMachineLibrary.Core.Definitions.TransitionTriggerKind triggerKind, System.Object event, System.String eventIdentity, System.Object completionScope, System.Object conflictScope, System.Object compositeState, System.String sourceRegionId, System.String sourceRegionName, System.String targetRegionId, System.String targetRegionName, System.Collections.Generic.IEnumerable<StateMachineLibrary.Core.Diagnostics.TransitionConflictParticipant> participants, StateMachineLibrary.Core.Diagnostics.InvalidActiveShapeDiagnostic invalidShape, System.String validationCode)
+  property StateMachineLibrary.Core.Definitions.TransitionTriggerKind TriggerKind {get;}
+  property StateMachineLibrary.Core.Diagnostics.InvalidActiveShapeDiagnostic InvalidShape {get;}
+  property StateMachineLibrary.Core.Diagnostics.TransitionConflictKind Kind {get;}
+  property System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Core.Diagnostics.TransitionConflictParticipant> Participants {get;}
+  property System.Object CompletionScope {get;}
+  property System.Object CompositeState {get;}
+  property System.Object ConflictScope {get;}
+  property System.Object Event {get;}
+  property System.String EventIdentity {get;}
+  property System.String Message {get;}
+  property System.String SourceRegionId {get;}
+  property System.String SourceRegionName {get;}
+  property System.String TargetRegionId {get;}
+  property System.String TargetRegionName {get;}
+  property System.String ValidationCode {get;}
+
+enum StateMachineLibrary.Core.Diagnostics.TransitionConflictKind : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  field StateMachineLibrary.Core.Diagnostics.TransitionConflictKind AmbiguousGuardOutcome
+  field StateMachineLibrary.Core.Diagnostics.TransitionConflictKind CompletionConflict
+  field StateMachineLibrary.Core.Diagnostics.TransitionConflictKind CrossRegionBoundary
+  field StateMachineLibrary.Core.Diagnostics.TransitionConflictKind DuplicateSourceScope
+  field StateMachineLibrary.Core.Diagnostics.TransitionConflictKind InvalidPostShape
+  field StateMachineLibrary.Core.Diagnostics.TransitionConflictKind ParentRegionalConflict
+  enum AmbiguousGuardOutcome
+  enum CompletionConflict
+  enum CrossRegionBoundary
+  enum DuplicateSourceScope
+  enum InvalidPostShape
+  enum ParentRegionalConflict
+
+class StateMachineLibrary.Core.Diagnostics.TransitionConflictParticipant
+  ctor (StateMachineLibrary.Core.Diagnostics.TransitionConflictParticipantRole role, System.String transitionId, StateMachineLibrary.Core.Definitions.TransitionTriggerKind triggerKind, System.Object event, System.String eventIdentity, System.Object sourceState, System.Object targetState, System.Object compositeState, System.String regionId, System.String regionName, StateMachineLibrary.Core.Diagnostics.GuardOutcomeDiagnostic guardOutcome, System.Int32 order)
+  property StateMachineLibrary.Core.Definitions.TransitionTriggerKind TriggerKind {get;}
+  property StateMachineLibrary.Core.Diagnostics.GuardOutcomeDiagnostic GuardOutcome {get;}
+  property StateMachineLibrary.Core.Diagnostics.TransitionConflictParticipantRole Role {get;}
+  property System.Int32 Order {get;}
+  property System.Object CompositeState {get;}
+  property System.Object Event {get;}
+  property System.Object SourceState {get;}
+  property System.Object TargetState {get;}
+  property System.String EventIdentity {get;}
+  property System.String RegionId {get;}
+  property System.String RegionName {get;}
+  property System.String TransitionId {get;}
+
+enum StateMachineLibrary.Core.Diagnostics.TransitionConflictParticipantRole : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  field StateMachineLibrary.Core.Diagnostics.TransitionConflictParticipantRole CompetingTransition
+  field StateMachineLibrary.Core.Diagnostics.TransitionConflictParticipantRole CompletionTransition
+  field StateMachineLibrary.Core.Diagnostics.TransitionConflictParticipantRole Composite
+  field StateMachineLibrary.Core.Diagnostics.TransitionConflictParticipantRole Event
+  field StateMachineLibrary.Core.Diagnostics.TransitionConflictParticipantRole InvalidShapeMember
+  field StateMachineLibrary.Core.Diagnostics.TransitionConflictParticipantRole ParentTransition
+  field StateMachineLibrary.Core.Diagnostics.TransitionConflictParticipantRole Region
+  field StateMachineLibrary.Core.Diagnostics.TransitionConflictParticipantRole RegionalTransition
+  field StateMachineLibrary.Core.Diagnostics.TransitionConflictParticipantRole SourceState
+  field StateMachineLibrary.Core.Diagnostics.TransitionConflictParticipantRole TargetState
+  enum CompetingTransition
+  enum CompletionTransition
+  enum Composite
+  enum Event
+  enum InvalidShapeMember
+  enum ParentTransition
+  enum Region
+  enum RegionalTransition
+  enum SourceState
+  enum TargetState
+
 class StateMachineLibrary.Core.Execution.ActionExecutionContext<TState, TEvent>
   ctor (StateMachineDefinition<TState, TEvent> definition, TState sourceState, TState targetState, TEvent event, TransitionDefinition<TState, TEvent> transition, StateMachineLibrary.Core.Execution.TransitionLifecyclePhase phase, System.Threading.CancellationToken cancellationToken, StateMachineLibrary.Core.Definitions.MetadataCollection metadata, System.String regionId, System.String regionName, System.Boolean isRegionalCompletion, StateMachineLibrary.Core.Definitions.TransitionTriggerKind? triggerKind)
   property StateMachineDefinition<TState, TEvent> Definition {get;}
@@ -579,9 +664,10 @@ class StateMachineLibrary.Core.Execution.TransitionContext<TState, TEvent>
   property TransitionDefinition<TState, TEvent> Transition {get;}
 
 class StateMachineLibrary.Core.Execution.TransitionDiagnostics
-  ctor (System.String summary, StateMachineLibrary.Core.Execution.TransitionLifecyclePhase phase, System.Exception exception, System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Core.Validation.ValidationFinding> validationFindings, System.String affectedElement, System.Object hierarchyMetadata, System.Object parallelMetadata)
+  ctor (System.String summary, StateMachineLibrary.Core.Execution.TransitionLifecyclePhase phase, System.Exception exception, System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Core.Validation.ValidationFinding> validationFindings, System.String affectedElement, System.Object hierarchyMetadata, System.Object parallelMetadata, System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Core.Diagnostics.TransitionConflictDiagnostic> conflictDiagnostics)
   property StateMachineLibrary.Core.Execution.TransitionDiagnostics None {get;}
   property StateMachineLibrary.Core.Execution.TransitionLifecyclePhase Phase {get;}
+  property System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Core.Diagnostics.TransitionConflictDiagnostic> ConflictDiagnostics {get;}
   property System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Core.Validation.ValidationFinding> ValidationFindings {get;}
   property System.Exception Exception {get;}
   property System.Object HierarchyMetadata {get;}
@@ -657,6 +743,7 @@ class StateMachineLibrary.Core.Execution.TransitionOutcome<TState, TEvent>
   property StateMachineLibrary.Core.Execution.TransitionOutcomeCategory Category {get;}
   property System.Boolean Committed {get;}
   property System.Boolean IsSuccess {get;}
+  property System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Core.Diagnostics.TransitionConflictDiagnostic> ConflictDiagnostics {get;}
   property TEvent Event {get;}
   property TState ActiveLeafState {get;}
   property TState PreviousState {get;}
@@ -985,9 +1072,10 @@ class StateMachineLibrary.Core.Validation.ValidationFinding : System.IEquatable<
   property System.String TransitionId {get;set;}
 
 class StateMachineLibrary.Core.Validation.ValidationResult
-  ctor (System.Collections.Generic.IEnumerable<StateMachineLibrary.Core.Validation.ValidationFinding> findings)
+  ctor (System.Collections.Generic.IEnumerable<StateMachineLibrary.Core.Validation.ValidationFinding> findings, System.Collections.Generic.IEnumerable<StateMachineLibrary.Core.Diagnostics.TransitionConflictDiagnostic> conflictDiagnostics)
   property StateMachineLibrary.Core.Validation.ValidationResult Valid {get;}
   property System.Boolean IsValid {get;}
+  property System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Core.Diagnostics.TransitionConflictDiagnostic> ConflictDiagnostics {get;}
   property System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Core.Validation.ValidationFinding> Errors {get;}
   property System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Core.Validation.ValidationFinding> Findings {get;}
   property System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Core.Validation.ValidationFinding> Warnings {get;}

@@ -1,14 +1,17 @@
 using StateMachineLibrary.Core.Definitions;
 using StateMachineLibrary.Core.Diagnostics;
+using StateMachineLibrary.Core.Execution;
 using StateMachineLibrary.Core.Tests.Parallel;
 
 namespace StateMachineLibrary.Core.Tests.Execution;
 
-public sealed class ParallelParentExitConflictTests
+public sealed class ExternalParallelConflictDiagnosticTests
 {
     [Fact]
-    public async Task Parent_exit_and_regional_transition_conflict_before_commit()
+    public async Task External_parallel_conflict_returns_diagnostics_without_state_write()
     {
+        var state = ParallelState.Operational;
+        var writes = 0;
         var definition = StateMachineDefinition<ParallelState, ParallelEvent>.Create(builder =>
         {
             builder.ParallelComposite(ParallelState.Operational)
@@ -19,21 +22,18 @@ public sealed class ParallelParentExitConflictTests
             builder.State(ParallelState.WaitingForPick).On(ParallelEvent.Cancel).GoTo(ParallelState.Packing);
             builder.State(ParallelState.Cancelled);
         });
-        var runtime = definition.CreateRuntime(ParallelState.Operational);
+        var runtime = definition.CreateRuntime(StateAccessor.Create(() => state, next =>
+        {
+            writes++;
+            state = next;
+        }));
 
         var outcome = await runtime.ApplyAsync(ParallelEvent.Cancel);
 
         Assert.False(outcome.Committed);
-        Assert.Contains("Parent-level", outcome.Diagnostics.Summary);
-        var conflict = Assert.Single(outcome.Diagnostics.ConflictDiagnostics);
-        Assert.Equal(TransitionConflictKind.ParentRegionalConflict, conflict.Kind);
-        Assert.Equal(ParallelState.Operational, conflict.CompositeState);
-        Assert.Collection(conflict.Participants,
-            parent => Assert.Equal(TransitionConflictParticipantRole.ParentTransition, parent.Role),
-            regional =>
-            {
-                Assert.Equal(TransitionConflictParticipantRole.RegionalTransition, regional.Role);
-                Assert.Equal("Fulfillment", regional.RegionName);
-            });
+        Assert.Equal(ParallelState.Operational, state);
+        Assert.Equal(0, writes);
+        Assert.Equal(TransitionConflictKind.ParentRegionalConflict,
+            Assert.Single(outcome.Diagnostics.ConflictDiagnostics).Kind);
     }
 }

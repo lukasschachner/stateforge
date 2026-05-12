@@ -296,14 +296,20 @@ public sealed class StateMachineDefinition<TState, TEvent>
 
             if (tracker.IsRecognized(completionScope) || !selector.HasCandidates(completionScope)) return lastOutcome;
 
-            var selected = await selector.SelectAsync(executorState, completionScope, cancellationToken)
+            var selection = await selector.SelectWithDiagnosticsAsync(executorState, completionScope, cancellationToken)
                 .ConfigureAwait(false);
-            if (selected is null)
+            if (selection.IsAmbiguous)
+                return TransitionOutcome<TState, TEvent>.ValidationFailure(activeShape.ActiveLeafState!, default!,
+                    new TransitionDiagnostics(selection.ConflictDiagnostic!.Message, TransitionLifecyclePhase.Matching,
+                        conflictDiagnostics: [selection.ConflictDiagnostic]));
+
+            if (selection.Selected is null)
             {
                 tracker.MarkNoEligible(completionScope);
                 return lastOutcome;
             }
 
+            var selected = selection.Selected;
             tracker.MarkSelected(completionScope);
             var completionOutcome = await new TransitionExecutor<TState, TEvent>(this)
                 .ApplyCompletionAsync(executorState, selected, cancellationToken, observer,
