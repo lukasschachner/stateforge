@@ -52,6 +52,15 @@ UPDATE_PUBLIC_API_SNAPSHOTS=1 dotnet test --project tests/Release.Tests/Release.
 
 The CI workflow in `.github/workflows/ci.yml` runs restore, build, test, format verification, and pack, then uploads artifacts for review. A passing CI run means artifacts are ready for inspection, not publication.
 
+## Secure release workflow
+
+The release workflow in `.github/workflows/release.yml` adds secure-release controls for tagged/manual releases:
+
+- dependency vulnerability gate (`dotnet list ... --vulnerable --include-transitive --format json` + `eng/check-vulnerabilities.py`);
+- CycloneDX SBOM generation to `artifacts/sbom/StateMachineLibrary.cdx.json`;
+- provenance attestation for package and SBOM artifacts via `actions/attest-build-provenance`;
+- gated NuGet publication through protected `nuget-prod` environment approval and environment-scoped `NUGET_API_KEY` secret.
+
 ## Graph rendering feature notes
 
 Graph rendering adapters are validated by:

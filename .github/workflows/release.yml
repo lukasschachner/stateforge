@@ -1,0 +1,128 @@
+name: release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: 'Publish packages to NuGet (requires nuget-prod environment approval)'
+        type: boolean
+        default: false
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build-artifacts:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: restore local tools
+        run: dotnet tool restore
+
+      - name: prepare artifact directories
+        run: mkdir -p artifacts/packages artifacts/sbom artifacts/security
+
+      - name: restore
+        run: dotnet restore StateMachineLibrary.sln
+
+      - name: build
+        run: dotnet build StateMachineLibrary.sln --configuration Release --no-restore
+
+      - name: test
+        run: dotnet test --solution StateMachineLibrary.sln --configuration Release --no-build
+
+      - name: dependency vulnerability report
+        run: dotnet list StateMachineLibrary.sln package --vulnerable --include-transitive --format json > artifacts/security/vulnerabilities.json
+
+      - name: enforce vulnerability gate
+        run: python3 eng/check-vulnerabilities.py artifacts/security/vulnerabilities.json
+
+      - name: pack
+        run: dotnet pack StateMachineLibrary.sln --configuration Release --no-build --output artifacts/packages
+
+      - name: generate cyclonedx sbom
+        run: dotnet CycloneDX StateMachineLibrary.sln --configuration Release --exclude-test-projects --output-format Json --output artifacts/sbom --filename StateMachineLibrary.cdx.json
+
+      - name: attest nuget packages provenance
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: artifacts/packages/*
+
+      - name: attest sbom provenance
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: artifacts/sbom/StateMachineLibrary.cdx.json
+
+      - name: upload package artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuget-release-candidates
+          path: artifacts/packages/*
+
+      - name: upload security artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-supply-chain-evidence
+          path: |
+            artifacts/sbom/*
+            artifacts/security/*
+
+  publish-nuget:
+    needs: build-artifacts
+    if: startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'workflow_dispatch' && inputs.publish)
+    runs-on: ubuntu-latest
+    environment: nuget-prod
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: download package artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: nuget-release-candidates
+          path: artifacts/packages
+
+      - name: publish packages to nuget
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+          NUGET_SOURCE: https://api.nuget.org/v3/index.json
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+
+          nupkgs=(artifacts/packages/*.nupkg)
+          if [ ${#nupkgs[@]} -eq 0 ]; then
+            echo "No .nupkg files found to publish" >&2
+            exit 1
+          fi
+
+          dotnet nuget push "${nupkgs[@]}" \
+            --source "$NUGET_SOURCE" \
+            --api-key "$NUGET_API_KEY" \
+            --skip-duplicate
+
+          snupkgs=(artifacts/packages/*.snupkg)
+          if [ ${#snupkgs[@]} -gt 0 ]; then
+            dotnet nuget push "${snupkgs[@]}" \
+              --source "$NUGET_SOURCE" \
+              --api-key "$NUGET_API_KEY" \
+              --skip-duplicate
+          else
+            echo "No symbol packages (*.snupkg) found; skipping symbol publish."
+          fi

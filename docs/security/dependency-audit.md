@@ -4,7 +4,7 @@
 
 - Feature or release: Repository baseline and release-capable NuGet package set
 - Reviewer: Spec Kit security-governance baseline
-- Date: 2026-05-11
+- Date: 2026-05-13
 - Package ecosystems involved: NuGet; GitHub Actions marketplace actions; npm only for local Pi/Spec Kit tooling and not as a shipped product dependency
 
 ## Dependencies Changed
@@ -25,20 +25,23 @@ Feature-level plans that add, update, or remove dependencies must update this do
 | GitHub Actions `actions/checkout` | `v4` | GitHub Actions marketplace | Yes | Review before release | Yes for CI use | Approved CI action; pinning hardening may be added later |
 | GitHub Actions `actions/setup-dotnet` | `v4` | GitHub Actions marketplace | Yes | Review before release | Yes for CI use | Approved CI action; pinning hardening may be added later |
 | GitHub Actions `actions/upload-artifact` | `v4` | GitHub Actions marketplace | Yes | Review before release | Yes for CI use | Approved CI action; review artifact retention/exposure settings before public release |
+| GitHub Actions `actions/download-artifact` | `v4` | GitHub Actions marketplace | Yes | Review before release | Yes for CI/release use | Approved release workflow action |
+| GitHub Actions `actions/attest-build-provenance` | `v2` | GitHub Actions marketplace | Yes | Review before release | Yes for supply-chain provenance | Approved for release provenance attestation |
+| CycloneDX .NET tool (`cyclonedx`) | `6.2.0` | NuGet | Yes | Review before release | Yes for SBOM generation | Approved release-time SBOM tool |
 
 ## Lock Files and Provenance
 
 - Lock files updated and committed: No NuGet lock file policy is recorded yet.
 - Hashes / integrity values verified: Not yet recorded for NuGet dependencies or GitHub Actions.
-- Build provenance recorded (where applicable): Basic CI workflow exists; provenance/SLSA attestation is not yet recorded.
+- Build provenance recorded (where applicable): Release workflow records provenance attestations for package and SBOM artifacts via `actions/attest-build-provenance`.
 
 ## Automation Posture
 
 Static dependency audits are supplementary, not a replacement for continuous monitoring. Current baseline:
 
-- Renovatebot or Dependabot configured for this repository: no evidence found in `.github/dependabot.yml` or Renovate config. Action required before public release or sustained external consumption.
-- Automated update PRs reviewed and triaged on a defined cadence: no cadence recorded. Action required.
-- SBOM produced by CI for each release artefact: no. Action required for release-capable packages.
+- Renovatebot or Dependabot configured for this repository: Renovate is configured in `renovate.json`.
+- Automated update PRs reviewed and triaged on a defined cadence: Renovate grouping/rate controls are configured; maintainer review cadence should continue as an operational process.
+- SBOM produced by CI for each release artefact: yes in `.github/workflows/release.yml` (`dotnet CycloneDX ...` output to `artifacts/sbom/`).
 - Dependency Track (or equivalent) ingests CI-built SBOMs for continuous CVE monitoring: no evidence found. Decide whether to adopt Dependency Track or equivalent CVE monitoring before public release.
 - OpenSSF Scorecard reviewed for high-impact public dependencies: no evidence found. Run once the repository/package posture is public or before a major public release.
 
@@ -50,11 +53,10 @@ Static dependency audits are supplementary, not a replacement for continuous mon
 ## Follow-Up
 
 - Open risks:
-  - No automated dependency update configuration found.
-  - No CI-produced SBOM found.
-  - No VEX workflow or CVE triage cadence recorded.
+  - VEX records and advisory triage cadence are not yet populated for a real public release.
+  - Release artifact signing policy/implementation is not configured.
   - GitHub Actions are version-pinned by major version, not immutable SHA.
-- Required mitigations and owners: Maintainers should decide update automation, SBOM generation format, VEX storage, and provenance/signing approach before public package publication.
+- Required mitigations and owners: Maintainers should operate VEX issuance per release, decide signing strategy, and consider SHA-pinning release-critical GitHub Actions before public package publication.
 - Next audit trigger: dependency change, release workflow change, public NuGet release candidate, or security advisory affecting .NET/Roslyn/test/build dependencies.
 
 ## Feature Audit: Completion Transitions (2026-05-12)

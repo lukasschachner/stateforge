@@ -4,7 +4,7 @@
 
 - Feature: Repository baseline for .NET State Machine Library specs and release-capable packages
 - Owner: Maintainers
-- Review date: 2026-05-11
+- Review date: 2026-05-13
 - Primary language(s): C#, Bash, PowerShell
 - Frameworks involved: .NET `net10.0`, `netstandard2.0` analyzer target, GitHub Actions
 
@@ -14,7 +14,7 @@
 - Output encoding reviewed: applicable to graph text renderers and future docs/web outputs; not applicable to Core runtime UI because Core has no UI.
 - Authentication and session handling reviewed: N/A for current package set; no HTTP/auth/session surface.
 - Authorisation and access control reviewed: N/A for current package set; no multi-user service or protected resource surface.
-- Secrets handling reviewed (no hard-coded secrets): applicable to CI/release workflows and future package publishing; current CI does not publish packages or require registry secrets.
+- Secrets handling reviewed (no hard-coded secrets): applicable to CI/release workflows and future package publishing; release workflow uses environment-scoped NuGet credentials and approval gate.
 - Cryptographic primitives reviewed (current algorithms only): N/A for current runtime semantics; required if future signing, hashing, or crypto APIs are added.
 - Error handling reviewed (no internal state leakage): applicable to validation diagnostics, source-generator diagnostics, persistence outcomes, and telemetry samples.
 - File and network I/O reviewed: applicable to release/package validation scripts, generated artifacts, graph rendering samples, and future network adapters.
@@ -59,8 +59,8 @@
 
 ## Follow-Up
 
-- Open findings: SBOM generation, VEX status records, SLSA provenance, Dependabot/Renovate posture, and OpenSSF Scorecard review are not yet fully automated.
-- Required mitigations and owners: Maintainers should add release security tasks to release-readiness and package-affecting specs before public package publication.
+- Open findings: Per-release VEX records and release artifact signing are not yet implemented; OpenSSF Scorecard review is not yet automated.
+- Required mitigations and owners: Maintainers should issue VEX statements each public release, finalize signing policy, and continue release security tasks in package-affecting specs before public package publication.
 - Re-review trigger: dependency additions, package/publication workflow changes, new HTTP/API/auth features, new serialization/storage providers, telemetry exporter changes, or public release readiness review.
 
 ## Feature Review: Completion Transitions (2026-05-12)
