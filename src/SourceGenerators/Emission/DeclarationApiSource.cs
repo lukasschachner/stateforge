@@ -39,6 +39,21 @@ public static class DeclarationApiSource
 
                                          /// <summary>Marks the state as terminal.</summary>
                                          public bool IsTerminal { get; set; }
+
+                                         /// <summary>Declares this state's parent composite.</summary>
+                                         public object? Parent { get; set; }
+
+                                         /// <summary>Declares the initial child for this composite state.</summary>
+                                         public object? InitialChild { get; set; }
+
+                                         /// <summary>Declares history behavior for this composite state.</summary>
+                                         public HistoryMode History { get; set; }
+
+                                         /// <summary>Declares an optional history fallback child state.</summary>
+                                         public object? HistoryFallback { get; set; }
+
+                                         /// <summary>Marks the state as a parallel composite.</summary>
+                                         public bool IsParallelComposite { get; set; }
                                      }
 
                                      /// <summary>Declares a simple event value or payload event type.</summary>
@@ -103,6 +118,49 @@ public static class DeclarationApiSource
                                      /// <summary>Transition kind used by declaration attributes.</summary>
                                      internal enum TransitionKind { External, Self, Internal }
 
+                                     /// <summary>History mode used by advanced declaration attributes and DSL markers.</summary>
+                                     internal enum HistoryMode { None, Shallow, Deep }
+
+                                     /// <summary>Declares an explicit named region under a parallel composite.</summary>
+                                     [global::System.AttributeUsage(global::System.AttributeTargets.Class | global::System.AttributeTargets.Struct, AllowMultiple = true, Inherited = false)]
+                                     internal sealed class ParallelRegionAttribute : global::System.Attribute
+                                     {
+                                         public ParallelRegionAttribute(object ownerCompositeState, string name)
+                                         {
+                                             OwnerCompositeState = ownerCompositeState;
+                                             Name = name;
+                                         }
+
+                                         public object OwnerCompositeState { get; }
+                                         public string Name { get; }
+                                     }
+
+                                     /// <summary>Marks a state as a parallel composite.</summary>
+                                     [global::System.AttributeUsage(global::System.AttributeTargets.Class | global::System.AttributeTargets.Struct, AllowMultiple = true, Inherited = false)]
+                                     internal sealed class ParallelCompositeAttribute : global::System.Attribute
+                                     {
+                                         public ParallelCompositeAttribute(object compositeState) => CompositeState = compositeState;
+                                         public object CompositeState { get; }
+                                     }
+
+                                     /// <summary>Declares membership in a named parallel region.</summary>
+                                     [global::System.AttributeUsage(global::System.AttributeTargets.Class | global::System.AttributeTargets.Struct, AllowMultiple = true, Inherited = false)]
+                                     internal sealed class RegionAttribute : global::System.Attribute
+                                     {
+                                         public RegionAttribute(object ownerCompositeState, string name, object state)
+                                         {
+                                             OwnerCompositeState = ownerCompositeState;
+                                             Name = name;
+                                             State = state;
+                                         }
+
+                                         public object OwnerCompositeState { get; }
+                                         public string Name { get; }
+                                         public object State { get; }
+                                         public bool IsInitial { get; set; }
+                                         public bool IsTerminal { get; set; }
+                                     }
+
                                      /// <summary>Metadata key/value declaration.</summary>
                                      [global::System.AttributeUsage(global::System.AttributeTargets.Class | global::System.AttributeTargets.Struct, AllowMultiple = true, Inherited = false)]
                                      internal sealed class MetadataAttribute : global::System.Attribute
@@ -137,10 +195,68 @@ public static class DeclarationApiSource
                                          public StateDeclaration<TState, TEvent> Terminal() => this;
                                          /// <summary>Declares state metadata.</summary>
                                          public StateDeclaration<TState, TEvent> WithMetadata(string key, object? value) => this;
+                                         /// <summary>Declares the parent composite for this state.</summary>
+                                         public StateDeclaration<TState, TEvent> ChildOf(TState parentState) => this;
+                                         /// <summary>Declares the parent composite for this state.</summary>
+                                         public StateDeclaration<TState, TEvent> WithParent(TState parentState) => this;
+                                         /// <summary>Declares the initial child for this composite state.</summary>
+                                         public StateDeclaration<TState, TEvent> InitialChild(TState initialChildState) => this;
+                                         /// <summary>Declares the initial child for this composite state.</summary>
+                                         public StateDeclaration<TState, TEvent> WithInitialChild(TState initialChildState) => this;
+                                         /// <summary>Declares this state as a composite with the supplied initial child.</summary>
+                                         public StateDeclaration<TState, TEvent> Composite(TState initialChildState) => this;
+                                         /// <summary>Declares shallow history for this composite state.</summary>
+                                         public StateDeclaration<TState, TEvent> WithHistory() => this;
+                                         /// <summary>Declares history for this composite state.</summary>
+                                         public StateDeclaration<TState, TEvent> WithHistory(HistoryMode mode) => this;
+                                         /// <summary>Declares history with a fallback child for this composite state.</summary>
+                                         public StateDeclaration<TState, TEvent> WithHistory(HistoryMode mode, TState fallbackChildState) => this;
+                                         /// <summary>Declares shallow history with a fallback child for this composite state.</summary>
+                                         public StateDeclaration<TState, TEvent> WithHistory(TState fallbackChildState) => this;
+                                         /// <summary>Declares shallow history for this composite state.</summary>
+                                         public StateDeclaration<TState, TEvent> WithShallowHistory() => this;
+                                         /// <summary>Declares shallow history with a fallback child for this composite state.</summary>
+                                         public StateDeclaration<TState, TEvent> WithShallowHistory(TState fallbackChildState) => this;
+                                         /// <summary>Declares deep history for this composite state.</summary>
+                                         public StateDeclaration<TState, TEvent> WithDeepHistory() => this;
+                                         /// <summary>Declares deep history with a fallback child for this composite state.</summary>
+                                         public StateDeclaration<TState, TEvent> WithDeepHistory(TState fallbackChildState) => this;
+                                         /// <summary>Marks this state as a parallel composite.</summary>
+                                         public StateDeclaration<TState, TEvent> ParallelComposite() => this;
+                                         /// <summary>Declares membership in a named region.</summary>
+                                         public StateDeclaration<TState, TEvent> InRegion(TState compositeState, string regionName) => this;
+                                         /// <summary>Starts a named region declaration with no initial state.</summary>
+                                         public RegionDeclaration<TState, TEvent> Region(string name) => new RegionDeclaration<TState, TEvent>();
+                                         /// <summary>Starts a named region declaration with an initial state.</summary>
+                                         public RegionDeclaration<TState, TEvent> Region(string name, TState initialState) => new RegionDeclaration<TState, TEvent>();
                                          /// <summary>Starts a simple event transition declaration.</summary>
                                          public TransitionDeclaration<TState, TEvent> On(TEvent eventValue) => new TransitionDeclaration<TState, TEvent>();
                                          /// <summary>Starts a payload event transition declaration.</summary>
                                          public TransitionDeclaration<TState, TEvent> On<TSpecificEvent>() where TSpecificEvent : TEvent => new TransitionDeclaration<TState, TEvent>();
+                                     }
+
+                                     /// <summary>Declarative DSL region builder marker.</summary>
+                                     internal sealed class RegionDeclaration<TState, TEvent>
+                                     {
+                                         /// <summary>Declares a member of the current region.</summary>
+                                         public RegionMemberDeclaration<TState, TEvent> Member(TState state) => new RegionMemberDeclaration<TState, TEvent>();
+                                         /// <summary>Starts another named region declaration with no initial state.</summary>
+                                         public RegionDeclaration<TState, TEvent> Region(string name) => this;
+                                         /// <summary>Starts another named region declaration with an initial state.</summary>
+                                         public RegionDeclaration<TState, TEvent> Region(string name, TState initialState) => this;
+                                     }
+
+                                     /// <summary>Declarative DSL region member marker.</summary>
+                                     internal sealed class RegionMemberDeclaration<TState, TEvent>
+                                     {
+                                         /// <summary>Marks the region member as terminal.</summary>
+                                         public RegionDeclaration<TState, TEvent> Terminal() => new RegionDeclaration<TState, TEvent>();
+                                         /// <summary>Starts another member in the same region.</summary>
+                                         public RegionMemberDeclaration<TState, TEvent> Member(TState state) => this;
+                                         /// <summary>Starts another named region declaration with no initial state.</summary>
+                                         public RegionDeclaration<TState, TEvent> Region(string name) => new RegionDeclaration<TState, TEvent>();
+                                         /// <summary>Starts another named region declaration with an initial state.</summary>
+                                         public RegionDeclaration<TState, TEvent> Region(string name, TState initialState) => new RegionDeclaration<TState, TEvent>();
                                      }
 
                                      /// <summary>Declarative DSL transition builder marker.</summary>

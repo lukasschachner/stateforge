@@ -70,3 +70,11 @@
 - ASVS: N/A for this feature; no web/API/auth/session surface was added.
 - Surface review: No new authentication, authorization, cryptography, network I/O, user-controlled file I/O, serializer, persistence provider, timers, hosted services, or background scheduler behavior was introduced.
 - Secure coding rule review: Implementation stayed in memory-safe C#/.NET, reused existing cancellation-aware async lifecycle paths, and kept completion processing synchronous and bounded to active hierarchy/region shape plus declared completion transitions.
+
+## Feature Review: Source Generator Hierarchy and Regions (2026-05-12)
+
+- CWE-20: Advanced source-generator declarations validate duplicate explicit regions, missing regional initials, duplicate sibling region membership, unsupported history modes, and invalid advanced role combinations before emitting definitions.
+- Safe diagnostics: New `SMG009`-`SMG015` diagnostics use deterministic IDs/messages and source/related locations without stack traces, environment details, secrets, or local path interpolation in message text.
+- Runtime boundary: Core validation remains authoritative for graph reachability, runtime/guard-dependent ambiguity, and active-state validity; generated code only emits existing Core builder calls.
+- Surface review: No authentication, authorization, cryptography, network I/O, user-controlled file I/O, serializer, persistence provider, hosted service, renderer, or background scheduler behavior was introduced.
+- Secure coding rule review: Implementation stayed in memory-safe C#/.NET and parses compiler syntax/semantic model data without executing user-authored DSL methods or callbacks during generation.

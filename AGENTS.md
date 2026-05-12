@@ -3,7 +3,7 @@
 Guidance for AI coding agents working in this repository.
 
 <!-- SPECKIT START -->
-For feature-specific implementation context, read the active Spec Kit plan under `specs/<feature>/plan.md`, especially when implementing a `/speckit.*` task. Current feature state is tracked by `.specify/feature.json`.
+For feature-specific implementation context, read the active Spec Kit plan referenced by `.specify/feature.json`, especially when implementing a `/speckit.*` task.
 <!-- SPECKIT END -->
 
 ## Repository Overview

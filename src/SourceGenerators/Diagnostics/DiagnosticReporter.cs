@@ -47,6 +47,43 @@ public sealed class DiagnosticReporter
         Report(StateMachineGeneratorDiagnostics.GeneratedNameConflict, location, null, memberName);
     }
 
+    public void DuplicateRegion(string owner, string region, Location? location,
+        IEnumerable<Location?>? relatedLocations = null)
+    {
+        Report(StateMachineGeneratorDiagnostics.DuplicateRegionDeclaration, location, relatedLocations, owner, region);
+    }
+
+    public void MissingRegionalInitial(string owner, string region, Location? location)
+    {
+        Report(StateMachineGeneratorDiagnostics.MissingRegionalInitial, location, null, owner, region);
+    }
+
+    public void DuplicateRegionMembership(string state, string owner, Location? location,
+        IEnumerable<Location?>? relatedLocations = null)
+    {
+        Report(StateMachineGeneratorDiagnostics.DuplicateRegionMembership, location, relatedLocations, state, owner);
+    }
+
+    public void UnknownRegionOwner(string owner, Location? location)
+    {
+        Report(StateMachineGeneratorDiagnostics.UnknownRegionOwner, location, null, owner);
+    }
+
+    public void UnsupportedHistory(string state, Location? location)
+    {
+        Report(StateMachineGeneratorDiagnostics.UnsupportedHistoryMode, location, null, state);
+    }
+
+    public void InvalidRoleCombination(string state, string reason, Location? location)
+    {
+        Report(StateMachineGeneratorDiagnostics.InvalidAdvancedRoleCombination, location, null, state, reason);
+    }
+
+    public void InvalidRegion(string owner, string region, string reason, Location? location)
+    {
+        Report(StateMachineGeneratorDiagnostics.InvalidRegionDeclaration, location, null, owner, region, reason);
+    }
+
     public void Report(DiagnosticDescriptor descriptor, Location? location, IEnumerable<Location?>? relatedLocations,
         params object[] args)
     {

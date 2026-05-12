@@ -250,7 +250,9 @@ public static partial class GeneratedOrderMachine { }
 var definition = GeneratedOrderMachine.Definition;
 ```
 
-See [`samples/SourceGenerators.Sample`](samples/SourceGenerators.Sample).
+The generator also supports optional advanced declarations for hierarchy, history, terminal states, and parallel composites with named regions. Existing flat declarations remain valid and Core/fluent definitions continue to work unchanged. Generated definitions still use Core builder calls and therefore validate, execute, introspect, and export graph metadata like equivalent fluent definitions.
+
+See [`samples/SourceGenerators.Sample`](samples/SourceGenerators.Sample) and [`docs/examples/source-generators.md`](docs/examples/source-generators.md).
 
 ## Graph export and introspection example
 

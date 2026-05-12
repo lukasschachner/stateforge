@@ -80,6 +80,11 @@ public static class DslDeclarationParser
         }
 
         string? pendingEventKey = null;
+        string? currentRegionOwnerKey = null;
+        string? currentRegionOwnerExpression = null;
+        string? currentRegionName = null;
+        string? currentMemberKey = null;
+        string? currentMemberExpression = null;
         var conditions = new List<ConditionReference>();
         var behaviors = new List<BehaviorReference>();
         var transitionMetadata = new List<MetadataEntry>();
@@ -89,8 +94,115 @@ public static class DslDeclarationParser
             var call = calls[i];
             switch (call.Name)
             {
+                case "Terminal" when currentMemberKey is not null && currentRegionOwnerKey is not null &&
+                                     currentRegionName is not null && currentMemberExpression is not null &&
+                                     currentRegionOwnerExpression is not null:
+                    declaration.RegionMemberships.Add(new RegionMembership(currentMemberKey, currentMemberExpression,
+                        currentRegionOwnerKey, currentRegionOwnerExpression, currentRegionName, false, true,
+                        call.Location));
+                    EnsureState(declaration, currentMemberExpression, currentMemberKey, call.Location).IsTerminal = true;
+                    break;
                 case "Terminal":
                     state.IsTerminal = true;
+                    break;
+                case "ChildOf" when pendingEventKey is null && call.Arguments.Count == 1:
+                case "WithParent" when pendingEventKey is null && call.Arguments.Count == 1:
+                    state.ParentStateKey = transitionParser.Identity(call.Arguments[0]);
+                    state.ParentStateExpression = transitionParser.Text(call.Arguments[0]);
+                    state.ParentLocation = call.Location;
+                    EnsureState(declaration, state.ParentStateExpression, state.ParentStateKey, call.Location);
+                    break;
+                case "InitialChild" when pendingEventKey is null && call.Arguments.Count == 1:
+                case "WithInitialChild" when pendingEventKey is null && call.Arguments.Count == 1:
+                case "Composite" when pendingEventKey is null && call.Arguments.Count == 1:
+                    state.InitialChildStateKey = transitionParser.Identity(call.Arguments[0]);
+                    state.InitialChildExpression = transitionParser.Text(call.Arguments[0]);
+                    state.InitialChildLocation = call.Location;
+                    var child = EnsureState(declaration, state.InitialChildExpression, state.InitialChildStateKey,
+                        call.Location);
+                    child.ParentStateKey = stateKey;
+                    child.ParentStateExpression = stateText;
+                    child.ParentLocation ??= call.Location;
+                    break;
+                case "WithHistory" when pendingEventKey is null:
+                    ApplyHistory(declaration, state, call, transitionParser);
+                    break;
+                case "WithShallowHistory" when pendingEventKey is null:
+                    state.HistoryMode = DeclaredHistoryMode.Shallow;
+                    state.HistoryLocation = call.Location;
+                    if (call.Arguments.Count == 1)
+                    {
+                        state.HistoryFallbackStateKey = transitionParser.Identity(call.Arguments[0]);
+                        state.HistoryFallbackExpression = transitionParser.Text(call.Arguments[0]);
+                        EnsureState(declaration, state.HistoryFallbackExpression, state.HistoryFallbackStateKey,
+                            call.Location);
+                    }
+                    break;
+                case "WithDeepHistory" when pendingEventKey is null:
+                    state.HistoryMode = DeclaredHistoryMode.Deep;
+                    state.HistoryLocation = call.Location;
+                    if (call.Arguments.Count == 1)
+                    {
+                        state.HistoryFallbackStateKey = transitionParser.Identity(call.Arguments[0]);
+                        state.HistoryFallbackExpression = transitionParser.Text(call.Arguments[0]);
+                        EnsureState(declaration, state.HistoryFallbackExpression, state.HistoryFallbackStateKey,
+                            call.Location);
+                    }
+                    break;
+                case "ParallelComposite" when pendingEventKey is null:
+                    state.IsParallelComposite = true;
+                    if (!declaration.ParallelComposites.Any(p => p.CompositeStateKey == stateKey))
+                        declaration.ParallelComposites.Add(new ParallelCompositeDeclaration(stateKey, stateText,
+                            call.Location));
+                    break;
+                case "InRegion" when pendingEventKey is null && call.Arguments.Count >= 2:
+                    var inRegionOwnerKey = transitionParser.Identity(call.Arguments[0]);
+                    var inRegionOwnerExpression = transitionParser.Text(call.Arguments[0]);
+                    var inRegionName = StringConstant(semanticModel, call.Arguments[1], cancellationToken);
+                    declaration.RegionMemberships.Add(new RegionMembership(stateKey, stateText, inRegionOwnerKey,
+                        inRegionOwnerExpression, inRegionName, false, false, call.Location));
+                    state.ParentStateKey = inRegionOwnerKey;
+                    state.ParentStateExpression = inRegionOwnerExpression;
+                    EnsureState(declaration, inRegionOwnerExpression, inRegionOwnerKey, call.Location)
+                        .IsParallelComposite = true;
+                    break;
+                case "Region" when pendingEventKey is null && call.Arguments.Count >= 1:
+                    state.IsParallelComposite = true;
+                    if (!declaration.ParallelComposites.Any(p => p.CompositeStateKey == stateKey))
+                        declaration.ParallelComposites.Add(new ParallelCompositeDeclaration(stateKey, stateText,
+                            call.Location));
+                    currentRegionOwnerKey = stateKey;
+                    currentRegionOwnerExpression = stateText;
+                    currentRegionName = StringConstant(semanticModel, call.Arguments[0], cancellationToken);
+                    declaration.Regions.Add(new RegionDeclaration(stateKey, stateText, currentRegionName,
+                        declaration.Regions.Count, false, call.Location));
+                    currentMemberKey = null;
+                    currentMemberExpression = null;
+                    if (call.Arguments.Count >= 2)
+                    {
+                        currentMemberKey = transitionParser.Identity(call.Arguments[1]);
+                        currentMemberExpression = transitionParser.Text(call.Arguments[1]);
+                        declaration.RegionMemberships.Add(new RegionMembership(currentMemberKey,
+                            currentMemberExpression, stateKey, stateText, currentRegionName, true, false,
+                            call.Location));
+                        var initial = EnsureState(declaration, currentMemberExpression, currentMemberKey,
+                            call.Location);
+                        initial.ParentStateKey = stateKey;
+                        initial.ParentStateExpression = stateText;
+                    }
+                    break;
+                case "Member" when pendingEventKey is null && currentRegionOwnerKey is not null &&
+                                   currentRegionName is not null && currentRegionOwnerExpression is not null &&
+                                   call.Arguments.Count == 1:
+                    currentMemberKey = transitionParser.Identity(call.Arguments[0]);
+                    currentMemberExpression = transitionParser.Text(call.Arguments[0]);
+                    declaration.RegionMemberships.Add(new RegionMembership(currentMemberKey, currentMemberExpression,
+                        currentRegionOwnerKey, currentRegionOwnerExpression, currentRegionName, false, false,
+                        call.Location));
+                    var memberState = EnsureState(declaration, currentMemberExpression, currentMemberKey,
+                        call.Location);
+                    memberState.ParentStateKey = currentRegionOwnerKey;
+                    memberState.ParentStateExpression = currentRegionOwnerExpression;
                     break;
                 case "WithMetadata" when pendingEventKey is null && call.Arguments.Count >= 2:
                     state.Metadata.Add(new MetadataEntry(
@@ -196,6 +308,44 @@ public static class DslDeclarationParser
         transition.Behaviors.AddRange(behaviors);
         transition.Metadata.AddRange(metadata);
         declaration.Transitions.Add(transition);
+    }
+
+    private static DeclaredState EnsureState(MachineDeclaration declaration, string text, string key, Location? location)
+    {
+        return DeclarationParserHelpers.EnsureState(declaration, text, key, location);
+    }
+
+    private static void ApplyHistory(MachineDeclaration declaration, DeclaredState state, Call call,
+        DslTransitionParser parser)
+    {
+        state.HistoryLocation = call.Location;
+        if (call.Arguments.Count == 0)
+        {
+            state.HistoryMode = DeclaredHistoryMode.Shallow;
+            return;
+        }
+
+        if (call.Arguments.Count == 1)
+        {
+            var mode = AdvancedDeclarationParserHelpers.ParseHistoryMode(call.Arguments[0]);
+            if (mode == DeclaredHistoryMode.Unsupported)
+            {
+                state.HistoryMode = DeclaredHistoryMode.Shallow;
+                state.HistoryFallbackStateKey = parser.Identity(call.Arguments[0]);
+                state.HistoryFallbackExpression = parser.Text(call.Arguments[0]);
+                EnsureState(declaration, state.HistoryFallbackExpression, state.HistoryFallbackStateKey,
+                    call.Location);
+                return;
+            }
+
+            state.HistoryMode = mode;
+            return;
+        }
+
+        state.HistoryMode = AdvancedDeclarationParserHelpers.ParseHistoryMode(call.Arguments[0]);
+        state.HistoryFallbackStateKey = parser.Identity(call.Arguments[1]);
+        state.HistoryFallbackExpression = parser.Text(call.Arguments[1]);
+        EnsureState(declaration, state.HistoryFallbackExpression, state.HistoryFallbackStateKey, call.Location);
     }
 
     private static void Reset(ref List<ConditionReference> conditions, ref List<BehaviorReference> behaviors,

@@ -65,11 +65,26 @@ public static class DefinitionSourceEmitter
         foreach (var state in declaration.States)
         {
             sb.Append("    machine.State(").Append(state.ValueExpression).Append(")");
+            if (state.ParentStateExpression is not null) sb.Append(".ChildOf(").Append(state.ParentStateExpression).Append(")");
+            if (state.InitialChildExpression is not null) sb.Append(".InitialChild(").Append(state.InitialChildExpression).Append(")");
+            if (state.HistoryMode is DeclaredHistoryMode.Shallow or DeclaredHistoryMode.Deep)
+            {
+                sb.Append(".WithHistory(")
+                    .Append(AdvancedDeclarationParserHelpers.CoreHistoryMode(state.HistoryMode));
+                if (state.HistoryFallbackExpression is not null)
+                    sb.Append(", ").Append(state.HistoryFallbackExpression);
+                sb.Append(")");
+            }
+
+            if (state.IsParallelComposite) sb.Append(".ParallelComposite()");
             if (state.IsTerminal) sb.Append(".Terminal()");
 
             sb.Append(MetadataEmitter.Emit(state.Metadata));
             sb.AppendLine(";");
         }
+
+        foreach (var region in CanonicalRegions(declaration))
+            EmitRegion(sb, declaration, region);
 
         foreach (var transition in declaration.Transitions)
         {
@@ -100,6 +115,48 @@ public static class DefinitionSourceEmitter
 
         sb.AppendLine("});");
         return sb.ToString();
+    }
+
+    private static IEnumerable<RegionDeclaration> CanonicalRegions(MachineDeclaration declaration)
+    {
+        return declaration.Regions
+            .GroupBy(r => (r.OwnerCompositeStateKey, r.RegionName))
+            .Select(g => g.OrderBy(r => r.Order).First())
+            .OrderBy(r => r.Order);
+    }
+
+    private static void EmitRegion(StringBuilder sb, MachineDeclaration declaration, RegionDeclaration region)
+    {
+        if (region.InitialStateExpression is null) return;
+
+        var memberships = declaration.RegionMemberships
+            .Where(m => m.OwnerCompositeStateKey == region.OwnerCompositeStateKey &&
+                        string.Equals(m.RegionName, region.RegionName, StringComparison.Ordinal))
+            .ToArray();
+        var memberExpressions = memberships
+            .Select(m => m.StateExpression)
+            .Where(e => !string.Equals(e, region.InitialStateExpression, StringComparison.Ordinal))
+            .Distinct(StringComparer.Ordinal)
+            .ToArray();
+        var terminalExpressions = memberships
+            .Where(m => m.IsTerminal)
+            .Select(m => m.StateExpression)
+            .Distinct(StringComparer.Ordinal)
+            .ToArray();
+
+        sb.Append("    machine.ParallelComposite(").Append(region.OwnerCompositeExpression).Append(")")
+            .Append(".Region(")
+            .Append(ConditionReferenceEmitter.Literal(region.RegionName)).Append(", ")
+            .Append(region.InitialStateExpression).Append(", ")
+            .Append(ArrayExpression(memberExpressions, declaration.StateTypeName)).Append(", ")
+            .Append(ArrayExpression(terminalExpressions, declaration.StateTypeName)).AppendLine(");");
+    }
+
+    private static string ArrayExpression(IReadOnlyList<string> expressions, string elementType)
+    {
+        return expressions.Count == 0
+            ? "global::System.Array.Empty<" + elementType + ">()"
+            : "new " + elementType + "[] { " + string.Join(", ", expressions) + " }";
     }
 
     private static IEnumerable<INamedTypeSymbol> GetContainingTypes(INamedTypeSymbol type)

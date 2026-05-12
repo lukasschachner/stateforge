@@ -44,6 +44,12 @@ public static class AttributeDeclarationParser
                 ParseTransition(attribute, semanticModel, declaration, cancellationToken);
             else if (Is(attribute, "Metadata", semanticModel, cancellationToken))
                 ParseMetadata(attribute, semanticModel, declaration, cancellationToken);
+            else if (Is(attribute, "ParallelComposite", semanticModel, cancellationToken))
+                ParseParallelComposite(attribute, semanticModel, declaration, cancellationToken);
+            else if (Is(attribute, "ParallelRegion", semanticModel, cancellationToken))
+                ParseParallelRegion(attribute, semanticModel, declaration, cancellationToken);
+            else if (Is(attribute, "Region", semanticModel, cancellationToken))
+                ParseRegionMembership(attribute, semanticModel, declaration, cancellationToken);
 
         return declaration;
     }
@@ -73,8 +79,57 @@ public static class AttributeDeclarationParser
         var terminal = args.Value.Any(a =>
             a.NameEquals?.Name.Identifier.ValueText == "IsTerminal" &&
             semanticModel.GetConstantValue(a.Expression, cancellationToken).Value is true);
-        declaration.States.Add(new DeclaredState(expression, expression, key,
-            GeneratedNameHelper.IdentifierFromExpression(expression, "State_"), terminal, attribute.GetLocation()));
+        var state = declaration.States.FirstOrDefault(s => s.IdentityKey == key);
+        if (state is null)
+        {
+            state = new DeclaredState(expression, expression, key,
+                GeneratedNameHelper.IdentifierFromExpression(expression, "State_"), terminal, attribute.GetLocation());
+            declaration.States.Add(state);
+        }
+        else if (terminal)
+        {
+            state.IsTerminal = true;
+        }
+
+        var parent = AdvancedDeclarationParserHelpers.NamedArgument(args.Value, "Parent");
+        if (parent is not null)
+        {
+            state.ParentStateKey = SyntaxValue.IdentityForExpression(semanticModel, parent.Expression, cancellationToken);
+            state.ParentStateExpression = SyntaxValue.ExpressionText(parent.Expression);
+            state.ParentLocation = parent.GetLocation();
+        }
+
+        var initialChild = AdvancedDeclarationParserHelpers.NamedArgument(args.Value, "InitialChild");
+        if (initialChild is not null)
+        {
+            state.InitialChildStateKey = SyntaxValue.IdentityForExpression(semanticModel, initialChild.Expression, cancellationToken);
+            state.InitialChildExpression = SyntaxValue.ExpressionText(initialChild.Expression);
+            state.InitialChildLocation = initialChild.GetLocation();
+        }
+
+        var history = AdvancedDeclarationParserHelpers.NamedArgument(args.Value, "History");
+        if (history is not null)
+        {
+            state.HistoryMode = AdvancedDeclarationParserHelpers.ParseHistoryMode(history.Expression);
+            state.HistoryLocation = history.GetLocation();
+        }
+
+        var fallback = AdvancedDeclarationParserHelpers.NamedArgument(args.Value, "HistoryFallback");
+        if (fallback is not null)
+        {
+            state.HistoryFallbackStateKey = SyntaxValue.IdentityForExpression(semanticModel, fallback.Expression, cancellationToken);
+            state.HistoryFallbackExpression = SyntaxValue.ExpressionText(fallback.Expression);
+            state.HistoryLocation ??= fallback.GetLocation();
+        }
+
+        var parallel = AdvancedDeclarationParserHelpers.NamedArgument(args.Value, "IsParallelComposite");
+        if (parallel is not null && AdvancedDeclarationParserHelpers.BoolConstant(semanticModel, parallel.Expression, cancellationToken))
+        {
+            state.IsParallelComposite = true;
+            if (!declaration.ParallelComposites.Any(p => p.CompositeStateKey == key))
+                declaration.ParallelComposites.Add(new ParallelCompositeDeclaration(key, expression,
+                    parallel.GetLocation()));
+        }
     }
 
     private static void ParseEvent(AttributeSyntax attribute, SemanticModel semanticModel,
@@ -148,6 +203,60 @@ public static class AttributeDeclarationParser
         declaration.Metadata.Add(new MetadataEntry(
             StringConstant(semanticModel, args.Value[0].Expression, cancellationToken),
             args.Value[1].Expression.ToString(), attribute.GetLocation()));
+    }
+
+    private static void ParseParallelComposite(AttributeSyntax attribute, SemanticModel semanticModel,
+        MachineDeclaration declaration, CancellationToken cancellationToken)
+    {
+        var args = attribute.ArgumentList?.Arguments;
+        if (args is null || args.Value.Count == 0) return;
+        var owner = args.Value[0].Expression;
+        var expression = SyntaxValue.ExpressionText(owner);
+        var key = SyntaxValue.IdentityForExpression(semanticModel, owner, cancellationToken);
+        if (!declaration.ParallelComposites.Any(p => p.CompositeStateKey == key))
+            declaration.ParallelComposites.Add(new ParallelCompositeDeclaration(key, expression, attribute.GetLocation()));
+        DeclarationParserHelpers.EnsureState(declaration, expression, key, attribute.GetLocation())
+            .IsParallelComposite = true;
+    }
+
+    private static void ParseParallelRegion(AttributeSyntax attribute, SemanticModel semanticModel,
+        MachineDeclaration declaration, CancellationToken cancellationToken)
+    {
+        var args = attribute.ArgumentList?.Arguments;
+        if (args is null || args.Value.Count < 2) return;
+        var owner = args.Value[0].Expression;
+        var ownerExpression = SyntaxValue.ExpressionText(owner);
+        var ownerKey = SyntaxValue.IdentityForExpression(semanticModel, owner, cancellationToken);
+        var name = AdvancedDeclarationParserHelpers.StringConstant(semanticModel, args.Value[1].Expression,
+            cancellationToken);
+        declaration.Regions.Add(new RegionDeclaration(ownerKey, ownerExpression, name, declaration.Regions.Count, true,
+            attribute.GetLocation()));
+    }
+
+    private static void ParseRegionMembership(AttributeSyntax attribute, SemanticModel semanticModel,
+        MachineDeclaration declaration, CancellationToken cancellationToken)
+    {
+        var args = attribute.ArgumentList?.Arguments;
+        if (args is null || args.Value.Count < 3) return;
+        var owner = args.Value[0].Expression;
+        var ownerExpression = SyntaxValue.ExpressionText(owner);
+        var ownerKey = SyntaxValue.IdentityForExpression(semanticModel, owner, cancellationToken);
+        var name = AdvancedDeclarationParserHelpers.StringConstant(semanticModel, args.Value[1].Expression,
+            cancellationToken);
+        var member = args.Value[2].Expression;
+        var memberExpression = SyntaxValue.ExpressionText(member);
+        var memberKey = SyntaxValue.IdentityForExpression(semanticModel, member, cancellationToken);
+        var initial = args.Value.Any(a => a.NameEquals?.Name.Identifier.ValueText == "IsInitial" &&
+                                          AdvancedDeclarationParserHelpers.BoolConstant(semanticModel, a.Expression,
+                                              cancellationToken));
+        var terminal = args.Value.Any(a => a.NameEquals?.Name.Identifier.ValueText == "IsTerminal" &&
+                                           AdvancedDeclarationParserHelpers.BoolConstant(semanticModel, a.Expression,
+                                               cancellationToken));
+        declaration.RegionMemberships.Add(new RegionMembership(memberKey, memberExpression, ownerKey, ownerExpression,
+            name, initial, terminal, attribute.GetLocation()));
+        var memberState = DeclarationParserHelpers.EnsureState(declaration, memberExpression, memberKey,
+            attribute.GetLocation());
+        if (terminal) memberState.IsTerminal = true;
     }
 
     private static string StringConstant(SemanticModel semanticModel, ExpressionSyntax expression,

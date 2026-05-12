@@ -23,6 +23,10 @@ public sealed class MachineDeclaration
     public List<DeclaredState> States { get; } = new();
     public List<DeclaredEvent> Events { get; } = new();
     public List<DeclaredTransition> Transitions { get; } = new();
+    public List<CompositeDeclaration> Composites { get; } = new();
+    public List<ParallelCompositeDeclaration> ParallelComposites { get; } = new();
+    public List<RegionDeclaration> Regions { get; } = new();
+    public List<RegionMembership> RegionMemberships { get; } = new();
     public List<MetadataEntry> Metadata { get; } = new();
     public Location? SourceLocation { get; }
 }

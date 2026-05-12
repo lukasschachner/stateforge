@@ -72,3 +72,16 @@ Release validation includes Core tests for history restore/fallback behavior, co
 ## Completion Transition Release Readiness
 
 Before release, validate completion transitions with focused Core execution/validation/introspection tests, visualization rendering tests, public API snapshots, `dotnet format StateMachineLibrary.sln --verify-no-changes`, full `dotnet test StateMachineLibrary.sln`, and `dotnet pack StateMachineLibrary.sln --configuration Release --output artifacts/packages`.
+
+## Source Generator Hierarchy and Regions Release Readiness
+
+Advanced source-generator declarations require focused validation in `tests/SourceGenerators.Tests` for:
+
+- hierarchy/history emission, including `InitialChild`, `ChildOf`, `WithHistory`, and `Terminal` builder output;
+- parallel composite and named-region emission, including membership, regional terminals, and deterministic declaration-order region output;
+- byte-stable generated source for repeated advanced declaration generation;
+- advanced diagnostics `SMG009`-`SMG015` for duplicate explicit regions, missing regional initials, duplicate sibling membership, unknown owners, unsupported history modes, invalid role combinations, and invalid region declarations;
+- compatibility coverage proving existing flat attribute and compact DSL declarations keep their generated `Definition`/`CreateDefinition` members and do not emit advanced builder calls;
+- renderer-neutral graph/metadata assertions proving generated advanced definitions do not introduce Mermaid, Graphviz, PlantUML, image-rendering, or visual-designer behavior.
+
+Release review must include `tests/Release.Tests/PublicApi/SourceGenerators.approved.txt` because declaration-model records and diagnostic descriptors are part of the generator assembly surface, plus runnable sample validation for `samples/SourceGenerators.Sample`, including the `GeneratedAdvancedOrderMachine` validation and parallel-region runtime path.

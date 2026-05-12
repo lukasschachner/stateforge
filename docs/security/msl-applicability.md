@@ -40,3 +40,9 @@ MSL status is not treated as sufficient by itself. Feature plans and implementat
   - `docs/security/security-checklist.md`
   - `docs/security/dependency-audit.md`
   - `docs/security/supply-chain-evidence.md`
+
+## Feature Review: Source Generator Hierarchy and Regions (2026-05-12)
+
+- MSL status: C#/.NET remains the only implementation language for source-generator parsing, diagnostics, tests, docs, and samples.
+- Non-MSL justification: N/A; no C/C++/Assembly/manual-memory code was introduced.
+- Secure-coding follow-up: advanced generator inputs are compiler syntax/semantic data and are validated with deterministic diagnostics before generated code is emitted.

@@ -62,3 +62,9 @@ Static dependency audits are supplementary, not a replacement for continuous mon
 - Runtime dependency change: none. Core completion-transition implementation uses existing Core definition/runtime/validation/introspection components only.
 - Package-boundary expectation: Core remains dependency-light with no new `Microsoft.Extensions.*`, hosting, persistence, workflow, rendering, network, or crypto dependency.
 - Re-audit trigger: revisit if completion-transition follow-up work adds packages, generated artifacts, package metadata changes, or release workflow changes.
+
+## Feature Audit: Source Generator Hierarchy and Regions (2026-05-12)
+
+- Dependency change: none. The implementation extends the existing Roslyn source-generator package and tests without adding NuGet, CI action, runtime, renderer, persistence, telemetry, hosting, network, or crypto dependencies.
+- Package-boundary expectation: SourceGenerators keeps Roslyn as a private build/analyzer asset and emits calls into Core APIs; Core still has no dependency on SourceGenerators.
+- Re-audit trigger: revisit if generated declaration support later adds a textual parser package, external files, analyzer packaging changes, or release workflow changes.

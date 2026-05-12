@@ -12,6 +12,7 @@ public static class DeclarationValidator
         CheckGeneratedMemberConflicts(declaration, reporter);
         TransitionDeclarationValidator.Validate(declaration, reporter);
         TerminalStateDeclarationValidator.Validate(declaration, reporter);
+        AdvancedDeclarationValidator.Validate(declaration, reporter);
         MemberReferenceResolver.Validate(declaration, reporter);
     }
 

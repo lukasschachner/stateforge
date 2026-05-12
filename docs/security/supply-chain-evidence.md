@@ -65,3 +65,9 @@
 - Package/dependency changes: none expected for the feature implementation.
 - Release snapshot trigger: Core public API snapshot was updated to reflect new completion-transition APIs and graph trigger metadata.
 - Supply-chain impact: no new package sources, build tools, CI actions, signing steps, or distribution channels were introduced.
+
+## Feature Evidence: Source Generator Hierarchy and Regions (2026-05-12)
+
+- Package/dependency changes: none. SourceGenerators remains an analyzer package with existing Roslyn private build-time assets.
+- Release snapshot trigger: SourceGenerators public API snapshot requires review because advanced declaration model types, diagnostics, and reporter helpers are exposed from the generator assembly.
+- Supply-chain impact: no new package sources, build tools, CI actions, signing steps, external parsers, generated artifact ingestion, or distribution channels were introduced.

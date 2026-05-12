@@ -44,3 +44,8 @@ Silent omission is not allowed: feature plans that affect distribution, EU marke
   - Secure-use documentation and package integrity guidance.
 - Required mitigations: Add release-readiness/security tasks before public package publication.
 - Next CRA review date: Before any public NuGet publication, commercial distribution decision, or release process change.
+
+## Feature Review: Source Generator Hierarchy and Regions (2026-05-12)
+
+- Distribution applicability: unchanged. The feature modifies an existing release-capable SourceGenerators package but does not add a publication workflow, distribution channel, commercial offering, or EU market-placement decision.
+- Release-impact rationale: public API snapshot and sample/release validation are required before release, but CRA applicability remains governed by the baseline pre-publication reassessment gate.

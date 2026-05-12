@@ -53,6 +53,45 @@ public static partial class OrderMachineDsl
 
 The DSL method is parsed, not executed. Use only recognized declaration calls with statically resolvable values.
 
+## Hierarchy and parallel regions
+
+Advanced declaration syntax can express the same hierarchy, history, terminal, and parallel-region metadata as the Core fluent builder. Attribute declarations remain explicit about events:
+
+```csharp
+using StateMachineLibrary.SourceGeneration;
+
+public enum OrderState { Draft, Operational, Pick, PickDone, Pay, PayDone }
+public enum OrderEvent { Start, Picked, Paid }
+
+[StateMachine(typeof(OrderState), typeof(OrderEvent))]
+[State(OrderState.Draft)]
+[State(OrderState.Operational, IsParallelComposite = true)]
+[Region(OrderState.Operational, "Fulfillment", OrderState.Pick, IsInitial = true)]
+[Region(OrderState.Operational, "Fulfillment", OrderState.PickDone, IsTerminal = true)]
+[Region(OrderState.Operational, "Billing", OrderState.Pay, IsInitial = true)]
+[Region(OrderState.Operational, "Billing", OrderState.PayDone, IsTerminal = true)]
+[Event(OrderEvent.Start)]
+[Event(OrderEvent.Picked)]
+[Event(OrderEvent.Paid)]
+[Transition(OrderState.Draft, OrderEvent.Start, OrderState.Operational)]
+[Transition(OrderState.Pick, OrderEvent.Picked, OrderState.PickDone)]
+[Transition(OrderState.Pay, OrderEvent.Paid, OrderState.PayDone)]
+public static partial class GeneratedParallelOrderMachine { }
+```
+
+The compact DSL supports equivalent marker calls:
+
+```csharp
+machine.State(OrderState.Operational)
+    .ParallelComposite()
+    .Region("Fulfillment", OrderState.Pick)
+    .Member(OrderState.PickDone).Terminal()
+    .Region("Billing", OrderState.Pay)
+    .Member(OrderState.PayDone).Terminal();
+```
+
+Generated code calls Core builder APIs such as `InitialChild`, `WithHistory`, `ParallelComposite`, and `Region`; it does not add renderer-specific behavior or execute user code during generation.
+
 ## Payload events
 
 ```csharp
@@ -92,7 +131,7 @@ The generator verifies referenced member signatures where practical and emits me
 
 ## Diagnostics
 
-The generator reports blocking diagnostics for duplicate states/events, missing transition endpoints, ambiguous transitions, terminal states with outgoing transitions, unsupported DSL syntax, invalid member references, and generated member name conflicts. Fix diagnostics before relying on `Definition`.
+The generator reports blocking diagnostics for duplicate states/events, missing transition endpoints, ambiguous transitions, terminal states with outgoing transitions, unsupported DSL syntax, invalid member references, generated member name conflicts, duplicate explicit parallel regions, missing regional initials, duplicate sibling region membership, unsupported history modes, and invalid advanced role combinations. Fix diagnostics before relying on `Definition`.
 
 ## Runnable sample
 

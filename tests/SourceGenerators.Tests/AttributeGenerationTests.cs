@@ -14,4 +14,17 @@ public sealed class AttributeGenerationTests
         Assert.Contains("machine.WithMetadata(\"owner\", \"sales\")", result.GeneratedSource);
         Assert.Contains(".On(OrderEvent.Pay).GoTo(OrderState.Paid)", result.GeneratedSource);
     }
+
+    [Fact]
+    public void ExistingFlatAttributeDeclarationsDoNotEmitAdvancedBuilderCalls()
+    {
+        var result = GeneratorTestHost.Run(TestSources.AttributeLifecycle);
+
+        GeneratorTestHost.AssertCompiles(result);
+        Assert.Contains("machine.State(OrderState.Created);", result.GeneratedSource);
+        Assert.DoesNotContain(".InitialChild(", result.GeneratedSource);
+        Assert.DoesNotContain(".ParallelComposite()", result.GeneratedSource);
+        Assert.DoesNotContain("machine.ParallelComposite(", result.GeneratedSource);
+    }
+
 }

@@ -1,4 +1,7 @@
 # Public API snapshot for SourceGenerators
+static class StateMachineLibrary.SourceGenerators.Declarations.AdvancedDeclarationValidator
+  method System.Void Validate(StateMachineLibrary.SourceGenerators.Declarations.MachineDeclaration declaration, StateMachineLibrary.SourceGenerators.Diagnostics.DiagnosticReporter reporter)
+
 static class StateMachineLibrary.SourceGenerators.Declarations.AttributeDeclarationParser
   method StateMachineLibrary.SourceGenerators.Declarations.MachineDeclaration Parse(Microsoft.CodeAnalysis.CSharp.Syntax.TypeDeclarationSyntax syntax, Microsoft.CodeAnalysis.SemanticModel semanticModel, System.Threading.CancellationToken cancellationToken)
 
@@ -22,6 +25,19 @@ class StateMachineLibrary.SourceGenerators.Declarations.BehaviorReference
   property System.Boolean UseAsyncBuilder {get;set;}
   property System.String DisplayName {get;}
   property System.String MemberName {get;}
+
+class StateMachineLibrary.SourceGenerators.Declarations.CompositeDeclaration
+  ctor (System.String compositeStateKey, System.String compositeStateExpression, Microsoft.CodeAnalysis.Location sourceLocation)
+  property Microsoft.CodeAnalysis.Location HistoryLocation {get;set;}
+  property Microsoft.CodeAnalysis.Location InitialChildLocation {get;set;}
+  property Microsoft.CodeAnalysis.Location SourceLocation {get;}
+  property StateMachineLibrary.SourceGenerators.Declarations.DeclaredHistoryMode HistoryMode {get;set;}
+  property System.String CompositeStateExpression {get;}
+  property System.String CompositeStateKey {get;}
+  property System.String HistoryFallbackExpression {get;set;}
+  property System.String HistoryFallbackStateKey {get;set;}
+  property System.String InitialChildExpression {get;set;}
+  property System.String InitialChildStateKey {get;set;}
 
 class StateMachineLibrary.SourceGenerators.Declarations.ConditionReference
   ctor (System.String memberName, System.String displayName, Microsoft.CodeAnalysis.Location sourceLocation)
@@ -71,14 +87,35 @@ enum StateMachineLibrary.SourceGenerators.Declarations.DeclaredEventKind : Syste
   enum PayloadType
   enum Value
 
+enum StateMachineLibrary.SourceGenerators.Declarations.DeclaredHistoryMode : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  field StateMachineLibrary.SourceGenerators.Declarations.DeclaredHistoryMode Deep
+  field StateMachineLibrary.SourceGenerators.Declarations.DeclaredHistoryMode None
+  field StateMachineLibrary.SourceGenerators.Declarations.DeclaredHistoryMode Shallow
+  field StateMachineLibrary.SourceGenerators.Declarations.DeclaredHistoryMode Unsupported
+  enum Deep
+  enum None
+  enum Shallow
+  enum Unsupported
+
 class StateMachineLibrary.SourceGenerators.Declarations.DeclaredState
   ctor (System.String name, System.String valueExpression, System.String identityKey, System.String generatedIdentifier, System.Boolean isTerminal, Microsoft.CodeAnalysis.Location sourceLocation)
+  property Microsoft.CodeAnalysis.Location HistoryLocation {get;set;}
+  property Microsoft.CodeAnalysis.Location InitialChildLocation {get;set;}
+  property Microsoft.CodeAnalysis.Location ParentLocation {get;set;}
   property Microsoft.CodeAnalysis.Location SourceLocation {get;}
+  property StateMachineLibrary.SourceGenerators.Declarations.DeclaredHistoryMode HistoryMode {get;set;}
+  property System.Boolean IsParallelComposite {get;set;}
   property System.Boolean IsTerminal {get;set;}
   property System.Collections.Generic.List<StateMachineLibrary.SourceGenerators.Declarations.MetadataEntry> Metadata {get;}
   property System.String GeneratedIdentifier {get;}
+  property System.String HistoryFallbackExpression {get;set;}
+  property System.String HistoryFallbackStateKey {get;set;}
   property System.String IdentityKey {get;}
+  property System.String InitialChildExpression {get;set;}
+  property System.String InitialChildStateKey {get;set;}
   property System.String Name {get;}
+  property System.String ParentStateExpression {get;set;}
+  property System.String ParentStateKey {get;set;}
   property System.String ValueExpression {get;}
 
 class StateMachineLibrary.SourceGenerators.Declarations.DeclaredTransition
@@ -127,10 +164,14 @@ class StateMachineLibrary.SourceGenerators.Declarations.MachineDeclaration
   property Microsoft.CodeAnalysis.Location SourceLocation {get;}
   property StateMachineLibrary.SourceGenerators.Declarations.DeclarationIdentity DeclarationId {get;}
   property StateMachineLibrary.SourceGenerators.Declarations.DeclarationStyle DeclarationStyle {get;}
+  property System.Collections.Generic.List<StateMachineLibrary.SourceGenerators.Declarations.CompositeDeclaration> Composites {get;}
   property System.Collections.Generic.List<StateMachineLibrary.SourceGenerators.Declarations.DeclaredEvent> Events {get;}
   property System.Collections.Generic.List<StateMachineLibrary.SourceGenerators.Declarations.DeclaredState> States {get;}
   property System.Collections.Generic.List<StateMachineLibrary.SourceGenerators.Declarations.DeclaredTransition> Transitions {get;}
   property System.Collections.Generic.List<StateMachineLibrary.SourceGenerators.Declarations.MetadataEntry> Metadata {get;}
+  property System.Collections.Generic.List<StateMachineLibrary.SourceGenerators.Declarations.ParallelCompositeDeclaration> ParallelComposites {get;}
+  property System.Collections.Generic.List<StateMachineLibrary.SourceGenerators.Declarations.RegionDeclaration> Regions {get;}
+  property System.Collections.Generic.List<StateMachineLibrary.SourceGenerators.Declarations.RegionMembership> RegionMemberships {get;}
   property System.String EventTypeName {get;}
   property System.String StateTypeName {get;}
 
@@ -143,6 +184,12 @@ class StateMachineLibrary.SourceGenerators.Declarations.MetadataEntry
   property System.String Key {get;}
   property System.String ValueExpression {get;}
 
+class StateMachineLibrary.SourceGenerators.Declarations.ParallelCompositeDeclaration
+  ctor (System.String compositeStateKey, System.String compositeStateExpression, Microsoft.CodeAnalysis.Location sourceLocation)
+  property Microsoft.CodeAnalysis.Location SourceLocation {get;}
+  property System.String CompositeStateExpression {get;}
+  property System.String CompositeStateKey {get;}
+
 enum StateMachineLibrary.SourceGenerators.Declarations.ReferenceSignatureStatus : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
   field StateMachineLibrary.SourceGenerators.Declarations.ReferenceSignatureStatus Compatible
   field StateMachineLibrary.SourceGenerators.Declarations.ReferenceSignatureStatus Incompatible
@@ -152,6 +199,31 @@ enum StateMachineLibrary.SourceGenerators.Declarations.ReferenceSignatureStatus 
   enum Incompatible
   enum Unknown
   enum Unresolved
+
+class StateMachineLibrary.SourceGenerators.Declarations.RegionDeclaration
+  ctor (System.String ownerCompositeStateKey, System.String ownerCompositeExpression, System.String regionName, System.Int32 order, System.Boolean isExplicit, Microsoft.CodeAnalysis.Location sourceLocation)
+  property Microsoft.CodeAnalysis.Location InitialLocation {get;set;}
+  property Microsoft.CodeAnalysis.Location SourceLocation {get;}
+  property System.Boolean IsExplicit {get;set;}
+  property System.Collections.Generic.IReadOnlyList<Microsoft.CodeAnalysis.Location> RelatedLocations {get;}
+  property System.Collections.Generic.IReadOnlyList<StateMachineLibrary.SourceGenerators.Declarations.RegionMembership> Memberships {get;}
+  property System.Int32 Order {get;}
+  property System.String InitialStateExpression {get;set;}
+  property System.String InitialStateKey {get;set;}
+  property System.String OwnerCompositeExpression {get;}
+  property System.String OwnerCompositeStateKey {get;}
+  property System.String RegionName {get;}
+
+class StateMachineLibrary.SourceGenerators.Declarations.RegionMembership
+  ctor (System.String stateKey, System.String stateExpression, System.String ownerCompositeStateKey, System.String ownerCompositeExpression, System.String regionName, System.Boolean isInitial, System.Boolean isTerminal, Microsoft.CodeAnalysis.Location sourceLocation)
+  property Microsoft.CodeAnalysis.Location SourceLocation {get;}
+  property System.Boolean IsInitial {get;}
+  property System.Boolean IsTerminal {get;}
+  property System.String OwnerCompositeExpression {get;}
+  property System.String OwnerCompositeStateKey {get;}
+  property System.String RegionName {get;}
+  property System.String StateExpression {get;}
+  property System.String StateKey {get;}
 
 static class StateMachineLibrary.SourceGenerators.Declarations.TerminalStateDeclarationValidator
   method System.Void Validate(StateMachineLibrary.SourceGenerators.Declarations.MachineDeclaration declaration, StateMachineLibrary.SourceGenerators.Diagnostics.DiagnosticReporter reporter)
@@ -165,23 +237,37 @@ class StateMachineLibrary.SourceGenerators.Diagnostics.DiagnosticReporter
   property System.Collections.Generic.IReadOnlyList<Microsoft.CodeAnalysis.Diagnostic> Diagnostics {get;}
   method System.Void Ambiguous(System.String state, System.String eventIdentity, Microsoft.CodeAnalysis.Location location, System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.Location> relatedLocations)
   method System.Void Duplicate(System.String elementKind, System.String identity, Microsoft.CodeAnalysis.Location location, System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.Location> relatedLocations)
+  method System.Void DuplicateRegion(System.String owner, System.String region, Microsoft.CodeAnalysis.Location location, System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.Location> relatedLocations)
+  method System.Void DuplicateRegionMembership(System.String state, System.String owner, Microsoft.CodeAnalysis.Location location, System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.Location> relatedLocations)
   method System.Void InvalidMember(System.String memberName, System.String usage, Microsoft.CodeAnalysis.Location location)
+  method System.Void InvalidRegion(System.String owner, System.String region, System.String reason, Microsoft.CodeAnalysis.Location location)
+  method System.Void InvalidRoleCombination(System.String state, System.String reason, Microsoft.CodeAnalysis.Location location)
   method System.Void InvalidTerminal(System.String state, Microsoft.CodeAnalysis.Location location)
   method System.Void Missing(System.String elementKind, System.String identity, Microsoft.CodeAnalysis.Location location)
+  method System.Void MissingRegionalInitial(System.String owner, System.String region, Microsoft.CodeAnalysis.Location location)
   method System.Void NameConflict(System.String memberName, Microsoft.CodeAnalysis.Location location)
   method System.Void Report(Microsoft.CodeAnalysis.DiagnosticDescriptor descriptor, Microsoft.CodeAnalysis.Location location, System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.Location> relatedLocations, System.Object[] args)
   method System.Void ReportTo(Microsoft.CodeAnalysis.SourceProductionContext context)
+  method System.Void UnknownRegionOwner(System.String owner, Microsoft.CodeAnalysis.Location location)
   method System.Void UnsupportedDsl(System.String syntax, Microsoft.CodeAnalysis.Location location)
+  method System.Void UnsupportedHistory(System.String state, Microsoft.CodeAnalysis.Location location)
 
 static class StateMachineLibrary.SourceGenerators.Diagnostics.StateMachineGeneratorDiagnostics
   field Microsoft.CodeAnalysis.DiagnosticDescriptor AmbiguousTransition
   field Microsoft.CodeAnalysis.DiagnosticDescriptor DuplicateDeclaration
+  field Microsoft.CodeAnalysis.DiagnosticDescriptor DuplicateRegionDeclaration
+  field Microsoft.CodeAnalysis.DiagnosticDescriptor DuplicateRegionMembership
   field Microsoft.CodeAnalysis.DiagnosticDescriptor GeneratedNameConflict
+  field Microsoft.CodeAnalysis.DiagnosticDescriptor InvalidAdvancedRoleCombination
   field Microsoft.CodeAnalysis.DiagnosticDescriptor InvalidMemberReference
+  field Microsoft.CodeAnalysis.DiagnosticDescriptor InvalidRegionDeclaration
   field Microsoft.CodeAnalysis.DiagnosticDescriptor InvalidTerminalConfiguration
   field Microsoft.CodeAnalysis.DiagnosticDescriptor MissingReference
+  field Microsoft.CodeAnalysis.DiagnosticDescriptor MissingRegionalInitial
   field Microsoft.CodeAnalysis.DiagnosticDescriptor RuntimeValidationWarning
+  field Microsoft.CodeAnalysis.DiagnosticDescriptor UnknownRegionOwner
   field Microsoft.CodeAnalysis.DiagnosticDescriptor UnsupportedDslSyntax
+  field Microsoft.CodeAnalysis.DiagnosticDescriptor UnsupportedHistoryMode
 
 static class StateMachineLibrary.SourceGenerators.Emission.BehaviorReferenceEmitter
   method System.String Emit(StateMachineLibrary.SourceGenerators.Declarations.BehaviorReference reference)

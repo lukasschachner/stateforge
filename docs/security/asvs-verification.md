@@ -47,3 +47,7 @@ Current baseline:
   - `docs/security/security-checklist.md`
   - `docs/security/dependency-audit.md`
   - `docs/security/supply-chain-evidence.md`
+
+## Feature Review: Source Generator Hierarchy and Regions (2026-05-12)
+
+Selected Level: N/A. The feature extends a compile-time C# source generator and generated Core definitions only; it adds no web application, HTTP API, authentication, authorization, session management, or browser-facing service surface.
