@@ -55,3 +55,41 @@ Selected Level: N/A. The feature extends a compile-time C# source generator and 
 ## Feature review: 016-transition-conflict-diagnostics
 
 Selected Level: N/A. The feature adds in-process FSM validation/runtime diagnostic data only; it introduces no web application, HTTP API, authentication, authorization, session management, browser, or service endpoint surface.
+
+## Feature Review: Runtime Graph Overlays (2026-05-13)
+
+Selected Level: N/A. The feature adds in-process graph metadata and optional text-renderer hints only; it introduces no web application, HTTP API, authentication, authorization, session management, browser, hosted service, or user-account surface.
+
+## Feature Planning: Fluent Region Builders (2026-05-13)
+
+Selected Level: N/A. The feature adds in-process fluent declaration ergonomics for library users only; it introduces no web application, HTTP API, authentication, authorization, session management, browser, hosted service, user-account, or service endpoint surface.
+
+## Feature Implementation: Fluent Region Builders (2026-05-13)
+
+- ASVS applicability: N/A. The feature adds in-process Core builder APIs and validation diagnostics only.
+- No web, HTTP API, authentication, authorization, session management, browser, or hosted endpoint surface was introduced.
+- Verification focus remains CWE-20 input validation for region names/callbacks and safe diagnostic content for membership conflicts.
+
+## Feature Implementation: Parallel Regions Documentation and Sample (2026-05-13)
+
+- ASVS applicability: N/A. The feature adds Markdown documentation, an in-process console sample, and xUnit release validation only.
+- No web application, HTTP API, authentication, authorization, session management, browser-facing service, hosted endpoint, user-account surface, or multi-user access-control surface was introduced.
+- Verification focus remains safe validation diagnostics, accurate boundary language, and release-test evidence rather than ASVS control testing.
+
+## Feature Planning: Transition Preview Diagnostics (2026-05-13)
+
+Selected Level: N/A. The feature adds in-process transition explainability and structured denial diagnostics only; it introduces no web application, HTTP API, authentication, authorization, session management, browser, hosted service, user-account, or service endpoint surface.
+
+Verification focus remains secure input validation and safe diagnostic content under the project security checklist rather than ASVS control testing.
+
+## Feature Implementation: Transition Preview Diagnostics (2026-05-13)
+
+- ASVS applicability: N/A. The feature adds in-process FSM preview and diagnostic data only.
+- No web application, HTTP API, authentication, authorization, session management, browser-facing service, hosted endpoint, user-account surface, or multi-user access-control surface was introduced.
+- Verification focus remains CWE-20 active-shape/event validation, safe diagnostic content, cancellation behavior, and side-effect-free runtime inspection rather than ASVS control testing.
+
+## Feature Planning: Source Generator Validation (2026-05-13)
+
+Selected Level: N/A. The feature improves compile-time declaration validation, generated helpers, and in-process metadata for a library source generator; it introduces no web application, HTTP API, authentication, authorization, session management, browser-facing service, hosted endpoint, user-account surface, or multi-user access-control surface.
+
+Verification focus remains CWE-20 declarative input validation, safe diagnostic content, and package-boundary evidence under the project security checklist rather than ASVS control testing.

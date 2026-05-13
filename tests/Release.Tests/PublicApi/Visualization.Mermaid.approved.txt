@@ -8,6 +8,7 @@ static class StateMachineLibrary.Visualization.Mermaid.Rendering.MermaidGraphRen
 class StateMachineLibrary.Visualization.Mermaid.Rendering.MermaidRenderOptions
   ctor ()
   property System.Boolean IncludeMetadata {get;set;}
+  property System.Boolean RenderRuntimeOverlay {get;set;}
   property System.String DiagramTitle {get;set;}
   property System.String Indentation {get;set;}
   property System.String NewLine {get;set;}

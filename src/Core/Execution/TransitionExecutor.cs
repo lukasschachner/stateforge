@@ -1,4 +1,6 @@
 using StateMachineLibrary.Core.Definitions;
+using StateMachineLibrary.Core.Diagnostics;
+using StateMachineLibrary.Core.Validation;
 
 namespace StateMachineLibrary.Core.Execution;
 
@@ -7,13 +9,14 @@ internal sealed class TransitionExecutor<TState, TEvent>
 {
     private readonly TransitionActionRunner<TState, TEvent> _actionRunner = new();
     private readonly TransitionBehaviorRunner<TState, TEvent> _behaviorRunner = new();
-    private readonly ConditionEvaluator<TState, TEvent> _conditionEvaluator = new();
+    private readonly ConditionEvaluator<TState, TEvent> _conditionEvaluator;
     private readonly StateMachineDefinition<TState, TEvent> _definition;
     private readonly TransitionMatcher<TState, TEvent> _matcher;
 
     public TransitionExecutor(StateMachineDefinition<TState, TEvent> definition)
     {
         _definition = definition ?? throw new ArgumentNullException(nameof(definition));
+        _conditionEvaluator = new ConditionEvaluator<TState, TEvent>(_definition);
         _matcher = new TransitionMatcher<TState, TEvent>(definition);
     }
 
@@ -77,12 +80,7 @@ internal sealed class TransitionExecutor<TState, TEvent>
         var validation = _definition.Validate();
         if (!validation.IsValid)
         {
-            var outcome = TransitionOutcome<TState, TEvent>.ValidationFailure(
-                currentState,
-                @event,
-                new TransitionDiagnostics("Machine definition has validation errors.",
-                    validationFindings: validation.Errors,
-                    conflictDiagnostics: validation.ConflictDiagnostics));
+            var outcome = CreateValidationFailureOutcome(currentState, @event, validation);
             await observations.ObserveAsync(TransitionObservationKind.ValidationFailure, TransitionLifecyclePhase.None,
                 null, outcome, false, outcome.Diagnostics, currentState, cancellationToken).ConfigureAwait(false);
             await observations.OutcomeAsync(outcome, cancellationToken).ConfigureAwait(false);
@@ -105,7 +103,11 @@ internal sealed class TransitionExecutor<TState, TEvent>
                     currentState,
                     @event,
                     new TransitionDiagnostics($"Event '{@event}' is not permitted from state '{currentState}'.",
-                        TransitionLifecyclePhase.Matching));
+                        TransitionLifecyclePhase.Matching,
+                        denialDiagnostics:
+                        [
+                            CreateNoMatchDiagnostic(currentState, @event)
+                        ]));
                 await observations.ObserveAsync(TransitionObservationKind.NotPermitted,
                     TransitionLifecyclePhase.Matching, null, outcome, false, outcome.Diagnostics, currentState,
                     cancellationToken).ConfigureAwait(false);
@@ -135,7 +137,16 @@ internal sealed class TransitionExecutor<TState, TEvent>
                         $"Condition '{conditionResult.DeniedCondition!.DisplayName}' denied the transition.",
                         TransitionLifecyclePhase.Condition,
                         affectedElement: conditionResult.DeniedCondition.DisplayName,
-                        hierarchyMetadata: hierarchyDiagnostics));
+                        hierarchyMetadata: hierarchyDiagnostics,
+                        denialDiagnostics:
+                        [
+                            TransitionDenialDiagnostic.FailedGuards(
+                                GetTransitionId(transition),
+                                [new TransitionPreviewGuardDiagnostic(
+                                    GetTransitionId(transition), 0,
+                                    conditionResult.DeniedCondition.DisplayName,
+                                    TransitionPreviewGuardStatus.Failed)])
+                        ]));
                 await observations.ObserveAsync(TransitionObservationKind.ConditionDenied,
                     TransitionLifecyclePhase.Condition, transition, outcome, false, outcome.Diagnostics, currentState,
                     cancellationToken).ConfigureAwait(false);
@@ -264,12 +275,7 @@ internal sealed class TransitionExecutor<TState, TEvent>
     {
         var validation = _definition.Validate();
         if (!validation.IsValid)
-            return TransitionOutcome<TState, TEvent>.ValidationFailure(
-                currentState,
-                @event,
-                new TransitionDiagnostics("Machine definition has validation errors.",
-                    validationFindings: validation.Errors,
-                    conflictDiagnostics: validation.ConflictDiagnostics));
+            return CreateValidationFailureOutcome(currentState, @event, validation);
 
         TransitionDefinition<TState, TEvent>? transition = null;
         HierarchySelectionDiagnostics? hierarchyDiagnostics = null;
@@ -284,7 +290,11 @@ internal sealed class TransitionExecutor<TState, TEvent>
                     currentState,
                     @event,
                     new TransitionDiagnostics($"Event '{@event}' is not permitted from state '{currentState}'.",
-                        TransitionLifecyclePhase.Matching));
+                        TransitionLifecyclePhase.Matching,
+                        denialDiagnostics:
+                        [
+                            CreateNoMatchDiagnostic(currentState, @event)
+                        ]));
 
             var targetState = ResolveTargetState(currentState, transition, historyRecords, parallelHistoryStore,
                 preTransitionActiveShape, out var historyResolution);
@@ -307,7 +317,16 @@ internal sealed class TransitionExecutor<TState, TEvent>
                         $"Condition '{conditionResult.DeniedCondition!.DisplayName}' denied the transition.",
                         TransitionLifecyclePhase.Condition,
                         affectedElement: conditionResult.DeniedCondition.DisplayName,
-                        hierarchyMetadata: hierarchyDiagnostics));
+                        hierarchyMetadata: hierarchyDiagnostics,
+                        denialDiagnostics:
+                        [
+                            TransitionDenialDiagnostic.FailedGuards(
+                                GetTransitionId(transition),
+                                [new TransitionPreviewGuardDiagnostic(
+                                    GetTransitionId(transition), 0,
+                                    conditionResult.DeniedCondition.DisplayName,
+                                    TransitionPreviewGuardStatus.Failed)])
+                        ]));
 
             if (transition.Kind is TransitionKind.External or TransitionKind.Self)
             {
@@ -391,6 +410,24 @@ internal sealed class TransitionExecutor<TState, TEvent>
         }
     }
 
+    private static TransitionOutcome<TState, TEvent> CreateValidationFailureOutcome(
+        TState currentState,
+        TEvent @event,
+        ValidationResult validation)
+    {
+        return TransitionOutcome<TState, TEvent>.ValidationFailure(
+            currentState,
+            @event,
+            new TransitionDiagnostics("Machine definition has validation errors.",
+                validationFindings: validation.Errors,
+                conflictDiagnostics: validation.ConflictDiagnostics,
+                denialDiagnostics:
+                [
+                    TransitionDenialDiagnostic.ValidationConflicts(validation.Errors,
+                        validation.ConflictDiagnostics)
+                ]));
+    }
+
     private async ValueTask<ConditionEvaluationResult<TState, TEvent>> EvaluateConditionsAsync(
         TransitionDefinition<TState, TEvent> transition,
         TransitionContext<TState, TEvent> context,
@@ -409,6 +446,32 @@ internal sealed class TransitionExecutor<TState, TEvent>
         {
             throw new TransitionBehaviorException(TransitionLifecyclePhase.Condition, ex);
         }
+    }
+
+    private TransitionDenialDiagnostic CreateNoMatchDiagnostic(TState currentState, TEvent @event)
+    {
+        var eventIdentity = ResolveEventIdentity(@event);
+        if (_definition.FindState(currentState)?.IsTerminal == true)
+            return TransitionDenialDiagnostic.TerminalState(currentState, eventIdentity);
+
+        return eventIdentity is null
+            ? TransitionDenialDiagnostic.UnknownEvent(Convert.ToString(@event,
+                System.Globalization.CultureInfo.InvariantCulture))
+            : TransitionDenialDiagnostic.NoMatchingEvent(currentState, eventIdentity);
+    }
+
+    private string? ResolveEventIdentity(TEvent @event)
+    {
+        foreach (var eventDefinition in _definition.Events)
+            if (eventDefinition.Matches(@event))
+                return eventDefinition.Identity;
+
+        return null;
+    }
+
+    private string GetTransitionId(TransitionDefinition<TState, TEvent> transition)
+    {
+        return TransitionIdentityProvider.GetTransitionId(_definition, transition) ?? transition.ToString();
     }
 
     private TState ResolveTargetState(

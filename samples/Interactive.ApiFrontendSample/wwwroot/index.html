@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>StateMachineLibrary Interactive API Sample</title>
+    <link rel="stylesheet" href="/styles.css"/>
+</head>
+<body>
+<main class="layout">
+    <header>
+        <h1>Interactive Order Workflow Sample</h1>
+        <p>This sample drives a complex state machine through an API and visualizes runtime state with introspection.</p>
+        <div id="status-banner" class="status">Ready.</div>
+    </header>
+
+    <section class="panel">
+        <h2>Current Runtime</h2>
+        <div id="runtime-summary" class="mono">Loading runtime...</div>
+
+        <h3>Payment Progress</h3>
+        <div id="payment-summary" class="mono">Loading payment progress...</div>
+        <div class="progress-track" aria-label="Payment progress">
+            <div id="payment-progress-bar" class="progress-bar"></div>
+        </div>
+
+        <h3>Permitted Events</h3>
+        <div id="permitted-events" class="chips"></div>
+        <button id="reset-button" type="button">Reset Runtime</button>
+    </section>
+
+    <section class="panel">
+        <h2>Event Playground</h2>
+        <label for="event-type">Event Type</label>
+        <select id="event-type"></select>
+        <div id="event-description" class="hint"></div>
+        <div id="event-permitted" class="hint"></div>
+        <div id="event-fields"></div>
+
+        <div class="row">
+            <button id="preview-button" type="button">Preview</button>
+            <button id="apply-button" type="button">Apply</button>
+        </div>
+
+        <h3>Preview Result</h3>
+        <pre id="preview-summary" class="mono">No preview yet.</pre>
+
+        <h3>Apply Result</h3>
+        <pre id="apply-summary" class="mono">No event applied yet.</pre>
+    </section>
+
+    <section class="panel">
+        <h2>Definition Graph + Active Overlay</h2>
+        <div id="overlay-summary" class="mono">Loading graph overlay...</div>
+        <p class="hint">Edge legend: <span class="legend preview">preview</span> <span class="legend applied">applied</span> <span class="legend candidate">candidate</span></p>
+
+        <div id="diagram-container" class="diagram">Rendering diagram...</div>
+
+        <details>
+            <summary>Raw graph details (nodes/edges)</summary>
+            <h3>Nodes</h3>
+            <ul id="node-list" class="list"></ul>
+
+            <h3>Edges</h3>
+            <ul id="edge-list" class="list"></ul>
+        </details>
+    </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script src="/app.js" type="module"></script>
+</body>
+</html>

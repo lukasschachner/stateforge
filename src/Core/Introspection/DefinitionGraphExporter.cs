@@ -95,6 +95,46 @@ public static class DefinitionGraphExporter
         return GraphExportResult<TState, TEvent>.Success(graph, validation);
     }
 
+    internal static GraphExportResult<TState, TEvent> ExportGraph<TState, TEvent>(
+        StateMachineDefinition<TState, TEvent> definition,
+        ActiveStateShape<TState> activeShape,
+        RuntimeGraphExportOptions? options)
+    {
+        ArgumentNullException.ThrowIfNull(definition);
+        ArgumentNullException.ThrowIfNull(activeShape);
+
+        var resolvedOptions = options ?? new RuntimeGraphExportOptions();
+        resolvedOptions.Validate();
+
+        var export = ExportGraph(definition);
+        if (!export.Succeeded || export.Graph is null) return export;
+
+        if (resolvedOptions.OverlayMode == RuntimeGraphOverlayMode.None) return export;
+
+        var overlay = RuntimeGraphOverlayBuilder.Build(definition, export.Graph, activeShape, resolvedOptions);
+        var graph = CloneWithRuntimeOverlay(export.Graph, overlay);
+        return GraphExportResult<TState, TEvent>.Success(graph, export.Validation);
+    }
+
+    private static DefinitionGraph<TState, TEvent> CloneWithRuntimeOverlay<TState, TEvent>(
+        DefinitionGraph<TState, TEvent> graph,
+        GraphActiveStateOverlay<TState>? runtimeOverlay)
+    {
+        return new DefinitionGraph<TState, TEvent>(
+            graph.Id,
+            graph.Label,
+            graph.Nodes,
+            graph.Edges,
+            graph.Metadata,
+            graph.Validation,
+            graph.ParentChildRelationships,
+            graph.InitialChildMarkers,
+            graph.HistoryMarkers,
+            graph.Hierarchy,
+            graph.Regions,
+            runtimeOverlay);
+    }
+
     internal static string CreateNodeId(int declarationIndex)
     {
         return $"state-{declarationIndex:000}";

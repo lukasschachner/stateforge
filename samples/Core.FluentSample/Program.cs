@@ -53,6 +53,10 @@ internal static class Program
             builder.State(CommercialState.InvoiceCancelled).Terminal();
         });
 
+        var parallelDefinition = CreateParallelFulfillmentDefinition();
+        if (parallelDefinition.Validate().Errors.Count > 0)
+            throw new InvalidOperationException("Parallel fulfillment sample definition is invalid.");
+
         var paymentScenario = await RunScenario(
             definition,
             "payment-after-cancellation-review",
@@ -83,6 +87,31 @@ internal static class Program
             });
 
         Console.WriteLine($"Core sample completed: payment={paymentScenario}, cancellation={cancellationScenario}");
+    }
+
+    private static StateMachineDefinition<CommercialState, CommercialEvent> CreateParallelFulfillmentDefinition()
+    {
+        return StateMachineDefinition<CommercialState, CommercialEvent>.Create(builder =>
+        {
+            builder.ParallelComposite(CommercialState.OrderProcessing, composite =>
+            {
+                composite.Region("Fulfillment", region =>
+                {
+                    region.Initial(CommercialState.PickPending)
+                        .On<ConfirmOrder>()
+                        .GoTo(CommercialState.Picked);
+                    region.Terminal(CommercialState.Picked);
+                });
+
+                composite.Region("Billing", region =>
+                {
+                    region.Initial(CommercialState.PaymentPending)
+                        .On<RegisterPayment>()
+                        .GoTo(CommercialState.PaymentCaptured);
+                    region.Terminal(CommercialState.PaymentCaptured);
+                });
+            });
+        });
     }
 
     private static async Task<CommercialState> RunScenario(
@@ -119,7 +148,12 @@ internal enum CommercialState
     InvoiceIssued,
     InvoiceCancellationRequested,
     InvoicePaid,
-    InvoiceCancelled
+    InvoiceCancelled,
+    OrderProcessing,
+    PickPending,
+    Picked,
+    PaymentPending,
+    PaymentCaptured
 }
 
 internal abstract record CommercialEvent;

@@ -9,6 +9,9 @@ public sealed class MermaidRenderOptions
     /// <summary>Gets or sets an optional diagram title comment override.</summary>
     public string? DiagramTitle { get; set; }
 
+    /// <summary>Gets or sets whether runtime active-state overlay hints are emitted when graph data contains them.</summary>
+    public bool RenderRuntimeOverlay { get; set; }
+
     /// <summary>Gets or sets the line ending used in the rendered output.</summary>
     public string NewLine { get; set; } = "\n";
 

@@ -55,6 +55,13 @@ internal static class Program
             parallelRuntime.ActiveStateShape.ActiveRegions.Select(r => $"{r.RegionName}={r.ActiveLeafState}")));
         var activeSnapshot = parallelRuntime.CaptureActiveStateSnapshot();
         Console.WriteLine($"Active snapshot kind: {activeSnapshot.Kind} regions={activeSnapshot.RegionSnapshots.Count}");
+        var runtimeOverlayGraph = parallelRuntime.ExportGraph().Graph!;
+        var runtimeOverlay = runtimeOverlayGraph.RuntimeOverlay!;
+        Console.WriteLine(
+            $"Runtime graph overlay: shape={runtimeOverlay.ShapeKind} sequence={runtimeOverlay.Sequence} regions={runtimeOverlay.Regions.Count}");
+        foreach (var region in runtimeOverlay.Regions)
+            Console.WriteLine(
+                $"Runtime overlay region: {region.RegionOrder}:{region.RegionName} active={region.ActiveLeafState} terminal={region.IsTerminal}");
         Console.WriteLine($"Introspection snapshot kind: {parallelDefinition.Introspect().GetActiveStateSnapshotKind(ParallelOrderState.Operational)}");
         Console.WriteLine("Recorded parallel history: " + string.Join(", ",
             parallelRuntime.ParallelHistorySnapshots.Select(s =>

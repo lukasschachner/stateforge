@@ -24,4 +24,17 @@ internal sealed class TransitionMatcher<TState, TEvent>
 
         return null;
     }
+
+    public IReadOnlyList<TransitionDefinition<TState, TEvent>> EnumerateEventCandidates(TState currentState,
+        TEvent @event)
+    {
+        var sourcePath = _definition.HasHierarchy
+            ? _definition.GetActiveStatePath(currentState).StatesRootToLeaf
+            : [currentState];
+
+        return _definition.Transitions
+            .Where(transition => transition.Event.Matches(@event))
+            .Where(transition => sourcePath.Contains(transition.SourceState, EqualityComparer<TState>.Default))
+            .ToArray();
+    }
 }

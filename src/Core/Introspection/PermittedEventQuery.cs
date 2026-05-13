@@ -1,4 +1,5 @@
 using StateMachineLibrary.Core.Definitions;
+using StateMachineLibrary.Core.Execution;
 
 namespace StateMachineLibrary.Core.Introspection;
 
@@ -11,16 +12,40 @@ internal static class PermittedEventQuery
         CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        var comparer = EqualityComparer<TState>.Default;
         var sourceStates = definition.HasHierarchy
-            ? definition.GetActiveStatePath(state).StatesRootToLeaf.Reverse().ToArray()
+            ? definition.GetActiveStatePath(state).StatesRootToLeaf
             : [state];
-        IReadOnlyList<EventDefinition<TEvent>> events = definition.Transitions
-            .Where(t => sourceStates.Any(s => comparer.Equals(t.SourceState, s)))
+        return ValueTask.FromResult(GetPermittedEvents(definition, sourceStates));
+    }
+
+    public static ValueTask<IReadOnlyList<EventDefinition<TEvent>>> GetPermittedEventsAsync<TState, TEvent>(
+        StateMachineDefinition<TState, TEvent> definition,
+        ActiveStateShape<TState> activeShape,
+        CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        ArgumentNullException.ThrowIfNull(activeShape);
+
+        if (!activeShape.IsParallel)
+            return GetPermittedEventsAsync(definition, activeShape.ActiveLeafState!, cancellationToken);
+
+        var sourceStates = activeShape.ActiveRegions
+            .SelectMany(region => region.ActivePath.StatesRootToLeaf)
+            .Distinct(EqualityComparer<TState>.Default)
+            .ToArray();
+        return ValueTask.FromResult(GetPermittedEvents(definition, sourceStates));
+    }
+
+    private static IReadOnlyList<EventDefinition<TEvent>> GetPermittedEvents<TState, TEvent>(
+        StateMachineDefinition<TState, TEvent> definition,
+        IEnumerable<TState> sourceStates)
+    {
+        var sourceStateSet = new HashSet<TState>(sourceStates, EqualityComparer<TState>.Default);
+        return definition.Transitions
+            .Where(t => sourceStateSet.Contains(t.SourceState))
             .Select(t => t.Event)
             .GroupBy(e => e.Identity)
             .Select(g => g.First())
             .ToArray();
-        return ValueTask.FromResult(events);
     }
 }

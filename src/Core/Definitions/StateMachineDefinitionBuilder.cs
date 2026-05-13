@@ -102,9 +102,19 @@ public sealed class StateMachineDefinitionBuilder<TState, TEvent>
         return this;
     }
 
+    public StateMachineDefinitionBuilder<TState, TEvent> ParallelRegion(TState compositeState, string name,
+        Action<ParallelRegionDefinitionBuilder<TState, TEvent>> configure)
+    {
+        ArgumentNullException.ThrowIfNull(configure);
+        var regionId = AddParallelRegionBlock(compositeState, name);
+        configure(new ParallelRegionDefinitionBuilder<TState, TEvent>(this, compositeState, name, regionId));
+        return this;
+    }
+
     public ParallelCompositeDefinitionBuilder<TState, TEvent> ParallelComposite(TState compositeState,
         Action<ParallelCompositeDefinitionBuilder<TState, TEvent>> configure)
     {
+        ArgumentNullException.ThrowIfNull(configure);
         var builder = new ParallelCompositeDefinitionBuilder<TState, TEvent>(this, compositeState);
         configure(builder);
         return builder;
@@ -178,7 +188,7 @@ public sealed class StateMachineDefinitionBuilder<TState, TEvent>
         MarkParallelComposite(compositeState);
         var order = _parallelRegions.Count(r =>
             EqualityComparer<TState>.Default.Equals(r.OwnerCompositeState, compositeState));
-        var regionId = $"{compositeState}:{name}:{order}";
+        var regionId = $"region-{_parallelRegions.Count:000}";
         var members = new List<TState>();
         if (hasInitialState) members.Add(initialState!);
         if (memberStates is not null) members.AddRange(memberStates);
@@ -189,7 +199,7 @@ public sealed class StateMachineDefinitionBuilder<TState, TEvent>
         foreach (var member in uniqueMembers)
         {
             SetParentState(member, compositeState);
-            AssignStateToRegion(member, compositeState, name);
+            AssignStateToRegion(member, compositeState, regionId, name);
         }
 
         foreach (var terminal in terminalStates ?? [])
@@ -198,11 +208,47 @@ public sealed class StateMachineDefinitionBuilder<TState, TEvent>
             if (!uniqueMembers.Contains(terminal, EqualityComparer<TState>.Default))
             {
                 SetParentState(terminal, compositeState);
-                AssignStateToRegion(terminal, compositeState, name);
+                AssignStateToRegion(terminal, compositeState, regionId, name);
             }
         }
 
         return regionId;
+    }
+
+    internal string AddParallelRegionBlock(TState compositeState, string name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ArgumentException("Parallel region name must be non-blank.", nameof(name));
+
+        return AddParallelRegion(compositeState, name, default, [], hasInitialState: false);
+    }
+
+    internal StateDefinitionBuilder<TState, TEvent> AddStateToParallelRegion(string regionId, TState state)
+    {
+        var region = GetMutableRegion(regionId);
+        AddRegionMember(regionId, state);
+        AssignStateToRegion(state, region.OwnerCompositeState, region.RegionId, region.Name);
+        return new StateDefinitionBuilder<TState, TEvent>(this, state);
+    }
+
+    internal StateDefinitionBuilder<TState, TEvent> SetParallelRegionInitialState(string regionId, TState state)
+    {
+        AddStateToParallelRegion(regionId, state);
+        UpdateParallelRegion(regionId, region => region with { HasInitialState = true, InitialState = state });
+        return new StateDefinitionBuilder<TState, TEvent>(this, state);
+    }
+
+    internal StateDefinitionBuilder<TState, TEvent> AddParallelRegionTerminalState(string regionId, TState state)
+    {
+        AddStateToParallelRegion(regionId, state);
+        AddRegionTerminal(regionId, state);
+        MarkTerminal(state);
+        return new StateDefinitionBuilder<TState, TEvent>(this, state);
+    }
+
+    internal void SetParallelRegionMetadata(string regionId, string key, object? value)
+    {
+        UpdateParallelRegion(regionId, region => region with { Metadata = region.Metadata.With(key, value) });
     }
 
     internal void AssignStateToRegion(TState value, TState compositeState, string regionName)
@@ -210,7 +256,11 @@ public sealed class StateMachineDefinitionBuilder<TState, TEvent>
         var region = _parallelRegions.FirstOrDefault(r =>
             EqualityComparer<TState>.Default.Equals(r.OwnerCompositeState, compositeState) &&
             string.Equals(r.Name, regionName, StringComparison.Ordinal));
-        var regionId = region?.RegionId ?? $"{compositeState}:{regionName}";
+        AssignStateToRegion(value, compositeState, region?.RegionId ?? $"unresolved-region:{regionName}", regionName);
+    }
+
+    private void AssignStateToRegion(TState value, TState compositeState, string regionId, string regionName)
+    {
         var index = EnsureState(value);
         var state = _states[index];
         _states[index] = state with
@@ -222,6 +272,34 @@ public sealed class StateMachineDefinitionBuilder<TState, TEvent>
                 .With(ParallelRegionMetadataKeys.OwnerCompositeState, compositeState)
         };
         if (!EqualityComparer<TState>.Default.Equals(value, compositeState)) SetParentState(value, compositeState);
+    }
+
+    private ParallelRegionBuilderState<TState> GetMutableRegion(string regionId)
+    {
+        return _parallelRegions.First(r => string.Equals(r.RegionId, regionId, StringComparison.Ordinal));
+    }
+
+    private void AddRegionMember(string regionId, TState state)
+    {
+        UpdateParallelRegion(regionId, region => region.MemberStates.Contains(state, EqualityComparer<TState>.Default)
+            ? region
+            : region with { MemberStates = region.MemberStates.Concat([state]).ToArray() });
+    }
+
+    private void AddRegionTerminal(string regionId, TState state)
+    {
+        UpdateParallelRegion(regionId, region => region.TerminalStates.Contains(state, EqualityComparer<TState>.Default)
+            ? region
+            : region with { TerminalStates = region.TerminalStates.Concat([state]).ToArray() });
+    }
+
+    private void UpdateParallelRegion(string regionId,
+        Func<ParallelRegionBuilderState<TState>, ParallelRegionBuilderState<TState>> update)
+    {
+        var index = _parallelRegions.FindIndex(r => string.Equals(r.RegionId, regionId, StringComparison.Ordinal));
+        if (index < 0) throw new InvalidOperationException($"Parallel region '{regionId}' was not found.");
+
+        _parallelRegions[index] = update(_parallelRegions[index]);
     }
 
     internal void AddStateAction(TState value, StateActionDefinition<TState> action)
@@ -505,6 +583,15 @@ public sealed class ParallelCompositeDefinitionBuilder<TState, TEvent>
         return this;
     }
 
+    public ParallelCompositeDefinitionBuilder<TState, TEvent> Region(string name,
+        Action<ParallelRegionDefinitionBuilder<TState, TEvent>> configure)
+    {
+        ArgumentNullException.ThrowIfNull(configure);
+        var regionId = _builder.AddParallelRegionBlock(CompositeState, name);
+        configure(new ParallelRegionDefinitionBuilder<TState, TEvent>(_builder, CompositeState, name, regionId));
+        return this;
+    }
+
     public ParallelCompositeDefinitionBuilder<TState, TEvent> Region(string name, TState initialState,
         params TState[] memberStates)
     {
@@ -523,5 +610,47 @@ public sealed class ParallelCompositeDefinitionBuilder<TState, TEvent>
     public ParallelCompletionTransitionDefinitionBuilder<TState, TEvent> OnCompletion()
     {
         return new ParallelCompletionTransitionDefinitionBuilder<TState, TEvent>(_builder, this);
+    }
+}
+
+/// <summary>Fluent configuration for one named region of a parallel composite.</summary>
+public sealed class ParallelRegionDefinitionBuilder<TState, TEvent>
+{
+    private readonly StateMachineDefinitionBuilder<TState, TEvent> _builder;
+
+    internal ParallelRegionDefinitionBuilder(StateMachineDefinitionBuilder<TState, TEvent> builder, TState compositeState,
+        string regionName, string regionId)
+    {
+        _builder = builder;
+        CompositeState = compositeState;
+        RegionName = regionName;
+        RegionId = regionId;
+    }
+
+    public TState CompositeState { get; }
+
+    public string RegionName { get; }
+
+    public string RegionId { get; }
+
+    public StateDefinitionBuilder<TState, TEvent> State(TState state)
+    {
+        return _builder.AddStateToParallelRegion(RegionId, state);
+    }
+
+    public StateDefinitionBuilder<TState, TEvent> Initial(TState state)
+    {
+        return _builder.SetParallelRegionInitialState(RegionId, state);
+    }
+
+    public StateDefinitionBuilder<TState, TEvent> Terminal(TState state)
+    {
+        return _builder.AddParallelRegionTerminalState(RegionId, state);
+    }
+
+    public ParallelRegionDefinitionBuilder<TState, TEvent> WithMetadata(string key, object? value)
+    {
+        _builder.SetParallelRegionMetadata(RegionId, key, value);
+        return this;
     }
 }

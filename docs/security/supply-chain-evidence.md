@@ -77,3 +77,51 @@
 - Package/dependency changes: none expected; no package-boundary expansion.
 - Release snapshot trigger: Core public API snapshot updated for `StateMachineLibrary.Core.Diagnostics` types and additive `ConflictDiagnostics` properties.
 - SBOM/VEX/provenance impact: no dependency inventory change; normal release SBOM/provenance/signing evidence remains required before publication.
+
+## Feature Evidence: Runtime Graph Overlays (2026-05-13)
+
+- Package/dependency changes: none expected; no package-boundary expansion.
+- Release snapshot trigger: Core public API snapshot requires review for additive runtime overlay/export contracts. Mermaid, Graphviz, and PlantUML snapshots require review for additive `RenderRuntimeOverlay` options.
+- SBOM/VEX/provenance impact: no dependency inventory, build tool, CI action, signing, provenance, package source, or distribution-channel change was introduced. Normal release SBOM/VEX/provenance/signing evidence remains required before publication.
+
+## Feature Planning: Fluent Region Builders (2026-05-13)
+
+- SBOM: relevant for release packaging; no dependency inventory change is expected, but normal release SBOM generation remains required before publication.
+- VEX: relevant for release governance; no feature-specific VEX statement is expected unless advisory or dependency status changes before release.
+- SLSA: relevant for package provenance because the feature changes release-capable public surface evidence; no new build platform, package source, signing step, or provenance mechanism is expected.
+- Release snapshot trigger: Core public API snapshot should be reviewed for additive fluent builder surface changes.
+
+## Feature Implementation: Fluent Region Builders (2026-05-13)
+
+- SBOM impact: no dependency additions or package-boundary expansion; existing release SBOM generation remains applicable.
+- VEX/advisory impact: no new third-party component requires feature-specific VEX entries.
+- SLSA/provenance impact: existing release provenance workflow remains applicable to packages containing the additive Core API.
+- Public API snapshot: Core snapshot review is required for `ParallelRegionDefinitionBuilder<TState,TEvent>` and new block overloads before release approval.
+
+## Feature Implementation: Parallel Regions Documentation and Sample (2026-05-13)
+
+- SBOM impact: no dependency inventory change. The new sample references Core only, so existing release SBOM generation remains applicable without feature-specific third-party additions.
+- VEX/advisory impact: no new third-party component or vulnerability status requires a feature-specific VEX entry.
+- SLSA/provenance impact: existing CI/release provenance remains applicable; the feature adds release-test evidence for the sample and documentation contract but no new build platform, signing step, package source, or distribution channel.
+- Release validation impact: `CoreParallelRegionsSampleTests` runs the sample and documentation release tests assert guide boundaries and discoverability.
+
+## Feature Planning: Transition Preview Diagnostics (2026-05-13)
+
+- SBOM: relevant for release packaging; no dependency inventory change is expected, but normal release SBOM generation remains required before publication.
+- VEX: relevant for release governance; no feature-specific VEX statement is expected unless advisory or dependency status changes before release.
+- SLSA: relevant for package provenance because the feature changes release-capable public behavior/diagnostic evidence; no new build platform, package source, signing step, or provenance mechanism is expected.
+- Release snapshot trigger: Core public API snapshot should be reviewed for additive preview and denial diagnostic contracts before release approval.
+
+## Feature Implementation: Transition Preview Diagnostics (2026-05-13)
+
+- SBOM impact: no dependency additions, build-tool changes, package-source changes, or package-boundary expansion; existing release SBOM generation remains applicable.
+- VEX/advisory impact: no new third-party component requires feature-specific VEX entries.
+- SLSA/provenance impact: existing release provenance workflow remains applicable to packages containing the additive Core preview/diagnostic API.
+- Public API snapshot: Core snapshot was updated and reviewed for `PreviewAsync`, preview result/status/completeness contracts, guard diagnostics, denial reasons, candidates, and additive denial diagnostic forwarding properties.
+
+## Feature Planning: Source Generator Validation (2026-05-13)
+
+- SBOM: relevant for release packaging because SourceGenerators is a distributable analyzer package; no dependency inventory change is expected, but normal release SBOM generation remains required before publication.
+- VEX: relevant for release governance; no feature-specific VEX statement is expected unless an advisory or dependency status changes before release.
+- SLSA: relevant for package provenance because the feature changes release-capable generator diagnostics, generated helpers, and metadata evidence; no new build platform, package source, signing step, or provenance mechanism is expected.
+- Release snapshot trigger: SourceGenerators public API snapshot and generated-output snapshots should be reviewed for additive diagnostics, helper generation, and metadata contracts before release approval.

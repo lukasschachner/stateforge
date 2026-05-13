@@ -1,4 +1,5 @@
 using StateMachineLibrary.Core.Definitions;
+using StateMachineLibrary.Core.Diagnostics;
 using StateMachineLibrary.Core.Introspection;
 
 #pragma warning disable CS8714
@@ -65,6 +66,22 @@ public sealed class ExternalStateMachineRuntime<TState, TEvent> : IAsyncDisposab
             definitionFingerprint ?? ResolveDefinitionFingerprint());
     }
 
+    /// <summary>Exports definition graph data with runtime active-state overlay metadata.</summary>
+    public ValueTask<GraphExportResult<TState, TEvent>> ExportGraphAsync(CancellationToken cancellationToken = default)
+    {
+        return ExportGraphAsync(null, cancellationToken);
+    }
+
+    /// <summary>Exports definition graph data with runtime overlay behavior controlled by <paramref name="options"/>.</summary>
+    public async ValueTask<GraphExportResult<TState, TEvent>> ExportGraphAsync(
+        RuntimeGraphExportOptions? options,
+        CancellationToken cancellationToken = default)
+    {
+        var current = await StateAccessor.GetAsync(cancellationToken).ConfigureAwait(false);
+        EnsureActiveStateShape(current);
+        return DefinitionGraphExporter.ExportGraph(Definition, _activeStateShape!, options);
+    }
+
     public async ValueTask<TransitionOutcome<TState, TEvent>> ApplyAsync(TEvent @event,
         CancellationToken cancellationToken = default)
     {
@@ -74,11 +91,34 @@ public sealed class ExternalStateMachineRuntime<TState, TEvent> : IAsyncDisposab
         return await ApplyCoreAsync(@event, cancellationToken).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Reads current state and previews an event without calling the accessor setter or invoking observers.
+    /// </summary>
+    public async ValueTask<TransitionPreviewResult<TState, TEvent>> PreviewAsync(TEvent @event,
+        CancellationToken cancellationToken = default)
+    {
+        if (_gate is null) return await PreviewCoreAsync(@event, cancellationToken).ConfigureAwait(false);
+
+        using var lease = await _gate.EnterAsync(cancellationToken).ConfigureAwait(false);
+        return await PreviewCoreAsync(@event, cancellationToken).ConfigureAwait(false);
+    }
+
     public async ValueTask<IReadOnlyList<EventDefinition<TEvent>>> GetPermittedEventsAsync(
         CancellationToken cancellationToken = default)
     {
         var state = await StateAccessor.GetAsync(cancellationToken).ConfigureAwait(false);
-        return await PermittedEventQuery.GetPermittedEventsAsync(Definition, state, cancellationToken)
+        EnsureActiveStateShape(state);
+        return await PermittedEventQuery.GetPermittedEventsAsync(Definition, _activeStateShape!, cancellationToken)
+            .ConfigureAwait(false);
+    }
+
+    private async ValueTask<TransitionPreviewResult<TState, TEvent>> PreviewCoreAsync(TEvent @event,
+        CancellationToken cancellationToken)
+    {
+        var current = await StateAccessor.GetAsync(cancellationToken).ConfigureAwait(false);
+        EnsureActiveStateShape(current);
+        return await new TransitionPreviewPlanner<TState, TEvent>(Definition).PreviewAsync(_activeStateShape!, @event,
+                cancellationToken, _historyRecords, _parallelHistoryStore)
             .ConfigureAwait(false);
     }
 
@@ -116,7 +156,12 @@ public sealed class ExternalStateMachineRuntime<TState, TEvent> : IAsyncDisposab
             return TransitionOutcome<TState, TEvent>.ValidationFailure(currentLeaf, @event,
                 new TransitionDiagnostics("Machine definition has validation errors.",
                     validationFindings: validation.Errors,
-                    conflictDiagnostics: validation.ConflictDiagnostics));
+                    conflictDiagnostics: validation.ConflictDiagnostics,
+                    denialDiagnostics:
+                    [
+                        TransitionDenialDiagnostic.ValidationConflicts(validation.Errors,
+                            validation.ConflictDiagnostics)
+                    ]));
 
         var owner = _activeStateShape.OwningCompositeState!;
         var parentTransition = new TransitionMatcher<TState, TEvent>(Definition).Match(owner, @event);
@@ -126,7 +171,11 @@ public sealed class ExternalStateMachineRuntime<TState, TEvent> : IAsyncDisposab
             if (parentTransition is null)
                 return TransitionOutcome<TState, TEvent>.NotPermitted(currentLeaf, @event,
                     new TransitionDiagnostics($"Event '{@event}' is not permitted from active parallel regions.",
-                        TransitionLifecyclePhase.Matching));
+                        TransitionLifecyclePhase.Matching,
+                        denialDiagnostics:
+                        [
+                            TransitionDenialDiagnostic.NoMatchingEvent(currentLeaf, ResolveEventIdentity(@event))
+                        ]));
 
             await RunParallelExitActionsAsync(parentTransition, @event, cancellationToken).ConfigureAwait(false);
             var parentOutcome = await new TransitionExecutor<TState, TEvent>(Definition)
@@ -142,7 +191,7 @@ public sealed class ExternalStateMachineRuntime<TState, TEvent> : IAsyncDisposab
         }
 
         var transitions = matches.Select(match => match.Transition).Distinct().ToArray();
-        var plannedEntries = PlanPostRegionalEntries(matches);
+        var plannedEntries = RuntimeTransitionHelpers.PlanPostRegionalEntries(Definition, _activeStateShape!, matches);
         var plannedShape = ActiveStateShape<TState>.Parallel(owner, plannedEntries, _activeStateShape.Sequence + 1);
         var parentIsCompletion = parentTransition is not null &&
                                  ParallelCompletionEvaluator.IsComplete(Definition, plannedShape);
@@ -293,29 +342,6 @@ public sealed class ExternalStateMachineRuntime<TState, TEvent> : IAsyncDisposab
         return outcome;
     }
 
-    private IReadOnlyList<ActiveRegionEntry<TState>> PlanPostRegionalEntries(
-        IReadOnlyList<(ActiveRegionEntry<TState> Region, TransitionDefinition<TState, TEvent> Transition)> matches)
-    {
-        var entries = _activeStateShape!.ActiveRegions.ToDictionary(entry => entry.RegionId, StringComparer.Ordinal);
-        foreach (var (region, transition) in matches)
-        {
-            var target = transition.Kind == TransitionKind.Internal
-                ? region.ActiveLeafState
-                : InitialChildResolver.ResolveTargetLeaf(Definition, transition.TargetState);
-            var regionDefinition = Definition.GetParallelRegions(_activeStateShape.OwningCompositeState!)
-                .First(definition => definition.RegionId == region.RegionId);
-            entries[region.RegionId] = new ActiveRegionEntry<TState>(
-                region.RegionId,
-                region.RegionName,
-                target,
-                Definition.GetActiveStatePath(target),
-                regionDefinition.TerminalStates.Contains(target, EqualityComparer<TState>.Default));
-        }
-
-        return Definition.GetParallelRegions(_activeStateShape.OwningCompositeState!)
-            .Select(region => entries[region.RegionId]).ToArray();
-    }
-
     private async ValueTask<TransitionOutcome<TState, TEvent>> CommitParentOutcomeAsync(
         TransitionOutcome<TState, TEvent> parentOutcome, CancellationToken cancellationToken)
     {
@@ -399,25 +425,19 @@ public sealed class ExternalStateMachineRuntime<TState, TEvent> : IAsyncDisposab
 
     private void CommitHistory(Dictionary<TState, CompositeHistoryRecord<TState>> tempHistory)
     {
-        _historyRecords.Clear();
-        foreach (var item in tempHistory) _historyRecords[item.Key] = item.Value;
+        RuntimeTransitionHelpers.CommitHistory(_historyRecords, tempHistory);
     }
 
     private async ValueTask RunParallelExitActionsAsync(TransitionDefinition<TState, TEvent> parentTransition,
         TEvent @event, CancellationToken cancellationToken)
     {
-        var runner = new TransitionActionRunner<TState, TEvent>();
-        foreach (var region in HierarchyEntryExitPlanner.ExitOrder(_activeStateShape!.ActiveRegions))
-        {
-            var context = new ActionExecutionContext<TState, TEvent>(Definition, region.ActiveLeafState,
-                parentTransition.TargetState, @event, parentTransition, TransitionLifecyclePhase.Exit,
-                cancellationToken, regionId: region.RegionId, regionName: region.RegionName,
-                triggerKind: parentTransition.TriggerKind);
-            foreach (var state in region.ActivePath.StatesRootToLeaf.Reverse().TakeWhile(state =>
-                         !EqualityComparer<TState>.Default.Equals(state, _activeStateShape.OwningCompositeState)))
-                await runner.RunStateActionsAsync(Definition.FindState(state), ActionKind.Exit, parentTransition,
-                    context, cancellationToken).ConfigureAwait(false);
-        }
+        await RuntimeTransitionHelpers.RunParallelExitActionsAsync(Definition, _activeStateShape!, parentTransition,
+            @event, cancellationToken).ConfigureAwait(false);
+    }
+
+    private string? ResolveEventIdentity(TEvent @event)
+    {
+        return RuntimeTransitionHelpers.ResolveEventIdentity(Definition, @event);
     }
 
     private string? ResolveDefinitionFingerprint()
@@ -429,20 +449,7 @@ public sealed class ExternalStateMachineRuntime<TState, TEvent> : IAsyncDisposab
 
     private IReadOnlyList<CompositeHistorySnapshot<TState>> CreateHistorySnapshots()
     {
-        return Definition.HistoryEnabledStates
-            .Select(state =>
-            {
-                _historyRecords.TryGetValue(state.Value, out var record);
-                Definition.TryGetEffectiveHistoryFallback(state.Value, out var fallback);
-                return new CompositeHistorySnapshot<TState>(
-                    state.Value,
-                    record is not null,
-                    record is null ? default : record.LastActiveDirectChildState,
-                    record is null ? default : record.LastActiveDescendantLeafState,
-                    fallback,
-                    record?.LastUpdatedSequence ?? 0);
-            })
-            .ToArray();
+        return RuntimeTransitionHelpers.CreateHistorySnapshots(Definition, _historyRecords);
     }
 }
 

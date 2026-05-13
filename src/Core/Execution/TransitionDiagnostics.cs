@@ -14,7 +14,8 @@ public sealed class TransitionDiagnostics
         string? affectedElement = null,
         object? hierarchyMetadata = null,
         object? parallelMetadata = null,
-        IReadOnlyList<TransitionConflictDiagnostic>? conflictDiagnostics = null)
+        IReadOnlyList<TransitionConflictDiagnostic>? conflictDiagnostics = null,
+        IReadOnlyList<TransitionDenialDiagnostic>? denialDiagnostics = null)
     {
         Summary = summary;
         Phase = phase;
@@ -24,6 +25,7 @@ public sealed class TransitionDiagnostics
         HierarchyMetadata = hierarchyMetadata;
         ParallelMetadata = parallelMetadata;
         ConflictDiagnostics = conflictDiagnostics ?? Array.Empty<TransitionConflictDiagnostic>();
+        DenialDiagnostics = denialDiagnostics ?? Array.Empty<TransitionDenialDiagnostic>();
     }
 
     public static TransitionDiagnostics None { get; } = new("Transition completed.");
@@ -45,6 +47,9 @@ public sealed class TransitionDiagnostics
 
     /// <summary>Structured machine-readable transition conflict diagnostics.</summary>
     public IReadOnlyList<TransitionConflictDiagnostic> ConflictDiagnostics { get; }
+
+    /// <summary>Structured machine-readable denial diagnostics for non-committed transition attempts.</summary>
+    public IReadOnlyList<TransitionDenialDiagnostic> DenialDiagnostics { get; }
 }
 
 internal sealed record HierarchySelectionDiagnostics(

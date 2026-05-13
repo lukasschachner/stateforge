@@ -49,6 +49,9 @@ public sealed class TransitionOutcome<TState, TEvent>
     /// <summary>Structured machine-readable conflict diagnostics forwarded from <see cref="Diagnostics" />.</summary>
     public IReadOnlyList<TransitionConflictDiagnostic> ConflictDiagnostics => Diagnostics.ConflictDiagnostics;
 
+    /// <summary>Structured machine-readable denial diagnostics forwarded from <see cref="Diagnostics" />.</summary>
+    public IReadOnlyList<TransitionDenialDiagnostic> DenialDiagnostics => Diagnostics.DenialDiagnostics;
+
     public static TransitionOutcome<TState, TEvent> Success(TState previousState, TState resultingState, TEvent @event,
         TransitionDefinition<TState, TEvent> transition, ActiveStatePath<TState>? activeStatePath = null,
         IEnumerable<CompositeHistorySnapshot<TState>>? historySnapshots = null,

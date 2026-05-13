@@ -19,7 +19,7 @@ public sealed class ParallelRegionBoundaryValidationTests
         Assert.Contains(validation.Errors, f => f.Code == ParallelValidationCodes.IllegalBoundaryTransition);
         var conflict = Assert.Single(validation.ConflictDiagnostics,
             diagnostic => diagnostic.Kind == TransitionConflictKind.CrossRegionBoundary);
-        Assert.Equal("P:A:0", conflict.SourceRegionId);
-        Assert.Equal("P:B:1", conflict.TargetRegionId);
+        Assert.Equal("region-000", conflict.SourceRegionId);
+        Assert.Equal("region-001", conflict.TargetRegionId);
     }
 }

@@ -62,4 +62,19 @@ Renderer packages consume Core graph history metadata. Mermaid, Graphviz, and Pl
 
 Mermaid, Graphviz, and PlantUML adapters consume only renderer-neutral `DefinitionGraph` data for parallel regions. The adapters do not re-run Core validation or inspect runtime internals; region information is emitted from graph metadata and degrades gracefully for non-parallel graphs.
 
-For history-enabled parallel composites, adapters include deterministic metadata comments such as `history=Shallow` or `history=Deep` and the exported fallback state for each region. This is descriptive only: renderers do not infer restore behavior, execute actions, or access runtime history stores.
+For history-enabled parallel composites, adapters include deterministic metadata comments such as `history=Shallow` or `history=Deep` and the exported fallback state for each region. This is descriptive only: renderers do not infer restore behavior, execute actions, or access runtime history stores. To learn the Core parallel-region modeling semantics before choosing optional visualization adapters, see [parallel regions](parallel-regions.md).
+
+## Rendering runtime overlays
+
+Runtime graph overlays are ignored by default to preserve existing renderer output. Enable adapter-specific overlay hints only when desired:
+
+```csharp
+var graph = runtime.ExportGraph().Graph!;
+
+var mermaid = MermaidGraphRenderer.Render(graph, new MermaidRenderOptions
+{
+    RenderRuntimeOverlay = true
+});
+```
+
+When enabled, Mermaid, Graphviz, and PlantUML adapters consume only `DefinitionGraph.RuntimeOverlay`. They emit deterministic runtime-overlay comments and active leaf/path hints; they do not inspect runtime instances, dispatch events, evaluate guards, run actions, poll state, or own completion semantics.

@@ -62,6 +62,9 @@ public static class PlantUmlGraphRenderer
 
         AppendHierarchyLines(graph, orderedNodes, sb, nl);
 
+        if (resolvedOptions.RenderRuntimeOverlay)
+            AppendRuntimeOverlayLines(graph, sb, nl);
+
         if (resolvedOptions.IncludeMetadata) AppendMetadataLines(graph, orderedNodes, orderedEdges, sb, nl);
 
         sb.Append("@enduml").Append(nl);
@@ -153,6 +156,44 @@ public static class PlantUmlGraphRenderer
                 .Append(PlantUmlEscaper.EscapeComment(region.ParallelHistoryFallbackState is null
                     ? "<none>"
                     : StateLabel(region.ParallelHistoryFallbackState)))
+                .Append(nl);
+    }
+
+    private static void AppendRuntimeOverlayLines<TState, TEvent>(
+        DefinitionGraph<TState, TEvent> graph,
+        StringBuilder sb,
+        string nl)
+    {
+        var overlay = graph.RuntimeOverlay;
+        if (overlay is null) return;
+
+        sb.Append("' runtime-overlay: shape=")
+            .Append(overlay.ShapeKind)
+            .Append(" sequence=")
+            .Append(overlay.Sequence)
+            .Append(" activeLeafNodeId=")
+            .Append(PlantUmlEscaper.EscapeComment(overlay.ActiveLeafNodeId ?? ""))
+            .Append(" activePath=")
+            .Append(PlantUmlEscaper.EscapeComment(string.Join(",", overlay.ActivePathNodeIds)))
+            .Append(" complete=")
+            .Append(overlay.IsComplete ? "true" : "false")
+            .Append(nl);
+
+        foreach (var region in overlay.Regions.OrderBy(region => region.RegionOrder))
+            sb.Append("' runtime-overlay-region: order=")
+                .Append(region.RegionOrder)
+                .Append(" id=")
+                .Append(PlantUmlEscaper.EscapeComment(region.RegionId))
+                .Append(" name=")
+                .Append(PlantUmlEscaper.EscapeComment(region.RegionName ?? ""))
+                .Append(" activeLeafNodeId=")
+                .Append(PlantUmlEscaper.EscapeComment(region.ActiveLeafNodeId ?? ""))
+                .Append(" activePath=")
+                .Append(PlantUmlEscaper.EscapeComment(string.Join(",", region.ActivePathNodeIds)))
+                .Append(" terminal=")
+                .Append(region.IsTerminal ? "true" : "false")
+                .Append(" complete=")
+                .Append(region.IsComplete ? "true" : "false")
                 .Append(nl);
     }
 

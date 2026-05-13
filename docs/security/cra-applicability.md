@@ -53,3 +53,15 @@ Silent omission is not allowed: feature plans that affect distribution, EU marke
 ## Feature review: 016-transition-conflict-diagnostics
 
 CRA applicability remains unchanged. The feature adds additive Core diagnostics and public API snapshot evidence but does not alter product distribution, vulnerability-handling workflow, networked behavior, or EU market-placement assumptions. Reassess before public package publication as usual.
+
+## Feature Review: Runtime Graph Overlays (2026-05-13)
+
+CRA applicability remains governed by the baseline pre-publication reassessment gate. Runtime graph overlays add public API and release snapshot evidence, but do not alter product distribution, vulnerability-handling workflow, networked behavior, commercial offering, or EU market-placement assumptions.
+
+## Feature Planning: Transition Preview Diagnostics (2026-05-13)
+
+CRA applicability remains governed by the baseline pre-publication reassessment gate. Transition explainability and dry-run diagnostics may change release-capable Core public surface, but do not alter product distribution, vulnerability-handling workflow, networked behavior, commercial offering, or EU market-placement assumptions. Reassess before public package publication as usual.
+
+## Feature Implementation: Transition Preview Diagnostics (2026-05-13)
+
+CRA applicability remains governed by the baseline pre-publication reassessment gate. This feature adds additive Core public API, tests, docs, and release evidence, but does not alter product distribution, vulnerability-handling workflow, networked behavior, commercial offering, or EU market-placement assumptions. Reassess before public package publication as usual.

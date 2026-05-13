@@ -37,6 +37,11 @@ public static class MermaidGraphRenderer
             : resolvedOptions.DiagramTitle!;
         sb.Append(indent).Append("%% ").Append(MermaidEscaper.EscapeComment(title)).Append(nl);
         sb.Append(indent).Append("classDef terminal fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px;").Append(nl);
+        if (resolvedOptions.RenderRuntimeOverlay && graph.RuntimeOverlay is not null)
+        {
+            sb.Append(indent).Append("classDef runtimeActive fill:#fff8e1,stroke:#f57f17,stroke-width:3px;").Append(nl);
+            sb.Append(indent).Append("classDef runtimePath stroke:#f9a825,stroke-width:2px;").Append(nl);
+        }
 
         foreach (var node in orderedNodes)
             sb.Append(indent)
@@ -60,6 +65,9 @@ public static class MermaidGraphRenderer
             sb.Append(indent).Append("class ").Append(terminal.Identifier).Append(" terminal").Append(nl);
 
         AppendHierarchyLines(graph, orderedNodes, sb, indent, nl);
+
+        if (resolvedOptions.RenderRuntimeOverlay)
+            AppendRuntimeOverlayLines(graph, idMap, sb, indent, nl);
 
         if (resolvedOptions.IncludeMetadata) AppendMetadataLines(graph, orderedNodes, orderedEdges, sb, indent, nl);
 
@@ -158,6 +166,62 @@ public static class MermaidGraphRenderer
                     ? "<none>"
                     : StateLabel(region.ParallelHistoryFallbackState)))
                 .Append(nl);
+    }
+
+    private static void AppendRuntimeOverlayLines<TState, TEvent>(
+        DefinitionGraph<TState, TEvent> graph,
+        IReadOnlyDictionary<string, string> nodeIdentifiers,
+        StringBuilder sb,
+        string indent,
+        string nl)
+    {
+        var overlay = graph.RuntimeOverlay;
+        if (overlay is null) return;
+
+        sb.Append(indent)
+            .Append("%% runtime-overlay: shape=")
+            .Append(overlay.ShapeKind)
+            .Append(" sequence=")
+            .Append(overlay.Sequence)
+            .Append(" complete=")
+            .Append(overlay.IsComplete ? "true" : "false")
+            .Append(" terminal=")
+            .Append(overlay.IsTerminal ? "true" : "false")
+            .Append(nl);
+
+        foreach (var nodeId in overlay.ActivePathNodeIds)
+            if (nodeIdentifiers.TryGetValue(nodeId, out var identifier))
+                sb.Append(indent).Append("class ").Append(identifier).Append(" runtimePath").Append(nl);
+
+        if (overlay.ActiveLeafNodeId is not null &&
+            nodeIdentifiers.TryGetValue(overlay.ActiveLeafNodeId, out var activeIdentifier))
+            sb.Append(indent).Append("class ").Append(activeIdentifier).Append(" runtimeActive").Append(nl);
+
+        foreach (var region in overlay.Regions.OrderBy(region => region.RegionOrder))
+        {
+            sb.Append(indent)
+                .Append("%% runtime-overlay-region: order=")
+                .Append(region.RegionOrder)
+                .Append(" id=")
+                .Append(MermaidEscaper.EscapeComment(region.RegionId))
+                .Append(" name=")
+                .Append(MermaidEscaper.EscapeComment(region.RegionName ?? ""))
+                .Append(" active=")
+                .Append(MermaidEscaper.EscapeComment(region.ActiveLeafState?.ToString() ?? "<null>"))
+                .Append(" terminal=")
+                .Append(region.IsTerminal ? "true" : "false")
+                .Append(" complete=")
+                .Append(region.IsComplete ? "true" : "false")
+                .Append(nl);
+
+            foreach (var nodeId in region.ActivePathNodeIds)
+                if (nodeIdentifiers.TryGetValue(nodeId, out var identifier))
+                    sb.Append(indent).Append("class ").Append(identifier).Append(" runtimePath").Append(nl);
+
+            if (region.ActiveLeafNodeId is not null &&
+                nodeIdentifiers.TryGetValue(region.ActiveLeafNodeId, out var regionActiveIdentifier))
+                sb.Append(indent).Append("class ").Append(regionActiveIdentifier).Append(" runtimeActive").Append(nl);
+        }
     }
 
     private static void AppendMetadataLines<TState, TEvent>(

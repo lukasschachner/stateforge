@@ -15,4 +15,8 @@
     <ItemGroup>
         <ProjectReference Include="..\Core\Core.csproj"/>
     </ItemGroup>
+
+    <ItemGroup>
+        <Compile Include="..\Visualization.Shared\Rendering\GraphRenderingMetadataFormatter.cs" Link="Rendering\GraphRenderingMetadataFormatter.cs"/>
+    </ItemGroup>
 </Project>

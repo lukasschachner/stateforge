@@ -68,6 +68,10 @@ The release workflow in `.github/workflows/release.yml` adds secure-release cont
 - provenance attestation for signed package and SBOM artifacts via `actions/attest-build-provenance`;
 - gated NuGet publication through protected `nuget-prod` environment approval and environment-scoped secrets.
 
+## Runtime graph overlay feature notes
+
+Runtime graph overlays are validated by focused Core tests for flat, hierarchical, parallel, side-effect-free, option-validation, invalid-shape, and accessor-backed export behavior. Visualization tests cover default ignore behavior plus opt-in Mermaid, Graphviz, and PlantUML overlay comments/hints. Public API snapshot review is required for additive Core overlay contracts and renderer `RenderRuntimeOverlay` options.
+
 ## Graph rendering feature notes
 
 Graph rendering adapters are validated by:
@@ -79,7 +83,11 @@ Graph rendering adapters are validated by:
 
 ## Sample validation
 
-Runnable samples cover fluent runtime usage, hierarchical state modeling, source-generator declarations, graph export/introspection, optional graph rendering adapters, and provider-neutral persistence contracts. These samples must stay aligned with README and docs examples and must not introduce workflow orchestration, event sourcing, parallel regions/history states, database providers, hosted services, dependency injection integrations, browser rendering, or image generation.
+Runnable samples cover fluent runtime usage, transition preview and denial diagnostics documentation, hierarchical state modeling, parallel-region modeling, source-generator declarations, graph export/introspection, optional graph rendering adapters, provider-neutral persistence contracts, and an interactive API/frontend runtime showcase. The validated inventory includes `samples/Core.ParallelRegionsSample`, which prints active-region shape, completion status, graph region metadata, and a deterministic invalid-model diagnostic, plus `samples/Interactive.ApiFrontendSample`, which is release-validated via deterministic `--smoke-test` API script output. Samples must stay aligned with README and docs examples and must not introduce workflow orchestration, event sourcing, database providers, or image generation. The interactive sample's ASP.NET host and static frontend are demo infrastructure only and must not imply Core package hosting or browser dependencies. Parallel-region examples are limited to Core FSM definition/runtime semantics and must not imply concurrent regional action scheduling or persistence provider behavior.
+
+## Fluent region builder release coverage
+
+The additive Core fluent region builder APIs require focused Core coverage for nested region blocks, region-scoped initial/state/terminal helpers, old-style/new-style/mixed compatibility, validation diagnostics for blank names and conflicting membership, introspection/graph equivalence, and runtime progression through independent regions. Release review must inspect the Core public API snapshot diff for the new builder type and overloads before accepting `tests/Release.Tests/PublicApi/Core.approved.txt` updates.
 
 ## History-state release coverage
 

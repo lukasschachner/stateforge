@@ -61,6 +61,9 @@ public static class GraphvizDotRenderer
 
         AppendHierarchyLines(graph, orderedNodes, sb, indent, nl);
 
+        if (resolvedOptions.RenderRuntimeOverlay)
+            AppendRuntimeOverlayLines(graph, sb, indent, nl);
+
         if (resolvedOptions.IncludeMetadata) AppendMetadataLines(graph, orderedNodes, orderedEdges, sb, indent, nl);
 
         sb.Append('}').Append(nl);
@@ -158,6 +161,47 @@ public static class GraphvizDotRenderer
                 .Append(GraphvizEscaper.EscapeComment(region.ParallelHistoryFallbackState is null
                     ? "<none>"
                     : StateLabel(region.ParallelHistoryFallbackState)))
+                .Append(nl);
+    }
+
+    private static void AppendRuntimeOverlayLines<TState, TEvent>(
+        DefinitionGraph<TState, TEvent> graph,
+        StringBuilder sb,
+        string indent,
+        string nl)
+    {
+        var overlay = graph.RuntimeOverlay;
+        if (overlay is null) return;
+
+        sb.Append(indent)
+            .Append("// runtime-overlay: shape=")
+            .Append(overlay.ShapeKind)
+            .Append(" sequence=")
+            .Append(overlay.Sequence)
+            .Append(" activeLeafNodeId=")
+            .Append(GraphvizEscaper.EscapeComment(overlay.ActiveLeafNodeId ?? ""))
+            .Append(" activePath=")
+            .Append(GraphvizEscaper.EscapeComment(string.Join(",", overlay.ActivePathNodeIds)))
+            .Append(" complete=")
+            .Append(overlay.IsComplete ? "true" : "false")
+            .Append(nl);
+
+        foreach (var region in overlay.Regions.OrderBy(region => region.RegionOrder))
+            sb.Append(indent)
+                .Append("// runtime-overlay-region: order=")
+                .Append(region.RegionOrder)
+                .Append(" id=")
+                .Append(GraphvizEscaper.EscapeComment(region.RegionId))
+                .Append(" name=")
+                .Append(GraphvizEscaper.EscapeComment(region.RegionName ?? ""))
+                .Append(" activeLeafNodeId=")
+                .Append(GraphvizEscaper.EscapeComment(region.ActiveLeafNodeId ?? ""))
+                .Append(" activePath=")
+                .Append(GraphvizEscaper.EscapeComment(string.Join(",", region.ActivePathNodeIds)))
+                .Append(" terminal=")
+                .Append(region.IsTerminal ? "true" : "false")
+                .Append(" complete=")
+                .Append(region.IsComplete ? "true" : "false")
                 .Append(nl);
     }
 

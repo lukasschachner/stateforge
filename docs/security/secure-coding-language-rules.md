@@ -80,3 +80,11 @@ Additional .NET rules for this repository:
 - Open deviations: SBOM/VEX/SLSA automation is not yet fully implemented; see `docs/security/supply-chain-evidence.md`.
 - Required compensating controls: dependency and package-boundary tests; manual release review until automated SBOM/provenance is added.
 - Re-review trigger: before public package publication, dependency additions, new serializer/storage providers, HTTP/API surfaces, release workflow changes, or cryptography/secrets handling.
+
+## Feature Planning: Source Generator Validation (2026-05-13)
+
+- C# / .NET input validation: applied. Declarative state, event, transition, hierarchy, parallel-region, completion, history, metadata, and graph inputs should be validated from compiler syntax/semantic data before generated code is treated as trustworthy.
+- Source-generator execution safety: applied. Generation must remain deterministic and must not execute user-authored callbacks, guards, actions, transition behavior, runtime definitions, external processes, network calls, or visualization/rendering tools during generation.
+- Safe diagnostics: applied. Diagnostic messages should include stable user-facing identifiers and remediation guidance only, avoiding stack traces, local paths, environment values, secrets, callback internals, telemetry payloads, and serialized event payload contents.
+- HTML/JS/URL output encoding: not applicable. The planned generated metadata and graph data are renderer-neutral and in-process; any future browser-facing or HTML renderer output must perform context-appropriate encoding.
+- SQL, authentication, authorization, cryptography, network I/O, and runtime file I/O rules: not applicable because the planned feature has no database, web/API/auth/session, cryptographic, network, or user-controlled runtime file surface.

@@ -8,7 +8,7 @@ namespace StateMachineLibrary.Core.Introspection;
 /// <typeparam name="TEvent">The event value type used by the definition.</typeparam>
 public sealed class DefinitionGraph<TState, TEvent>
 {
-    /// <summary>Initializes a new immutable definition graph.</summary>
+    /// <summary>Initializes a new immutable definition graph without runtime overlay metadata.</summary>
     public DefinitionGraph(
         string id,
         string label,
@@ -21,6 +21,25 @@ public sealed class DefinitionGraph<TState, TEvent>
         IEnumerable<GraphHistoryMarker<TState>>? historyMarkers = null,
         GraphHierarchyMetadata? hierarchy = null,
         IEnumerable<GraphRegionMetadata<TState>>? regions = null)
+        : this(id, label, nodes, edges, metadata, validation, parentChildRelationships, initialChildMarkers,
+            historyMarkers, hierarchy, regions, null)
+    {
+    }
+
+    /// <summary>Initializes a new immutable definition graph with optional runtime overlay metadata.</summary>
+    public DefinitionGraph(
+        string id,
+        string label,
+        IEnumerable<GraphNode<TState>> nodes,
+        IEnumerable<GraphEdge<TState, TEvent>> edges,
+        MetadataCollection? metadata,
+        ValidationResult validation,
+        IEnumerable<GraphHierarchyRelationship<TState>>? parentChildRelationships,
+        IEnumerable<GraphInitialChildMarker<TState>>? initialChildMarkers,
+        IEnumerable<GraphHistoryMarker<TState>>? historyMarkers,
+        GraphHierarchyMetadata? hierarchy,
+        IEnumerable<GraphRegionMetadata<TState>>? regions,
+        GraphActiveStateOverlay<TState>? runtimeOverlay)
     {
         Id = string.IsNullOrWhiteSpace(id) ? "definition-graph" : id;
         Label = string.IsNullOrWhiteSpace(label) ? Id : label;
@@ -33,6 +52,7 @@ public sealed class DefinitionGraph<TState, TEvent>
         HistoryMarkers = Array.AsReadOnly((historyMarkers ?? []).ToArray());
         Hierarchy = hierarchy ?? GraphHierarchyMetadata.None;
         Regions = Array.AsReadOnly((regions ?? []).ToArray());
+        RuntimeOverlay = runtimeOverlay;
     }
 
     /// <summary>Gets the stable graph identifier.</summary>
@@ -58,4 +78,7 @@ public sealed class DefinitionGraph<TState, TEvent>
     public IReadOnlyList<GraphHistoryMarker<TState>> HistoryMarkers { get; }
     public GraphHierarchyMetadata Hierarchy { get; }
     public IReadOnlyList<GraphRegionMetadata<TState>> Regions { get; }
+
+    /// <summary>Gets runtime active-state overlay metadata when the graph was exported from a runtime instance.</summary>
+    public GraphActiveStateOverlay<TState>? RuntimeOverlay { get; }
 }

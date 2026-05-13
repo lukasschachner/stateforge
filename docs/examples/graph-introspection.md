@@ -34,7 +34,7 @@ History-enabled composites are exposed through definition introspection and grap
 
 ## Parallel-region and parallel-history metadata
 
-Graph export includes `DefinitionGraph.Regions`, node region annotations, and edge `RegionClassification` values such as `Regional`, `ParentBoundary`, and `InvalidBoundary`. Region metadata also includes renderer-neutral parallel-history fields: `ParallelHistoryMode`, `ParallelHistorySupported`, and `ParallelHistoryFallbackState`.
+Graph export includes `DefinitionGraph.Regions`, node region annotations, and edge `RegionClassification` values such as `Regional`, `ParentBoundary`, and `InvalidBoundary`. Region metadata also includes renderer-neutral parallel-history fields: `ParallelHistoryMode`, `ParallelHistorySupported`, and `ParallelHistoryFallbackState`. For the user-facing modeling guide and runnable order-processing sample, see [parallel regions](parallel-regions.md).
 
 Definition introspection exposes parallel-history configuration separately:
 
@@ -50,6 +50,24 @@ foreach (var history in definition.Introspect().ParallelHistoryDefinitions)
 ```
 
 Runtime code can inspect `StateMachineRuntime.ActiveStateShape` to enumerate current active region entries and `StateMachineRuntime.ParallelHistorySnapshots` to enumerate recorded history entries. These views are intentionally distinct: active shape is current execution state, while snapshots are provider-neutral recorded history.
+
+## Runtime graph overlays
+
+Runtime instances can export the same renderer-neutral definition graph data with an additive active-state overlay:
+
+```csharp
+var runtime = definition.CreateRuntime(OrderState.Created);
+var export = runtime.ExportGraph();
+var overlay = export.Graph!.RuntimeOverlay!;
+
+Console.WriteLine($"active={overlay.ActiveLeafState} sequence={overlay.Sequence}");
+```
+
+`RuntimeGraphExportOptions` controls whether the overlay is included. `OverlayMode = RuntimeGraphOverlayMode.None` returns definition graph data with `RuntimeOverlay == null`, preserving static graph behavior through runtime export plumbing.
+
+The overlay is inspection-only: export does not dispatch events, evaluate guards, run actions, invoke observers, or mutate history. Accessor-backed runtimes expose `ExportGraphAsync(...)`, read the current state through the accessor, honor cancellation, and do not call the accessor write path.
+
+For hierarchical machines, the overlay includes `ActivePath` and matching graph node ids. For parallel machines, it includes declaration-ordered region overlays with active leaves, active paths, terminal/completion status, completed region ids, and the captured sequence.
 
 ## Active snapshot vocabulary
 

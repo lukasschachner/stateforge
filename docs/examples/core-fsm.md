@@ -150,10 +150,60 @@ else
 }
 ```
 
+## Transition preview and denied diagnostics
+
+`PreviewAsync` answers what a direct event attempt would do without committing runtime state. Definition preview uses a
+supplied `ActiveStateShape<TState>`; runtime preview reads the runtime's current shape/history without calling observers
+or state writers.
+
+```csharp
+var preview = await definition.PreviewAsync(
+    ActiveStateShape<OrderState>.Single(OrderState.Created),
+    new Pay(42m),
+    cancellationToken);
+
+if (preview.IsPermitted)
+{
+    Console.WriteLine($"Would select {preview.SelectedTransition} and target {preview.ExpectedTargetState}");
+}
+```
+
+Guard-denied previews return structured guard diagnostics:
+
+```csharp
+var guardDenied = await definition.PreviewAsync(
+    ActiveStateShape<OrderState>.Single(OrderState.Created),
+    new Pay(-1m),
+    cancellationToken);
+
+if (guardDenied.DenialDiagnostic?.Reason == TransitionDenialReason.FailedGuards)
+{
+    foreach (var guard in guardDenied.GuardDiagnostics)
+    {
+        Console.WriteLine($"{guard.DisplayName}: {guard.Status}");
+    }
+}
+```
+
+Actual transition attempts keep their existing outcome category and summary while adding structured denial diagnostics:
+
+```csharp
+var denied = await definition.ApplyAsync(OrderState.Created, new Ship("TRACK-123"), cancellationToken);
+foreach (var diagnostic in denied.DenialDiagnostics)
+{
+    Console.WriteLine($"Denied: {diagnostic.Reason}");
+}
+```
+
+Preview does not run entry actions, exit actions, transition actions, transition behaviors, observers, persistence hooks,
+telemetry hooks, or completion cascades. Guard predicates may execute because their pass/fail result is required for the
+answer, so previewed guards should be pure/idempotent.
+
 ## State-owning runtime
 
 ```csharp
 var runtime = definition.CreateRuntime(OrderState.Created, ConcurrencyMode.Serialized);
+var runtimePreview = await runtime.PreviewAsync(new Pay(42m), cancellationToken);
 await runtime.ApplyAsync(new Pay(42m), cancellationToken);
 await runtime.ApplyAsync(new Ship("TRACK-123"), cancellationToken);
 Console.WriteLine(runtime.CurrentState);
@@ -249,21 +299,39 @@ History records are runtime-instance local and are not persisted by Core. Failed
 
 ## Parallel-region composite example
 
-Use `ParallelComposite(...).Region(...)` to model orthogonal parts of a composite state. Entering the composite activates one leaf per region, and a shared event can advance independent regions in declaration order.
+Use `ParallelComposite(...).Region(...)` to model orthogonal parts of a composite state. Entering the composite activates one leaf per region, and a shared event can advance independent regions in declaration order. Region-scoped blocks let the initial, ordinary, terminal, and transition-bearing states declare their membership in one place.
 
 ```csharp
 var definition = StateMachineDefinition<OrderState, OrderEvent>.Create(builder =>
 {
-    builder.ParallelComposite(OrderState.Operational)
-        .Region("Fulfillment", OrderState.WaitingForPick, [OrderState.Packing])
-        .Region("Billing", OrderState.WaitingForPayment, [OrderState.CapturingPayment]);
+    builder.ParallelComposite(OrderState.Operational, composite =>
+    {
+        composite.Region("Fulfillment", region =>
+        {
+            region.Initial(OrderState.WaitingForPick)
+                .On(OrderEvent.AdvanceFulfillment)
+                .GoTo(OrderState.Packing);
+            region.State(OrderState.Packing)
+                .On(OrderEvent.CompleteFulfillment)
+                .GoTo(OrderState.FulfillmentDone);
+            region.Terminal(OrderState.FulfillmentDone);
+        });
 
-    builder.State(OrderState.WaitingForPick).On(OrderEvent.Advance).GoTo(OrderState.Packing);
-    builder.State(OrderState.WaitingForPayment).On(OrderEvent.Advance).GoTo(OrderState.CapturingPayment);
+        composite.Region("Billing", region =>
+        {
+            region.Initial(OrderState.WaitingForPayment)
+                .On(OrderEvent.AdvanceBilling)
+                .GoTo(OrderState.CapturingPayment);
+            region.State(OrderState.CapturingPayment)
+                .On(OrderEvent.CompleteBilling)
+                .GoTo(OrderState.BillingDone);
+            region.Terminal(OrderState.BillingDone);
+        });
+    });
 });
 ```
 
-Validation rejects zero regions, blank or duplicate region names, missing initial states, duplicate membership, direct sibling-region transitions, ambiguous source/event transitions, and unreachable regional states. Completion is considered true only when all regions are terminal.
+`region.Initial(...)`, `region.State(...)`, and `region.Terminal(...)` return the existing state builder, so guards, actions, metadata, and transitions keep their existing semantics. Existing non-block `Region(...)` and `ParallelRegion(...)` APIs remain valid. Validation rejects zero regions, blank or duplicate region names, missing initial states, duplicate/conflicting membership, direct sibling-region transitions, ambiguous source/event transitions, and unreachable regional states. Completion is considered true only when all regions are terminal. For a complete adoption guide, migration notes, invalid-pattern examples, active-shape output, and sample instructions, see [parallel regions](parallel-regions.md).
 
 ## Parallel-history restore
 
@@ -312,7 +380,7 @@ if (validation.IsValid)
 }
 ```
 
-Flat snapshots carry one active leaf and no region metadata. Hierarchical snapshots add an ordered root-to-leaf `ActivePath`. Parallel snapshots carry the owning composite plus one declaration-ordered `ActiveRegionSnapshot` per region, including region id/name, active leaf path, and terminal flag.
+Flat snapshots carry one active leaf and no region metadata. Hierarchical snapshots add an ordered root-to-leaf `ActivePath`. Parallel snapshots carry the owning composite plus one declaration-ordered `ActiveRegionSnapshot` per region, including opaque declaration-based region id, region name, active leaf path, and terminal flag. Treat region ids as stable machine-definition identifiers, not display labels.
 
 ## Completion Transitions
 

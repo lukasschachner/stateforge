@@ -3,7 +3,7 @@
 Guidance for AI coding agents working in this repository.
 
 <!-- SPECKIT START -->
-Active Spec Kit plan: `specs/016-transition-conflict-diagnostics/plan.md`.
+Active Spec Kit plan: `specs/021-source-generator-validation/plan.md`.
 For feature-specific implementation context, read this plan and the feature directory referenced by `.specify/feature.json`, especially when implementing a `/speckit.*` task.
 <!-- SPECKIT END -->
 

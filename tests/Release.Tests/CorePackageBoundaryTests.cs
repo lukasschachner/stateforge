@@ -15,6 +15,8 @@ public sealed class CorePackageBoundaryTests
         Assert.Empty(packageReferences);
         Assert.Empty(projectReferences);
         Assert.DoesNotContain(packageReferences,
+            dep => dep.Contains("Diagnostics", StringComparison.OrdinalIgnoreCase));
+        Assert.DoesNotContain(packageReferences,
             dep => dep.Contains("Visualization", StringComparison.OrdinalIgnoreCase));
         Assert.DoesNotContain(projectReferences,
             dep => dep.Contains("Visualization", StringComparison.OrdinalIgnoreCase));

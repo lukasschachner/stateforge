@@ -76,3 +76,45 @@ Static dependency audits are supplementary, not a replacement for continuous mon
 - Runtime dependency change: none. Core diagnostics use existing BCL/Core definition, validation, and execution types only.
 - Package-boundary expectation: Core remains dependency-light with no logging, UI, renderer, OpenTelemetry, persistence, hosting, workflow, network, or crypto dependency added.
 - Validation evidence: package-boundary release tests should continue to pass; public API snapshot changed intentionally for additive diagnostic types/properties.
+
+## Feature Audit: Runtime Graph Overlays (2026-05-13)
+
+- Runtime dependency change: none. Core overlay export uses existing BCL/Core definition, validation, active-shape, and graph export types only.
+- Package-boundary expectation: Visualization packages consume `DefinitionGraph.RuntimeOverlay` only; Core remains independent of Mermaid, Graphviz, PlantUML, logging, telemetry, persistence, hosting, workflow, network, and crypto dependencies.
+- Re-audit trigger: revisit if future overlay work adds live streaming, serialization, hosted polling, renderer/image dependencies, persistence providers, or package-boundary changes.
+
+## Feature Planning: Fluent Region Builders (2026-05-13)
+
+- Dependency change expected: none. The feature should use existing Core definition, validation, introspection, testing, documentation, and sample infrastructure only.
+- Package-boundary expectation: Core remains dependency-light with no logging, UI, renderer, OpenTelemetry, persistence, hosting, workflow, network, crypto, source-generator, or external parser dependency added.
+- Re-audit trigger: revisit if planning introduces a new package, build tool, analyzer dependency, CI action, renderer dependency, source-generator syntax support, or release workflow change.
+
+## Feature Implementation: Fluent Region Builders (2026-05-13)
+
+- Dependency change: none. The implementation uses existing Core builder/validation/introspection/runtime code, xUnit tests, docs, and samples only.
+- Package-boundary expectation: Core remains dependency-light with no logging, UI, renderer, OpenTelemetry, persistence, hosting, workflow, network, crypto, source-generator, or external parser dependency added.
+- Validation evidence: focused Core tests and release public API/package validation remain the acceptance gates for the additive public builder surface.
+
+## Feature Implementation: Parallel Regions Documentation and Sample (2026-05-13)
+
+- Dependency change: none. The new sample references `src/Core/Core.csproj` only and adds no NuGet package, build tool, CI action, renderer dependency, hosting dependency, persistence provider, network client, crypto library, or source-generator dependency.
+- Package-boundary expectation: Core remains dependency-light; the sample demonstrates renderer-neutral graph metadata without referencing Mermaid, Graphviz, PlantUML, browser tooling, image rendering, persistence providers, hosted services, workflow orchestration, or external services.
+- Validation evidence: release tests run the sample and assert stable active-region, completion, graph metadata, invalid diagnostic, and completion-label output.
+
+## Feature Planning: Transition Preview Diagnostics (2026-05-13)
+
+- Dependency change expected: none. The feature should use existing Core definition/runtime/validation/introspection, test, documentation, and release-validation infrastructure only.
+- Package-boundary expectation: Core remains dependency-light with no logging, dependency-injection, hosting, persistence-provider, telemetry-exporter, workflow-orchestration, visualization-rendering, network, crypto, serializer, or external parser dependency added.
+- Re-audit trigger: revisit if planning introduces a new package, build tool, analyzer dependency, CI action, renderer dependency, persistence/telemetry provider, serialization dependency, or release workflow change.
+
+## Feature Implementation: Transition Preview Diagnostics (2026-05-13)
+
+- Dependency change: none. The implementation uses existing Core definition/runtime/validation components, BCL collections, xUnit tests, documentation, and release-test infrastructure only.
+- Package-boundary expectation: Core remains dependency-light with no logging, dependency-injection, hosting, persistence-provider, telemetry-exporter, workflow, visualization-rendering, network, crypto, serializer, or external parser dependency added.
+- Validation evidence: Core package-boundary tests and `src/Core/Core.csproj` review remain the release gate; public API snapshot changed intentionally for additive preview/diagnostic contracts.
+
+## Feature Planning: Source Generator Validation (2026-05-13)
+
+- Dependency change expected: none. The feature should extend the existing source-generator package, existing Roslyn private build-time assets, tests, documentation, and release-validation infrastructure.
+- Package-boundary expectation: SourceGenerators keeps Roslyn dependencies private to build/analyzer use, emits compatible Core definitions, and does not add runtime visualization, renderer, network, hosting, persistence-provider, serializer, crypto, logging, or dependency-injection dependencies.
+- Re-audit trigger: revisit if planning introduces a new NuGet package, textual parser, analyzer packaging change, generated artifact ingestion step, CI action, visualization dependency, release workflow change, or package-boundary expansion.

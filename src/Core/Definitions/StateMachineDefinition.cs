@@ -244,6 +244,24 @@ public sealed class StateMachineDefinition<TState, TEvent>
         return new ActiveStatePath<TState>(path.Count == 0 ? [activeLeafState] : path);
     }
 
+    /// <summary>
+    /// Previews an event against a supplied active shape without mutating runtime state or running lifecycle side effects.
+    /// </summary>
+    /// <remarks>
+    /// Preview validates the definition and active shape, matches transitions, and evaluates guards because guard
+    /// outcomes are required for permit/deny diagnostics. It does not run entry actions, exit actions, transition
+    /// actions, transition behaviors, observers, persistence hooks, telemetry hooks, or completion cascades. Guards
+    /// supplied by consumers should therefore be pure/idempotent for reliable dry-run behavior.
+    /// </remarks>
+    public ValueTask<TransitionPreviewResult<TState, TEvent>> PreviewAsync(
+        ActiveStateShape<TState> activeStateShape,
+        TEvent @event,
+        CancellationToken cancellationToken = default)
+    {
+        return new TransitionPreviewPlanner<TState, TEvent>(this).PreviewAsync(activeStateShape, @event,
+            cancellationToken);
+    }
+
     /// <summary>Applies an event to caller-supplied state and returns a structured transition outcome.</summary>
     /// <remarks>
     ///     When <paramref name="observer" /> is omitted, execution preserves the dependency-free no-observer path.

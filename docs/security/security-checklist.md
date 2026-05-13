@@ -86,3 +86,59 @@
 - Safe diagnostics: reviewed. Structured diagnostics include state/event/region identifiers, transition IDs, guard display names, and participant roles only; no stack traces, environment variables, filesystem paths, secrets, callback internals, logging sinks, or serialized user payloads are added.
 - Runtime pre-commit behavior: reviewed. Parent/regional and completion conflicts are returned as non-committed outcomes before state writes.
 - New surfaces: additive Core result properties and diagnostic model types only; no auth, crypto, web/API, network, file I/O, telemetry exporter, renderer, persistence provider, or hosting surface introduced.
+
+## Feature Review: Runtime Graph Overlays (2026-05-13)
+
+- CWE-20 / input validation: runtime overlay export validates active-state snapshots before returning overlay metadata and rejects unsupported option enum values/combinations.
+- Side-effect-free inspection: reviewed and tested. Export reads active shape/current accessor state only; it does not dispatch events, evaluate guards, run actions, invoke observers, write external state, mutate history, or start background work.
+- Safe diagnostics: reviewed. Invalid active-shape failures reuse snapshot diagnostics with state/region/sequence context and without stack traces, environment details, filesystem paths, secrets, guard/action output, or callback internals.
+- Surface review: no authentication, authorization, cryptography, network I/O, user-controlled file I/O, serializer, persistence provider, telemetry exporter, hosted service, browser, or image-rendering surface was introduced.
+
+## Feature Planning: Fluent Region Builders (2026-05-13)
+
+- NIST SSDF: applicable. The feature changes production-bound public library surface and must carry traceable requirements, tests, documentation, validation evidence, and public API snapshot review.
+- CWE Top 25: applicable primarily through CWE-20 input validation and safe diagnostic handling for blank region names, missing membership, duplicate/conflicting membership, and illegal regional boundaries.
+- Safe diagnostics: planned diagnostics should include only declared state, event, region, and validation identifiers needed for remediation; no stack traces, environment data, filesystem paths, secrets, callback internals, or serialized payloads should be introduced.
+- Surface review: no authentication, authorization, cryptography, network I/O, user-controlled file I/O, serializer, persistence provider, telemetry exporter, hosted service, browser, image-rendering, command execution, or workflow orchestration surface is in scope.
+
+## Feature Implementation: Fluent Region Builders (2026-05-13)
+
+- NIST SSDF: reviewed. Requirements, plan, tasks, tests, docs, sample, implementation notes, and public API snapshot review are tracked for the additive builder surface.
+- CWE-20 / input validation: reviewed. New block overloads reject null callbacks and blank/null/whitespace region names locally; semantic errors such as duplicate/conflicting membership remain validation findings.
+- Safe diagnostics: reviewed. Membership diagnostics include declared state/composite/region identifiers and remediation guidance only; no stack traces, environment data, filesystem paths, secrets, callback internals, or serialized payloads were added.
+- Surface review: no authentication, authorization, cryptography, network I/O, user-controlled file I/O, serializer, persistence provider, telemetry exporter, hosted service, browser, image-rendering, command execution, or workflow orchestration surface was introduced.
+
+## Feature Implementation: Parallel Regions Documentation and Sample (2026-05-13)
+
+- NIST SSDF: reviewed. Requirements, plan, contracts, release tests, sample output labels, documentation links, security evidence, and implementation notes provide traceability for the documentation/sample feature.
+- CWE-20 / input validation: reviewed. The guide documents invalid region declarations, missing initial states, duplicate or invalid region names, illegal boundaries, ambiguous handling, and pre-commit conflict behavior using existing validation semantics.
+- Safe diagnostics: reviewed. The sample prints deterministic validation code/message content only; it does not print stack traces, local paths, environment values, secrets, process IDs, timestamps, random IDs, or callback internals.
+- Surface review: no authentication, authorization, cryptography, network I/O, user-controlled file I/O, serializer, persistence provider, telemetry exporter, hosted service, browser, image-rendering, command execution, or workflow orchestration surface was introduced.
+
+## Feature Planning: Transition Preview Diagnostics (2026-05-13)
+
+- NIST SSDF: applicable. The feature changes production-bound transition behavior diagnostics and should carry traceable requirements, tests, documentation, public API snapshot review, and release evidence.
+- CWE Top 25: applicable primarily through CWE-20 input validation and safe error/diagnostic handling for supplied active shapes, events, guard results, ambiguous candidates, validation conflicts, and unknown/terminal states.
+- Safe diagnostics: planned diagnostics should include state, event, transition, guard, region, and validation identifiers needed for remediation only; they must not expose stack traces, environment data, local filesystem paths, secrets, callback internals, telemetry payloads, persistence details, or serialized event payload contents beyond consumer-supplied identifiers.
+- Surface review: no authentication, authorization, cryptography, network I/O, user-controlled file I/O, serializer, persistence provider, telemetry exporter, hosted service, browser, image-rendering, command execution, logging integration, dependency-injection, or workflow orchestration surface is in scope.
+
+## Feature Implementation: Transition Preview Diagnostics (2026-05-13)
+
+- NIST SSDF: reviewed. Requirements, plan, contracts, tests, docs, public API snapshot review, and validation notes track the additive transition preview/denial diagnostic surface.
+- CWE-20 / input validation: reviewed. Preview validates machine definitions and supplied active-state shapes before authoritative matching, and maps validation failures to structured diagnostics.
+- Safe diagnostics: reviewed. Denial/guard diagnostics include reason codes, transition IDs, guard display names, state/event/region identifiers, and validation codes only; they do not add stack traces, local paths, environment values, secrets, persistence details, telemetry payloads, or serialized event payloads.
+- Guard purity caveat: documented. Preview may execute guards to explain permit/deny decisions; users are told to keep previewed guards pure/idempotent.
+- Side-effect-free preview: tested. Preview does not run entry/exit actions, transition actions, transition behaviors, observers, completion cascades, accessor setters, persistence hooks, telemetry exporters, hosted work, or renderer behavior.
+- Surface review: no authentication, authorization, cryptography, network I/O, user-controlled file I/O, serializer, persistence provider, telemetry exporter, hosted service, browser, image-rendering, command execution, dependency-injection, logging, or workflow orchestration surface was introduced.
+
+## Feature Planning: Source Generator Validation (2026-05-13)
+
+- NIST SSDF: applicable. The feature changes production-bound generator behavior and should carry traceable requirements, tests, documentation, diagnostics evidence, generated-output compatibility evidence, public API snapshot review, and release evidence.
+- CWE Top 25: applicable primarily through CWE-20 input validation and safe error/diagnostic handling for declarative state, event, transition, hierarchy, parallel-region, completion, history, metadata, and graph declarations.
+- OWASP ASVS: N/A. The feature has no web application, HTTP API, authentication, authorization, session management, browser-facing service, hosted endpoint, user-account, or multi-user access-control surface; `docs/security/asvs-verification.md` records the rationale.
+- SBOM: relevant for release packaging because SourceGenerators is a distributable package; no dependency inventory change is expected, but release SBOM generation remains required before publication.
+- VEX: relevant for release governance; no feature-specific VEX entry is expected unless a dependency advisory or vulnerability status changes before release.
+- SLSA: relevant for package provenance because generated diagnostics/helpers/metadata affect release-capable artifacts; existing provenance/signing workflow remains applicable unless release tooling changes.
+- Safe diagnostics: planned diagnostics should include stable machine, state, event, transition, region, completion, history, and validation identifiers needed for remediation only; they must not expose stack traces, environment data, local filesystem paths, secrets, callback internals, telemetry payloads, serialized event payload contents, or generated temporary paths.
+- Surface review: no authentication, authorization, cryptography, network I/O, user-controlled file I/O, serializer, persistence provider, telemetry exporter, hosted service, browser, image-rendering, command execution, logging integration, dependency-injection, workflow orchestration, or runtime visualization dependency is in scope.
+- Evidence artifacts to update: `docs/security/msl-applicability.md`, `docs/security/security-checklist.md`, `docs/security/secure-coding-language-rules.md`, `docs/security/dependency-audit.md`, `docs/security/supply-chain-evidence.md`, and `docs/security/asvs-verification.md`; create per-release VEX records under `docs/security/vex/` only if advisory status requires it.

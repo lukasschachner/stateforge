@@ -31,16 +31,16 @@ public sealed class ParallelHistoryValidationTests
         {
             new ParallelRegionHistoryEntry<ParallelHistoryState>("unknown", "Unknown", 0, ParallelHistoryState.Packing,
                 validPath, 1),
-            new ParallelRegionHistoryEntry<ParallelHistoryState>("Operational:Fulfillment:0", "Fulfillment", 0,
+            new ParallelRegionHistoryEntry<ParallelHistoryState>("region-000", "Fulfillment", 0,
                 ParallelHistoryState.Packing, validPath, 2),
-            new ParallelRegionHistoryEntry<ParallelHistoryState>("Operational:Fulfillment:0", "Fulfillment", 0,
+            new ParallelRegionHistoryEntry<ParallelHistoryState>("region-000", "Fulfillment", 0,
                 ParallelHistoryState.Packing, validPath, 3),
-            new ParallelRegionHistoryEntry<ParallelHistoryState>("Operational:Billing:1", "Billing", 1,
+            new ParallelRegionHistoryEntry<ParallelHistoryState>("region-001", "Billing", 1,
                 (ParallelHistoryState)998,
                 new ActiveStatePath<ParallelHistoryState>([
                     ParallelHistoryState.Operational, (ParallelHistoryState)998
                 ]), 4),
-            new ParallelRegionHistoryEntry<ParallelHistoryState>("Operational:Billing:1", "Billing", 1,
+            new ParallelRegionHistoryEntry<ParallelHistoryState>("region-001", "Billing", 1,
                 ParallelHistoryState.Packing, invalidPath, 5)
         };
         var snapshot = new ParallelHistorySnapshot<ParallelHistoryState>(ParallelHistoryState.Operational,

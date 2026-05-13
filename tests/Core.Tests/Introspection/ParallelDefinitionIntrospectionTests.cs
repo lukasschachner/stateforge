@@ -14,4 +14,18 @@ public sealed class ParallelDefinitionIntrospectionTests
         Assert.Contains("Fulfillment",
             introspection.ParallelRegions.Where(r => r.RegionId == membership.RegionId).Select(r => r.Name));
     }
+
+    [Fact]
+    public void Region_scoped_initial_and_terminal_declarations_match_old_style_introspection()
+    {
+        var oldStyle = ParallelGraphTestData.CreateTwoRegionDefinitionOldStyle().Introspect();
+        var newStyle = ParallelGraphTestData.CreateTwoRegionDefinitionNewStyle().Introspect();
+
+        Assert.Equal(oldStyle.ParallelRegions.Select(r => (r.Name, r.InitialState)),
+            newStyle.ParallelRegions.Select(r => (r.Name, r.InitialState)));
+        Assert.Equal(oldStyle.ParallelRegions.Select(r => (r.Name, Terminals: string.Join(",", r.TerminalStates))),
+            newStyle.ParallelRegions.Select(r => (r.Name, Terminals: string.Join(",", r.TerminalStates))));
+        Assert.True(newStyle.TryGetRegionMembership(ParallelState.FulfillmentDone, out var membership));
+        Assert.Contains(newStyle.ParallelRegions, r => r.RegionId == membership.RegionId && r.Name == "Fulfillment");
+    }
 }

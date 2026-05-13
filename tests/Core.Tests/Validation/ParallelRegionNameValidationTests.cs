@@ -16,4 +16,27 @@ public sealed class ParallelRegionNameValidationTests
         Assert.Contains(errors, f => f.Code == ParallelValidationCodes.BlankRegionName);
         Assert.Contains(errors, f => f.Code == ParallelValidationCodes.DuplicateRegionName);
     }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("   ")]
+    public void New_composite_region_block_rejects_blank_names(string? name)
+    {
+        var builder = new StateMachineDefinitionBuilder<string, string>();
+        var composite = builder.ParallelComposite("P");
+
+        Assert.Throws<ArgumentException>(() => composite.Region(name!, _ => { }));
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("   ")]
+    public void New_top_level_parallel_region_block_rejects_blank_names(string? name)
+    {
+        var builder = new StateMachineDefinitionBuilder<string, string>();
+
+        Assert.Throws<ArgumentException>(() => builder.ParallelRegion("P", name!, _ => { }));
+    }
 }

@@ -1,4 +1,5 @@
 using StateMachineLibrary.Core.Definitions;
+using StateMachineLibrary.Core.Execution;
 using StateMachineLibrary.Core.Tests.Parallel;
 
 namespace StateMachineLibrary.Core.Tests.Execution;
@@ -20,6 +21,10 @@ public sealed class ParallelDispatchConflictDiagnosticsOrderingTests
             builder.State(ParallelState.WaitingForPayment).On(ParallelEvent.Cancel).GoTo(ParallelState.CapturingPayment);
             builder.State(ParallelState.Cancelled);
         });
+
+        var preview = await definition.CreateRuntime(ParallelState.Operational).PreviewAsync(ParallelEvent.Cancel);
+        Assert.Equal(TransitionPreviewStatus.Denied, preview.Status);
+        Assert.Single(preview.ConflictDiagnostics);
 
         string[]? expected = null;
         for (var i = 0; i < 10; i++)

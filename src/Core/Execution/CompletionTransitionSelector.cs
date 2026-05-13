@@ -5,12 +5,13 @@ namespace StateMachineLibrary.Core.Execution;
 
 internal sealed class CompletionTransitionSelector<TState, TEvent>
 {
-    private readonly ConditionEvaluator<TState, TEvent> _conditionEvaluator = new();
+    private readonly ConditionEvaluator<TState, TEvent> _conditionEvaluator;
     private readonly StateMachineDefinition<TState, TEvent> _definition;
 
     public CompletionTransitionSelector(StateMachineDefinition<TState, TEvent> definition)
     {
-        _definition = definition;
+        _definition = definition ?? throw new ArgumentNullException(nameof(definition));
+        _conditionEvaluator = new ConditionEvaluator<TState, TEvent>(_definition);
     }
 
     public async ValueTask<CompletionTransitionDefinition<TState, TEvent>?> SelectAsync(

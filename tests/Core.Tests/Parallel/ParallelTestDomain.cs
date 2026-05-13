@@ -20,5 +20,7 @@ internal enum ParallelEvent
     PaymentStarted,
     CompleteFulfillment,
     CompleteBilling,
+    PickFinished,
+    PaymentCaptured,
     Cancel
 }

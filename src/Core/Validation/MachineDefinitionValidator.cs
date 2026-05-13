@@ -124,21 +124,4 @@ public static class MachineDefinitionValidator
         return new ValidationResult(findings, conflictDiagnostics);
     }
 
-    private sealed record TransitionKey<TState>(TState SourceState, string EventIdentity);
-
-    private sealed class TransitionKeyComparer<TState>(IEqualityComparer<TState> stateComparer)
-        : IEqualityComparer<TransitionKey<TState>>
-    {
-        public bool Equals(TransitionKey<TState>? x, TransitionKey<TState>? y)
-        {
-            return x is not null && y is not null && stateComparer.Equals(x.SourceState, y.SourceState) &&
-                   StringComparer.Ordinal.Equals(x.EventIdentity, y.EventIdentity);
-        }
-
-        public int GetHashCode(TransitionKey<TState> obj)
-        {
-            return HashCode.Combine(stateComparer.GetHashCode(obj.SourceState!),
-                StringComparer.Ordinal.GetHashCode(obj.EventIdentity));
-        }
-    }
 }
