@@ -50,6 +50,8 @@ public static class AttributeDeclarationParser
                 ParseParallelRegion(attribute, semanticModel, declaration, cancellationToken);
             else if (Is(attribute, "Region", semanticModel, cancellationToken))
                 ParseRegionMembership(attribute, semanticModel, declaration, cancellationToken);
+            else if (Is(attribute, "Completion", semanticModel, cancellationToken))
+                ParseCompletion(attribute, semanticModel, declaration, cancellationToken);
 
         return declaration;
     }
@@ -257,6 +259,21 @@ public static class AttributeDeclarationParser
         var memberState = DeclarationParserHelpers.EnsureState(declaration, memberExpression, memberKey,
             attribute.GetLocation());
         if (terminal) memberState.IsTerminal = true;
+    }
+
+    private static void ParseCompletion(AttributeSyntax attribute, SemanticModel semanticModel,
+        MachineDeclaration declaration, CancellationToken cancellationToken)
+    {
+        var args = attribute.ArgumentList?.Arguments;
+        if (args is null || args.Value.Count < 2) return;
+        var source = args.Value[0].Expression;
+        var target = args.Value[1].Expression;
+        declaration.CompletionDeclarations.Add(new CompletionDeclaration(
+            SyntaxValue.IdentityForExpression(semanticModel, source, cancellationToken),
+            SyntaxValue.ExpressionText(source),
+            SyntaxValue.IdentityForExpression(semanticModel, target, cancellationToken),
+            SyntaxValue.ExpressionText(target),
+            attribute.GetLocation()));
     }
 
     private static string StringConstant(SemanticModel semanticModel, ExpressionSyntax expression,

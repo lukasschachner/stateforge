@@ -125,3 +125,7 @@
 - VEX: relevant for release governance; no feature-specific VEX statement is expected unless an advisory or dependency status changes before release.
 - SLSA: relevant for package provenance because the feature changes release-capable generator diagnostics, generated helpers, and metadata evidence; no new build platform, package source, signing step, or provenance mechanism is expected.
 - Release snapshot trigger: SourceGenerators public API snapshot and generated-output snapshots should be reviewed for additive diagnostics, helper generation, and metadata contracts before release approval.
+
+## Source generator validation supply-chain evidence (2026-05-13)
+
+No dependency inventory change or advisory status requiring VEX was introduced. Package-boundary tests cover analyzer packaging, private Roslyn assets, and no runtime visualization dependency.

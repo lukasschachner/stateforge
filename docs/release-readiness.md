@@ -109,3 +109,7 @@ Advanced source-generator declarations require focused validation in `tests/Sour
 - renderer-neutral graph/metadata assertions proving generated advanced definitions do not introduce Mermaid, Graphviz, PlantUML, image-rendering, or visual-designer behavior.
 
 Release review must include `tests/Release.Tests/PublicApi/SourceGenerators.approved.txt` because declaration-model records and diagnostic descriptors are part of the generator assembly surface, plus runnable sample validation for `samples/SourceGenerators.Sample`, including the `GeneratedAdvancedOrderMachine` validation and parallel-region runtime path.
+
+## Source generator validation evidence
+
+Source generator release readiness includes focused generator diagnostics/helper/metadata tests, public API snapshot review for the analyzer assembly, sample execution, and package-boundary checks confirming Roslyn remains private and no runtime visualization dependency is introduced.

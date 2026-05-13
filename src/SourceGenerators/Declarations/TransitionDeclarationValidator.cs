@@ -18,7 +18,17 @@ public static class TransitionDeclarationValidator
                 reporter.Missing("event", transition.EventKey, transition.SourceLocation);
         }
 
-        foreach (var group in declaration.Transitions.GroupBy(t => t.SourceStateKey + "\u001f" + t.EventKey)
+        foreach (var group in declaration.Transitions.GroupBy(t =>
+                     t.SourceStateKey + "\u001f" + t.EventKey + "\u001f" + t.TargetStateKey + "\u001f" + t.TransitionKind,
+                     StringComparer.Ordinal).Where(g => g.Count() > 1))
+        {
+            var first = group.First();
+            reporter.Duplicate("transition", first.SourceStateKey + " -> " + first.TargetStateKey,
+                first.SourceLocation, group.Skip(1).Select(t => t.SourceLocation));
+        }
+
+        foreach (var group in declaration.Transitions.Where(t => t.Conditions.Count == 0)
+                     .GroupBy(t => t.SourceStateKey + "\u001f" + t.EventKey, StringComparer.Ordinal)
                      .Where(g => g.Count() > 1))
         {
             var first = group.First();

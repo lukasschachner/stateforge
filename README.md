@@ -81,6 +81,12 @@ if (outcome.Category == TransitionOutcomeCategory.Success)
 
 See the runnable sample at [`samples/Core.FluentSample`](samples/Core.FluentSample).
 
+## Optional source generation
+
+`StateMachineLibrary.SourceGenerators` provides attribute/DSL declarations that generate the same Core definition contract (`Definition` and `CreateDefinition`) plus additive event helpers and renderer-neutral `GeneratedMetadata`/`GeneratedGraph` records for tests and documentation. The generator reports stable `SMG###` diagnostics for statically knowable declaration mistakes and keeps Roslyn dependencies private to the analyzer package.
+
+See [`docs/examples/source-generation.md`](docs/examples/source-generation.md) and [`samples/SourceGenerators.Sample`](samples/SourceGenerators.Sample).
+
 ## Optional hierarchical states
 
 Core can model nested states without changing flat FSM behavior. A composite state declares an `InitialChild`, child

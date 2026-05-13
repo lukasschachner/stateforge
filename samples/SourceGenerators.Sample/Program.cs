@@ -6,7 +6,7 @@ internal static class Program
     private static async Task Main()
     {
         var definition = GeneratedOrderMachine.Definition;
-        var outcome = await definition.ApplyAsync(OrderState.Created, OrderEvent.Pay);
+        var outcome = await GeneratedOrderMachine.ApplyOrderEvent_PayAsync(OrderState.Created);
         if (outcome.Category != TransitionOutcomeCategory.Success)
             throw new InvalidOperationException(outcome.Diagnostics.Summary);
 
@@ -23,7 +23,7 @@ internal static class Program
         await advancedRuntime.ApplyAsync(OrderEvent.Pay);
         Console.WriteLine("After billing: " + FormatRegions(advancedRuntime));
 
-        Console.WriteLine($"Source generator sample completed: {outcome.ResultingState}; advanced states: {advancedDefinition.States.Count}");
+        Console.WriteLine($"Source generator sample completed: {outcome.ResultingState}; advanced states: {advancedDefinition.States.Count}; metadata entries: {GeneratedOrderMachine.GeneratedMetadata.Count}; graph entries: {GeneratedOrderMachine.GeneratedGraph.Count}");
     }
 
     private static string FormatRegions(StateMachineRuntime<OrderState, OrderEvent> runtime)

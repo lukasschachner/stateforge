@@ -93,3 +93,7 @@ Verification focus remains secure input validation and safe diagnostic content u
 Selected Level: N/A. The feature improves compile-time declaration validation, generated helpers, and in-process metadata for a library source generator; it introduces no web application, HTTP API, authentication, authorization, session management, browser-facing service, hosted endpoint, user-account surface, or multi-user access-control surface.
 
 Verification focus remains CWE-20 declarative input validation, safe diagnostic content, and package-boundary evidence under the project security checklist rather than ASVS control testing.
+
+## Source generator validation ASVS rationale (2026-05-13)
+
+ASVS remains not applicable: this feature introduces no web application, HTTP API, authentication, authorization, session management, or browser-facing service surface.

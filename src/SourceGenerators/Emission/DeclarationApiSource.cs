@@ -161,6 +161,20 @@ public static class DeclarationApiSource
                                          public bool IsTerminal { get; set; }
                                      }
 
+                                     /// <summary>Declares a completion transition from a completed composite state.</summary>
+                                     [global::System.AttributeUsage(global::System.AttributeTargets.Class | global::System.AttributeTargets.Struct, AllowMultiple = true, Inherited = false)]
+                                     internal sealed class CompletionAttribute : global::System.Attribute
+                                     {
+                                         public CompletionAttribute(object sourceState, object targetState)
+                                         {
+                                             SourceState = sourceState;
+                                             TargetState = targetState;
+                                         }
+
+                                         public object SourceState { get; }
+                                         public object TargetState { get; }
+                                     }
+
                                      /// <summary>Metadata key/value declaration.</summary>
                                      [global::System.AttributeUsage(global::System.AttributeTargets.Class | global::System.AttributeTargets.Struct, AllowMultiple = true, Inherited = false)]
                                      internal sealed class MetadataAttribute : global::System.Attribute

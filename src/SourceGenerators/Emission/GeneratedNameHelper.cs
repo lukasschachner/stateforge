@@ -17,6 +17,17 @@ public static class GeneratedNameHelper
         return builder.ToString().TrimEnd('_');
     }
 
+    public static string EventHelperName(DeclaredEvent declaredEvent)
+    {
+        if (declaredEvent is null) throw new ArgumentNullException(nameof(declaredEvent));
+        var identifier = declaredEvent.GeneratedIdentifier ?? string.Empty;
+        const string prefix = "Event_";
+        if (!string.IsNullOrWhiteSpace(identifier) && identifier.StartsWith(prefix, StringComparison.Ordinal))
+            identifier = identifier.Substring(prefix.Length);
+        if (string.IsNullOrWhiteSpace(identifier)) identifier = ShortHash(declaredEvent.IdentityKey);
+        return "Apply" + identifier + "Async";
+    }
+
     public static string SourceName(MachineDeclaration declaration)
     {
         var name = declaration.ContainingType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)

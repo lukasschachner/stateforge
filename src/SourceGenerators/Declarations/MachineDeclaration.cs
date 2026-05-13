@@ -27,6 +27,10 @@ public sealed class MachineDeclaration
     public List<ParallelCompositeDeclaration> ParallelComposites { get; } = new();
     public List<RegionDeclaration> Regions { get; } = new();
     public List<RegionMembership> RegionMemberships { get; } = new();
+    public List<CompletionDeclaration> CompletionDeclarations { get; } = new();
+    public List<GeneratedHelperModel> GeneratedHelpers { get; } = new();
+    public GeneratedMetadataModel? GeneratedMetadata { get; set; }
+    public StaticDeclarationGraph? StaticGraph { get; set; }
     public List<MetadataEntry> Metadata { get; } = new();
     public Location? SourceLocation { get; }
 }

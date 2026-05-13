@@ -77,4 +77,19 @@ public static class StateMachineGeneratorDiagnostics
         "SMG015", "Invalid parallel region declaration",
         "Parallel region '{1}' on composite '{0}' is invalid: {2}.", Category, DiagnosticSeverity.Error,
         true);
+
+    public static readonly DiagnosticDescriptor UnreachableState = new(
+        "SMG016", "Unreachable state declaration",
+        "State '{0}' is unreachable from the declared initial state and static region initial states. Add a transition, make it an initial child/region initial, or remove the state.",
+        Category, DiagnosticSeverity.Error, true);
+
+    public static readonly DiagnosticDescriptor DeadEndState = new(
+        "SMG017", "Dead-end non-terminal state declaration",
+        "State '{0}' is non-terminal and has no statically declared outgoing progress path. Add an outgoing transition or mark it terminal.",
+        Category, DiagnosticSeverity.Error, true);
+
+    public static readonly DiagnosticDescriptor TerminalNotReachable = new(
+        "SMG018", "Terminal state is not reachable",
+        "No declared terminal state is reachable through static declaration paths. Unreachable terminal state(s): {0}.",
+        Category, DiagnosticSeverity.Error, true);
 }

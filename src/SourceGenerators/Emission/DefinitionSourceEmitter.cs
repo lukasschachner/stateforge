@@ -32,8 +32,12 @@ public static class DefinitionSourceEmitter
 
         AppendIndentedLine(sb, indentLevel, GetTypeDeclaration(declaration.ContainingType));
         AppendIndentedLine(sb, indentLevel, "{");
+        var memberIndent = Indent(indentLevel + 1);
         sb.Append(DefinitionMemberEmitter.EmitMembers(declaration.StateTypeName, declaration.EventTypeName,
-            EmitCreateBody(declaration), Indent(indentLevel + 1)));
+            EmitCreateBody(declaration), memberIndent));
+        sb.Append(EventHelperEmitter.Emit(declaration, memberIndent));
+        sb.Append(GeneratedMetadataEmitter.Emit(declaration, memberIndent));
+        sb.Append(GeneratedGraphEmitter.Emit(declaration, memberIndent));
         AppendIndentedLine(sb, indentLevel, "}");
 
         for (var i = containingTypes.Length - 1; i >= 0; i--)
@@ -85,6 +89,14 @@ public static class DefinitionSourceEmitter
 
         foreach (var region in CanonicalRegions(declaration))
             EmitRegion(sb, declaration, region);
+
+        foreach (var completion in declaration.CompletionDeclarations)
+        {
+            if (declaration.States.Any(s => s.IdentityKey == completion.SourceStateKey) &&
+                declaration.States.Any(s => s.IdentityKey == completion.TargetStateKey))
+                sb.Append("    machine.State(").Append(completion.SourceExpression).Append(").OnCompletion().GoTo(")
+                    .Append(completion.TargetExpression).AppendLine(");");
+        }
 
         foreach (var transition in declaration.Transitions)
         {

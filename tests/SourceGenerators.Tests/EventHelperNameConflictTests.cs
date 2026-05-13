@@ -1,9 +1,9 @@
 namespace StateMachineLibrary.SourceGenerators.Tests;
 
-public sealed class DeclarationDuplicateDiagnosticTests
+public sealed class EventHelperNameConflictTests
 {
     [Fact]
-    public void DuplicateStateEventTransitionAndGeneratedNameConflictsProduceDiagnostics()
+    public void HelperNameConflictsSkipHelperAndRecordReason()
     {
         var source = """
                      using StateMachineLibrary.SourceGeneration;
@@ -11,13 +11,17 @@ public sealed class DeclarationDuplicateDiagnosticTests
                      public enum E { Go }
                      [StateMachine(typeof(S), typeof(E))]
                      [State(S.A)]
-                     [State(S.B)]
+                     [State(S.B, IsTerminal = true)]
                      [Event(E.Go)]
                      [Transition(S.A, E.Go, S.B)]
-                     [Transition(S.A, E.Go, S.B)]
-                     public static partial class M { }
+                     public static partial class M
+                     {
+                         public static object? ApplyE_GoAsync => null;
+                     }
                      """;
+
         var result = GeneratorTestHost.Run(source);
-        Assert.NotEmpty(result.GeneratorDiagnostics("SMG003"));
+        Assert.DoesNotContain("runtime.ApplyAsync(E.Go", result.GeneratedSource);
+        Assert.Contains("reason=GeneratedNameConflict", result.GeneratedSource);
     }
 }

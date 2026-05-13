@@ -32,7 +32,7 @@ public static class GeneratorTestHost
         var syntaxTree = CSharpSyntaxTree.ParseText(source, parseOptions);
         var compilation = CSharpCompilation.Create(
             "GeneratorTests",
-            new[] { syntaxTree },
+            [syntaxTree],
             References(),
             new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary,
                 nullableContextOptions: NullableContextOptions.Enable));

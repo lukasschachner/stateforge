@@ -142,3 +142,9 @@
 - Safe diagnostics: planned diagnostics should include stable machine, state, event, transition, region, completion, history, and validation identifiers needed for remediation only; they must not expose stack traces, environment data, local filesystem paths, secrets, callback internals, telemetry payloads, serialized event payload contents, or generated temporary paths.
 - Surface review: no authentication, authorization, cryptography, network I/O, user-controlled file I/O, serializer, persistence provider, telemetry exporter, hosted service, browser, image-rendering, command execution, logging integration, dependency-injection, workflow orchestration, or runtime visualization dependency is in scope.
 - Evidence artifacts to update: `docs/security/msl-applicability.md`, `docs/security/security-checklist.md`, `docs/security/secure-coding-language-rules.md`, `docs/security/dependency-audit.md`, `docs/security/supply-chain-evidence.md`, and `docs/security/asvs-verification.md`; create per-release VEX records under `docs/security/vex/` only if advisory status requires it.
+
+## Source generator validation feature checkpoint (2026-05-13)
+
+- NIST SSDF/CWE-20: malformed declarations are covered by deterministic diagnostic tests.
+- Safe diagnostics: messages avoid environment-specific values and callback internals.
+- N/A surfaces: no web, auth, crypto, serializer, network, or hosted service surface was added.

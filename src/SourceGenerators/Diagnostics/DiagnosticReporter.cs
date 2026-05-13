@@ -84,10 +84,30 @@ public sealed class DiagnosticReporter
         Report(StateMachineGeneratorDiagnostics.InvalidRegionDeclaration, location, null, owner, region, reason);
     }
 
+    public void UnreachableState(string state, Location? location)
+    {
+        Report(StateMachineGeneratorDiagnostics.UnreachableState, location, null, state);
+    }
+
+    public void DeadEndState(string state, Location? location)
+    {
+        Report(StateMachineGeneratorDiagnostics.DeadEndState, location, null, state);
+    }
+
+    public void TerminalNotReachable(string states, Location? location)
+    {
+        Report(StateMachineGeneratorDiagnostics.TerminalNotReachable, location, null, states);
+    }
+
     public void Report(DiagnosticDescriptor descriptor, Location? location, IEnumerable<Location?>? relatedLocations,
         params object[] args)
     {
-        var related = relatedLocations?.Where(l => l is not null).Select(l => l!).ToArray();
+        var related = relatedLocations?.Where(l => l is not null)
+            .Select(l => l!)
+            .OrderBy(l => l.GetLineSpan().Path, StringComparer.Ordinal)
+            .ThenBy(l => l.GetLineSpan().StartLinePosition.Line)
+            .ThenBy(l => l.GetLineSpan().StartLinePosition.Character)
+            .ToArray();
         _diagnostics.Add(Diagnostic.Create(descriptor, location, related, args));
     }
 

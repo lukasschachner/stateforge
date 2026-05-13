@@ -94,3 +94,7 @@ MSL status is not treated as sufficient by itself. Feature plans and implementat
 - MSL status: PASS. Planned production implementation remains in C#/.NET for source-generator parsing, diagnostics, generated helpers, generated metadata, tests, and documentation.
 - Non-MSL justification: N/A; the feature does not require C, C++, Assembly, classic Objective-C, native extensions, or manual-memory implementation code.
 - Secure-coding follow-up: apply C#/.NET validation and safe diagnostic rules to declarative syntax/semantic inputs, generated metadata, generated graph data, and generated helper naming.
+
+## Source generator validation feature evidence (2026-05-13)
+
+The source generator validation implementation remains C#/.NET only. No unsafe, native, manual-memory, or non-MSL component was introduced.

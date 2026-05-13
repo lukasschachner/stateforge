@@ -88,3 +88,7 @@ Additional .NET rules for this repository:
 - Safe diagnostics: applied. Diagnostic messages should include stable user-facing identifiers and remediation guidance only, avoiding stack traces, local paths, environment values, secrets, callback internals, telemetry payloads, and serialized event payload contents.
 - HTML/JS/URL output encoding: not applicable. The planned generated metadata and graph data are renderer-neutral and in-process; any future browser-facing or HTML renderer output must perform context-appropriate encoding.
 - SQL, authentication, authorization, cryptography, network I/O, and runtime file I/O rules: not applicable because the planned feature has no database, web/API/auth/session, cryptographic, network, or user-controlled runtime file surface.
+
+## Source generator validation feature evidence (2026-05-13)
+
+The generator inspects compiler syntax/semantic data and does not execute user guards, actions, transition behaviors, renderers, shell commands, network calls, or arbitrary file I/O. Diagnostics and generated metadata use declared identifiers and deterministic strings, avoiding stack traces, environment values, temporary paths, and serialized payload contents.

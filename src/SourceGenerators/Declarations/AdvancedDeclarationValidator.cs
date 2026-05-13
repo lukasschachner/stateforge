@@ -8,10 +8,70 @@ public static class AdvancedDeclarationValidator
 
     public static void Validate(MachineDeclaration declaration, DiagnosticReporter reporter)
     {
+        ValidateHierarchy(declaration, reporter);
         ValidateHistory(declaration, reporter);
         ValidateRegions(declaration, reporter);
         ValidateMemberships(declaration, reporter);
+        ValidateCompletions(declaration, reporter);
         ValidateRoleCombinations(declaration, reporter);
+    }
+
+    private static void ValidateHierarchy(MachineDeclaration declaration, DiagnosticReporter reporter)
+    {
+        var states = declaration.States.ToDictionary(s => s.IdentityKey, StringComparer.Ordinal);
+        foreach (var state in declaration.States)
+        {
+            if (state.ParentStateKey is not null && !states.ContainsKey(state.ParentStateKey))
+                reporter.Missing("state", state.ParentStateExpression ?? state.ParentStateKey,
+                    state.ParentLocation ?? state.SourceLocation);
+
+            if (state.InitialChildStateKey is not null)
+            {
+                if (!states.TryGetValue(state.InitialChildStateKey, out var child))
+                {
+                    reporter.Missing("state", state.InitialChildExpression ?? state.InitialChildStateKey,
+                        state.InitialChildLocation ?? state.SourceLocation);
+                }
+                else if (child.ParentStateKey is not null && child.ParentStateKey != state.IdentityKey)
+                {
+                    reporter.InvalidRoleCombination(state.Name,
+                        "initial child must declare this state as its parent",
+                        state.InitialChildLocation ?? state.SourceLocation);
+                }
+            }
+
+            if (state.HistoryFallbackStateKey is not null)
+            {
+                if (!states.TryGetValue(state.HistoryFallbackStateKey, out var fallback))
+                {
+                    reporter.Missing("state", state.HistoryFallbackExpression ?? state.HistoryFallbackStateKey,
+                        state.HistoryLocation ?? state.SourceLocation);
+                }
+                else if (fallback.ParentStateKey is not null && fallback.ParentStateKey != state.IdentityKey)
+                {
+                    reporter.InvalidRoleCombination(state.Name,
+                        "history fallback must be a child of the state declaring history",
+                        state.HistoryLocation ?? state.SourceLocation);
+                }
+            }
+        }
+
+        foreach (var state in declaration.States)
+        {
+            var seen = new HashSet<string>(StringComparer.Ordinal);
+            var current = state;
+            while (current.ParentStateKey is not null && states.TryGetValue(current.ParentStateKey, out var parent))
+            {
+                if (!seen.Add(current.IdentityKey) || parent.IdentityKey == state.IdentityKey)
+                {
+                    reporter.InvalidRoleCombination(state.Name, "hierarchy parent cycle detected",
+                        state.ParentLocation ?? state.SourceLocation);
+                    break;
+                }
+
+                current = parent;
+            }
+        }
     }
 
     private static void ValidateHistory(MachineDeclaration declaration, DiagnosticReporter reporter)
@@ -52,6 +112,26 @@ public static class AdvancedDeclarationValidator
             if (region.InitialStateKey is null)
                 reporter.MissingRegionalInitial(region.OwnerCompositeExpression, region.RegionName,
                     region.SourceLocation);
+        }
+    }
+
+    private static void ValidateCompletions(MachineDeclaration declaration, DiagnosticReporter reporter)
+    {
+        var states = new HashSet<string>(declaration.States.Select(s => s.IdentityKey), StringComparer.Ordinal);
+        foreach (var completion in declaration.CompletionDeclarations)
+        {
+            if (!states.Contains(completion.SourceStateKey))
+                reporter.Missing("state", completion.SourceExpression, completion.SourceLocation);
+            if (!states.Contains(completion.TargetStateKey))
+                reporter.Missing("state", completion.TargetExpression, completion.SourceLocation);
+        }
+
+        foreach (var group in declaration.CompletionDeclarations.GroupBy(c => c.SourceStateKey, StringComparer.Ordinal)
+                     .Where(g => g.Count() > 1))
+        {
+            var first = group.First();
+            reporter.Ambiguous(first.SourceExpression, "completion", first.SourceLocation,
+                group.Skip(1).Select(c => c.SourceLocation));
         }
     }
 

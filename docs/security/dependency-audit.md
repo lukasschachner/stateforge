@@ -118,3 +118,7 @@ Static dependency audits are supplementary, not a replacement for continuous mon
 - Dependency change expected: none. The feature should extend the existing source-generator package, existing Roslyn private build-time assets, tests, documentation, and release-validation infrastructure.
 - Package-boundary expectation: SourceGenerators keeps Roslyn dependencies private to build/analyzer use, emits compatible Core definitions, and does not add runtime visualization, renderer, network, hosting, persistence-provider, serializer, crypto, logging, or dependency-injection dependencies.
 - Re-audit trigger: revisit if planning introduces a new NuGet package, textual parser, analyzer packaging change, generated artifact ingestion step, CI action, visualization dependency, release workflow change, or package-boundary expansion.
+
+## Source generator validation dependency evidence (2026-05-13)
+
+No new package dependency was added. Roslyn remains a private analyzer dependency and SourceGenerators has no runtime visualization dependency.

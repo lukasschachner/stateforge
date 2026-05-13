@@ -26,6 +26,14 @@ class StateMachineLibrary.SourceGenerators.Declarations.BehaviorReference
   property System.String DisplayName {get;}
   property System.String MemberName {get;}
 
+class StateMachineLibrary.SourceGenerators.Declarations.CompletionDeclaration
+  ctor (System.String sourceStateKey, System.String sourceExpression, System.String targetStateKey, System.String targetExpression, Microsoft.CodeAnalysis.Location sourceLocation)
+  property Microsoft.CodeAnalysis.Location SourceLocation {get;}
+  property System.String SourceExpression {get;}
+  property System.String SourceStateKey {get;}
+  property System.String TargetExpression {get;}
+  property System.String TargetStateKey {get;}
+
 class StateMachineLibrary.SourceGenerators.Declarations.CompositeDeclaration
   ctor (System.String compositeStateKey, System.String compositeStateExpression, Microsoft.CodeAnalysis.Location sourceLocation)
   property Microsoft.CodeAnalysis.Location HistoryLocation {get;set;}
@@ -60,6 +68,11 @@ class StateMachineLibrary.SourceGenerators.Declarations.DeclarationLocation
 
 static class StateMachineLibrary.SourceGenerators.Declarations.DeclarationNormalizer
   method StateMachineLibrary.SourceGenerators.Declarations.MachineDeclaration Normalize(StateMachineLibrary.SourceGenerators.Declarations.MachineDeclaration declaration)
+
+static class StateMachineLibrary.SourceGenerators.Declarations.DeclarationOrdering
+  method System.Linq.IOrderedEnumerable<StateMachineLibrary.SourceGenerators.Declarations.DeclaredEvent> Events(System.Collections.Generic.IEnumerable<StateMachineLibrary.SourceGenerators.Declarations.DeclaredEvent> events)
+  method System.Linq.IOrderedEnumerable<StateMachineLibrary.SourceGenerators.Declarations.DeclaredState> States(System.Collections.Generic.IEnumerable<StateMachineLibrary.SourceGenerators.Declarations.DeclaredState> states)
+  method System.Linq.IOrderedEnumerable<StateMachineLibrary.SourceGenerators.Declarations.DeclaredTransition> Transitions(System.Collections.Generic.IEnumerable<StateMachineLibrary.SourceGenerators.Declarations.DeclaredTransition> transitions)
 
 enum StateMachineLibrary.SourceGenerators.Declarations.DeclarationStyle : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
   field StateMachineLibrary.SourceGenerators.Declarations.DeclarationStyle Attribute
@@ -158,16 +171,85 @@ class StateMachineLibrary.SourceGenerators.Declarations.DslTransitionParser
 static class StateMachineLibrary.SourceGenerators.Declarations.EventDeclarationNormalizer
   method System.Void EnsureTransitionEvents(StateMachineLibrary.SourceGenerators.Declarations.MachineDeclaration declaration)
 
+class StateMachineLibrary.SourceGenerators.Declarations.GeneratedEventMetadata
+  ctor (System.String identityKey, System.String displayName, StateMachineLibrary.SourceGenerators.Declarations.DeclaredEventKind eventKind, StateMachineLibrary.SourceGenerators.Declarations.GeneratedHelperAvailability helperAvailability, StateMachineLibrary.SourceGenerators.Declarations.GeneratedHelperSkippedReason skippedReason)
+  property StateMachineLibrary.SourceGenerators.Declarations.DeclaredEventKind EventKind {get;}
+  property StateMachineLibrary.SourceGenerators.Declarations.GeneratedHelperAvailability HelperAvailability {get;}
+  property StateMachineLibrary.SourceGenerators.Declarations.GeneratedHelperSkippedReason SkippedReason {get;}
+  property System.String DisplayName {get;}
+  property System.String IdentityKey {get;}
+
+static class StateMachineLibrary.SourceGenerators.Declarations.GeneratedGraphMetadataBuilder
+  method StateMachineLibrary.SourceGenerators.Declarations.StaticDeclarationGraph Build(StateMachineLibrary.SourceGenerators.Declarations.MachineDeclaration declaration)
+
+static class StateMachineLibrary.SourceGenerators.Declarations.GeneratedHelperAnalyzer
+  method System.Void Analyze(StateMachineLibrary.SourceGenerators.Declarations.MachineDeclaration declaration)
+
+enum StateMachineLibrary.SourceGenerators.Declarations.GeneratedHelperAvailability : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  field StateMachineLibrary.SourceGenerators.Declarations.GeneratedHelperAvailability Generated
+  field StateMachineLibrary.SourceGenerators.Declarations.GeneratedHelperAvailability Skipped
+  enum Generated
+  enum Skipped
+
+class StateMachineLibrary.SourceGenerators.Declarations.GeneratedHelperModel
+  ctor (System.String eventKey, System.String helperName, StateMachineLibrary.SourceGenerators.Declarations.GeneratedHelperAvailability availability, StateMachineLibrary.SourceGenerators.Declarations.GeneratedHelperSkippedReason skippedReason)
+  property StateMachineLibrary.SourceGenerators.Declarations.GeneratedHelperAvailability Availability {get;}
+  property StateMachineLibrary.SourceGenerators.Declarations.GeneratedHelperSkippedReason SkippedReason {get;}
+  property System.String EventKey {get;}
+  property System.String HelperName {get;}
+
+enum StateMachineLibrary.SourceGenerators.Declarations.GeneratedHelperSkippedReason : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  field StateMachineLibrary.SourceGenerators.Declarations.GeneratedHelperSkippedReason AmbiguousHelperCandidate
+  field StateMachineLibrary.SourceGenerators.Declarations.GeneratedHelperSkippedReason DuplicateEventIdentity
+  field StateMachineLibrary.SourceGenerators.Declarations.GeneratedHelperSkippedReason GeneratedNameConflict
+  field StateMachineLibrary.SourceGenerators.Declarations.GeneratedHelperSkippedReason None
+  field StateMachineLibrary.SourceGenerators.Declarations.GeneratedHelperSkippedReason RequiredMemberConflict
+  field StateMachineLibrary.SourceGenerators.Declarations.GeneratedHelperSkippedReason UnsupportedEventShape
+  enum AmbiguousHelperCandidate
+  enum DuplicateEventIdentity
+  enum GeneratedNameConflict
+  enum None
+  enum RequiredMemberConflict
+  enum UnsupportedEventShape
+
+static class StateMachineLibrary.SourceGenerators.Declarations.GeneratedMetadataBuilder
+  method StateMachineLibrary.SourceGenerators.Declarations.GeneratedMetadataModel Build(StateMachineLibrary.SourceGenerators.Declarations.MachineDeclaration declaration)
+
+class StateMachineLibrary.SourceGenerators.Declarations.GeneratedMetadataModel
+  ctor (System.String machineId, System.Collections.Generic.IReadOnlyList<StateMachineLibrary.SourceGenerators.Declarations.GeneratedStateMetadata> states, System.Collections.Generic.IReadOnlyList<StateMachineLibrary.SourceGenerators.Declarations.GeneratedEventMetadata> events, System.Collections.Generic.IReadOnlyList<StateMachineLibrary.SourceGenerators.Declarations.GeneratedTransitionMetadata> transitions)
+  property System.Collections.Generic.IReadOnlyList<StateMachineLibrary.SourceGenerators.Declarations.GeneratedEventMetadata> Events {get;}
+  property System.Collections.Generic.IReadOnlyList<StateMachineLibrary.SourceGenerators.Declarations.GeneratedStateMetadata> States {get;}
+  property System.Collections.Generic.IReadOnlyList<StateMachineLibrary.SourceGenerators.Declarations.GeneratedTransitionMetadata> Transitions {get;}
+  property System.String MachineId {get;}
+
+class StateMachineLibrary.SourceGenerators.Declarations.GeneratedStateMetadata
+  ctor (System.String identityKey, System.String displayName, System.Boolean isTerminal)
+  property System.Boolean IsTerminal {get;}
+  property System.String DisplayName {get;}
+  property System.String IdentityKey {get;}
+
+class StateMachineLibrary.SourceGenerators.Declarations.GeneratedTransitionMetadata
+  ctor (System.String transitionId, System.String sourceStateKey, System.String eventKey, System.String targetStateKey, StateMachineLibrary.SourceGenerators.Declarations.DeclaredTransitionKind transitionKind)
+  property StateMachineLibrary.SourceGenerators.Declarations.DeclaredTransitionKind TransitionKind {get;}
+  property System.String EventKey {get;}
+  property System.String SourceStateKey {get;}
+  property System.String TargetStateKey {get;}
+  property System.String TransitionId {get;}
+
 class StateMachineLibrary.SourceGenerators.Declarations.MachineDeclaration
   ctor (StateMachineLibrary.SourceGenerators.Declarations.DeclarationIdentity declarationId, Microsoft.CodeAnalysis.INamedTypeSymbol containingType, System.String stateTypeName, System.String eventTypeName, StateMachineLibrary.SourceGenerators.Declarations.DeclarationStyle declarationStyle, Microsoft.CodeAnalysis.Location sourceLocation)
   property Microsoft.CodeAnalysis.INamedTypeSymbol ContainingType {get;}
   property Microsoft.CodeAnalysis.Location SourceLocation {get;}
   property StateMachineLibrary.SourceGenerators.Declarations.DeclarationIdentity DeclarationId {get;}
   property StateMachineLibrary.SourceGenerators.Declarations.DeclarationStyle DeclarationStyle {get;}
+  property StateMachineLibrary.SourceGenerators.Declarations.GeneratedMetadataModel GeneratedMetadata {get;set;}
+  property StateMachineLibrary.SourceGenerators.Declarations.StaticDeclarationGraph StaticGraph {get;set;}
+  property System.Collections.Generic.List<StateMachineLibrary.SourceGenerators.Declarations.CompletionDeclaration> CompletionDeclarations {get;}
   property System.Collections.Generic.List<StateMachineLibrary.SourceGenerators.Declarations.CompositeDeclaration> Composites {get;}
   property System.Collections.Generic.List<StateMachineLibrary.SourceGenerators.Declarations.DeclaredEvent> Events {get;}
   property System.Collections.Generic.List<StateMachineLibrary.SourceGenerators.Declarations.DeclaredState> States {get;}
   property System.Collections.Generic.List<StateMachineLibrary.SourceGenerators.Declarations.DeclaredTransition> Transitions {get;}
+  property System.Collections.Generic.List<StateMachineLibrary.SourceGenerators.Declarations.GeneratedHelperModel> GeneratedHelpers {get;}
   property System.Collections.Generic.List<StateMachineLibrary.SourceGenerators.Declarations.MetadataEntry> Metadata {get;}
   property System.Collections.Generic.List<StateMachineLibrary.SourceGenerators.Declarations.ParallelCompositeDeclaration> ParallelComposites {get;}
   property System.Collections.Generic.List<StateMachineLibrary.SourceGenerators.Declarations.RegionDeclaration> Regions {get;}
@@ -225,6 +307,44 @@ class StateMachineLibrary.SourceGenerators.Declarations.RegionMembership
   property System.String StateExpression {get;}
   property System.String StateKey {get;}
 
+class StateMachineLibrary.SourceGenerators.Declarations.StaticDeclarationGraph
+  ctor (System.Collections.Generic.IReadOnlyList<StateMachineLibrary.SourceGenerators.Declarations.StaticDeclarationGraphNode> nodes, System.Collections.Generic.IReadOnlyList<StateMachineLibrary.SourceGenerators.Declarations.StaticDeclarationGraphEdge> edges, System.Collections.Generic.IReadOnlyList<System.String> initialRoots)
+  property System.Collections.Generic.IReadOnlyList<StateMachineLibrary.SourceGenerators.Declarations.StaticDeclarationGraphEdge> Edges {get;}
+  property System.Collections.Generic.IReadOnlyList<StateMachineLibrary.SourceGenerators.Declarations.StaticDeclarationGraphNode> Nodes {get;}
+  property System.Collections.Generic.IReadOnlyList<System.String> InitialRoots {get;}
+
+static class StateMachineLibrary.SourceGenerators.Declarations.StaticDeclarationGraphAnalyzer
+  method System.Void Analyze(StateMachineLibrary.SourceGenerators.Declarations.StaticDeclarationGraph graph, StateMachineLibrary.SourceGenerators.Diagnostics.DiagnosticReporter reporter)
+
+static class StateMachineLibrary.SourceGenerators.Declarations.StaticDeclarationGraphBuilder
+  method StateMachineLibrary.SourceGenerators.Declarations.StaticDeclarationGraph Build(StateMachineLibrary.SourceGenerators.Declarations.MachineDeclaration declaration)
+
+class StateMachineLibrary.SourceGenerators.Declarations.StaticDeclarationGraphEdge
+  ctor (System.String sourceStateKey, System.String targetStateKey, StateMachineLibrary.SourceGenerators.Declarations.StaticDeclarationGraphEdgeKind kind, Microsoft.CodeAnalysis.Location location)
+  property Microsoft.CodeAnalysis.Location Location {get;}
+  property StateMachineLibrary.SourceGenerators.Declarations.StaticDeclarationGraphEdgeKind Kind {get;}
+  property System.String SourceStateKey {get;}
+  property System.String TargetStateKey {get;}
+
+enum StateMachineLibrary.SourceGenerators.Declarations.StaticDeclarationGraphEdgeKind : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  field StateMachineLibrary.SourceGenerators.Declarations.StaticDeclarationGraphEdgeKind Completion
+  field StateMachineLibrary.SourceGenerators.Declarations.StaticDeclarationGraphEdgeKind HistoryFallback
+  field StateMachineLibrary.SourceGenerators.Declarations.StaticDeclarationGraphEdgeKind InitialChild
+  field StateMachineLibrary.SourceGenerators.Declarations.StaticDeclarationGraphEdgeKind RegionInitial
+  field StateMachineLibrary.SourceGenerators.Declarations.StaticDeclarationGraphEdgeKind Transition
+  enum Completion
+  enum HistoryFallback
+  enum InitialChild
+  enum RegionInitial
+  enum Transition
+
+class StateMachineLibrary.SourceGenerators.Declarations.StaticDeclarationGraphNode
+  ctor (System.String stateKey, System.String displayName, System.Boolean isTerminal, Microsoft.CodeAnalysis.Location location)
+  property Microsoft.CodeAnalysis.Location Location {get;}
+  property System.Boolean IsTerminal {get;}
+  property System.String DisplayName {get;}
+  property System.String StateKey {get;}
+
 static class StateMachineLibrary.SourceGenerators.Declarations.TerminalStateDeclarationValidator
   method System.Void Validate(StateMachineLibrary.SourceGenerators.Declarations.MachineDeclaration declaration, StateMachineLibrary.SourceGenerators.Diagnostics.DiagnosticReporter reporter)
 
@@ -236,6 +356,7 @@ class StateMachineLibrary.SourceGenerators.Diagnostics.DiagnosticReporter
   property System.Boolean HasErrors {get;}
   property System.Collections.Generic.IReadOnlyList<Microsoft.CodeAnalysis.Diagnostic> Diagnostics {get;}
   method System.Void Ambiguous(System.String state, System.String eventIdentity, Microsoft.CodeAnalysis.Location location, System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.Location> relatedLocations)
+  method System.Void DeadEndState(System.String state, Microsoft.CodeAnalysis.Location location)
   method System.Void Duplicate(System.String elementKind, System.String identity, Microsoft.CodeAnalysis.Location location, System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.Location> relatedLocations)
   method System.Void DuplicateRegion(System.String owner, System.String region, Microsoft.CodeAnalysis.Location location, System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.Location> relatedLocations)
   method System.Void DuplicateRegionMembership(System.String state, System.String owner, Microsoft.CodeAnalysis.Location location, System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.Location> relatedLocations)
@@ -248,12 +369,15 @@ class StateMachineLibrary.SourceGenerators.Diagnostics.DiagnosticReporter
   method System.Void NameConflict(System.String memberName, Microsoft.CodeAnalysis.Location location)
   method System.Void Report(Microsoft.CodeAnalysis.DiagnosticDescriptor descriptor, Microsoft.CodeAnalysis.Location location, System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.Location> relatedLocations, System.Object[] args)
   method System.Void ReportTo(Microsoft.CodeAnalysis.SourceProductionContext context)
+  method System.Void TerminalNotReachable(System.String states, Microsoft.CodeAnalysis.Location location)
   method System.Void UnknownRegionOwner(System.String owner, Microsoft.CodeAnalysis.Location location)
+  method System.Void UnreachableState(System.String state, Microsoft.CodeAnalysis.Location location)
   method System.Void UnsupportedDsl(System.String syntax, Microsoft.CodeAnalysis.Location location)
   method System.Void UnsupportedHistory(System.String state, Microsoft.CodeAnalysis.Location location)
 
 static class StateMachineLibrary.SourceGenerators.Diagnostics.StateMachineGeneratorDiagnostics
   field Microsoft.CodeAnalysis.DiagnosticDescriptor AmbiguousTransition
+  field Microsoft.CodeAnalysis.DiagnosticDescriptor DeadEndState
   field Microsoft.CodeAnalysis.DiagnosticDescriptor DuplicateDeclaration
   field Microsoft.CodeAnalysis.DiagnosticDescriptor DuplicateRegionDeclaration
   field Microsoft.CodeAnalysis.DiagnosticDescriptor DuplicateRegionMembership
@@ -265,7 +389,9 @@ static class StateMachineLibrary.SourceGenerators.Diagnostics.StateMachineGenera
   field Microsoft.CodeAnalysis.DiagnosticDescriptor MissingReference
   field Microsoft.CodeAnalysis.DiagnosticDescriptor MissingRegionalInitial
   field Microsoft.CodeAnalysis.DiagnosticDescriptor RuntimeValidationWarning
+  field Microsoft.CodeAnalysis.DiagnosticDescriptor TerminalNotReachable
   field Microsoft.CodeAnalysis.DiagnosticDescriptor UnknownRegionOwner
+  field Microsoft.CodeAnalysis.DiagnosticDescriptor UnreachableState
   field Microsoft.CodeAnalysis.DiagnosticDescriptor UnsupportedDslSyntax
   field Microsoft.CodeAnalysis.DiagnosticDescriptor UnsupportedHistoryMode
 
@@ -285,13 +411,30 @@ static class StateMachineLibrary.SourceGenerators.Emission.DefinitionMemberEmitt
 static class StateMachineLibrary.SourceGenerators.Emission.DefinitionSourceEmitter
   method System.String Emit(StateMachineLibrary.SourceGenerators.Declarations.MachineDeclaration declaration)
 
+static class StateMachineLibrary.SourceGenerators.Emission.EventHelperEmitter
+  method System.String Emit(StateMachineLibrary.SourceGenerators.Declarations.MachineDeclaration declaration, System.String indent)
+
+static class StateMachineLibrary.SourceGenerators.Emission.GeneratedGraphEmitter
+  method System.String Emit(StateMachineLibrary.SourceGenerators.Declarations.MachineDeclaration declaration, System.String indent)
+
 class StateMachineLibrary.SourceGenerators.Emission.GeneratedMachineDefinition
   ctor (StateMachineLibrary.SourceGenerators.Declarations.MachineDeclaration declaration, System.String generatedSourceName, System.String source)
   property StateMachineLibrary.SourceGenerators.Declarations.MachineDeclaration Declaration {get;}
   property System.String GeneratedSourceName {get;}
   property System.String Source {get;}
 
+static class StateMachineLibrary.SourceGenerators.Emission.GeneratedMemberCatalog
+  field System.String CreateDefinition
+  field System.String Definition
+  field System.String GeneratedGraph
+  field System.String GeneratedMetadata
+  property System.Collections.Generic.IReadOnlyCollection<System.String> RequiredMemberNames {get;}
+
+static class StateMachineLibrary.SourceGenerators.Emission.GeneratedMetadataEmitter
+  method System.String Emit(StateMachineLibrary.SourceGenerators.Declarations.MachineDeclaration declaration, System.String indent)
+
 static class StateMachineLibrary.SourceGenerators.Emission.GeneratedNameHelper
+  method System.String EventHelperName(StateMachineLibrary.SourceGenerators.Declarations.DeclaredEvent declaredEvent)
   method System.String IdentifierFromExpression(System.String expression, System.String prefix)
   method System.String ShortHash(System.String input)
   method System.String SourceName(StateMachineLibrary.SourceGenerators.Declarations.MachineDeclaration declaration)
