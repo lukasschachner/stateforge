@@ -5,8 +5,8 @@
         <PackageVersion>$(VersionPrefix)-$(VersionSuffix)</PackageVersion>
         <Authors>StateForge contributors</Authors>
         <Company>StateForge contributors</Company>
-        <PackageProjectUrl>https://github.com/example/dotnet-stateforge</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/example/dotnet-stateforge</RepositoryUrl>
+        <PackageProjectUrl>https://github.com/lukasschachner/stateforge</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/lukasschachner/stateforge</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <PackageReadmeFile>README.md</PackageReadmeFile>
