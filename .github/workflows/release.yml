@@ -94,11 +94,9 @@ jobs:
           name: security-supply-chain-evidence
           path: artifacts
 
-      - name: validate signing and publish secrets
+      - name: validate publish secret
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
-          NUGET_SIGN_CERT_PFX_B64: ${{ secrets.NUGET_SIGN_CERT_PFX_B64 }}
-          NUGET_SIGN_CERT_PASSWORD: ${{ secrets.NUGET_SIGN_CERT_PASSWORD }}
         run: |
           set -euo pipefail
 
@@ -107,60 +105,7 @@ jobs:
             exit 1
           fi
 
-          if [ -z "${NUGET_SIGN_CERT_PFX_B64:-}" ]; then
-            echo "NUGET_SIGN_CERT_PFX_B64 is required in nuget-prod environment" >&2
-            exit 1
-          fi
-
-          if [ -z "${NUGET_SIGN_CERT_PASSWORD:-}" ]; then
-            echo "NUGET_SIGN_CERT_PASSWORD is required in nuget-prod environment" >&2
-            exit 1
-          fi
-
-      - name: author-sign packages
-        env:
-          NUGET_SIGN_CERT_PFX_B64: ${{ secrets.NUGET_SIGN_CERT_PFX_B64 }}
-          NUGET_SIGN_CERT_PASSWORD: ${{ secrets.NUGET_SIGN_CERT_PASSWORD }}
-          NUGET_TIMESTAMP_URL: ${{ secrets.NUGET_TIMESTAMP_URL }}
-        run: |
-          set -euo pipefail
-          shopt -s nullglob
-
-          nupkgs=(artifacts/packages/*.nupkg)
-          if [ ${#nupkgs[@]} -eq 0 ]; then
-            echo "No .nupkg files found to sign" >&2
-            exit 1
-          fi
-
-          cert_path="$(mktemp -u).pfx"
-          trap 'rm -f "$cert_path"' EXIT
-
-          umask 077
-          echo "$NUGET_SIGN_CERT_PFX_B64" | base64 --decode > "$cert_path"
-
-          timestamp_url="${NUGET_TIMESTAMP_URL:-http://timestamp.digicert.com}"
-          dotnet nuget sign "${nupkgs[@]}" \
-            --certificate-path "$cert_path" \
-            --certificate-password "$NUGET_SIGN_CERT_PASSWORD" \
-            --timestamper "$timestamp_url" \
-            --hash-algorithm SHA256 \
-            --timestamp-hash-algorithm SHA256 \
-            --overwrite
-
-      - name: verify signed packages
-        run: |
-          set -euo pipefail
-          shopt -s nullglob
-
-          nupkgs=(artifacts/packages/*.nupkg)
-          if [ ${#nupkgs[@]} -eq 0 ]; then
-            echo "No .nupkg files found to verify" >&2
-            exit 1
-          fi
-
-          dotnet nuget verify --all "${nupkgs[@]}"
-
-      - name: attest signed nuget packages provenance
+      - name: attest nuget packages provenance
         uses: actions/attest-build-provenance@v2
         with:
           subject-path: artifacts/packages/*
