@@ -1,5 +1,5 @@
-using StateMachineLibrary.Core.Definitions;
-using StateMachineLibrary.Core.Execution;
+using StateForge.Core.Definitions;
+using StateForge.Core.Execution;
 
 namespace Interactive.ApiFrontendSample.Features.OrderWorkflow;
 

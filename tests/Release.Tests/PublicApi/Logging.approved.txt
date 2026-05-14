@@ -1,0 +1,83 @@
+# Public API snapshot for StateForge.Logging
+static class StateForge.Logging.Configuration.StateMachineLogFilter
+  method System.Boolean ShouldLog(StateForge.Logging.Configuration.StateMachineLoggingOptions options, StateForge.Logging.Diagnostics.StateMachineLogRecord record)
+
+class StateForge.Logging.Configuration.StateMachineLoggingOptions
+  ctor ()
+  property Microsoft.Extensions.Logging.EventId TransitionDeniedEventId {get;set;}
+  property Microsoft.Extensions.Logging.EventId TransitionFailedEventId {get;set;}
+  property Microsoft.Extensions.Logging.EventId TransitionSucceededEventId {get;set;}
+  property Microsoft.Extensions.Logging.EventId ValidationFindingEventId {get;set;}
+  property System.Boolean EnableScopes {get;set;}
+  property System.Boolean IncludeDenials {get;set;}
+  property System.Boolean IncludeFailures {get;set;}
+  property System.Boolean IncludeTransitions {get;set;}
+  property System.Boolean IncludeValidationFindings {get;set;}
+  property System.Collections.Generic.HashSet<System.String> IncludedMachineNames {get;}
+  property System.Func<StateForge.Logging.Diagnostics.StateMachineLogRecord, System.Boolean> Filter {get;set;}
+  property System.Int32 MaxMetadataValueLength {get;set;}
+  method StateForge.Logging.Configuration.StateMachineLoggingOptions FilterMachine(System.String machineName)
+  method StateForge.Logging.Configuration.StateMachineLoggingOptions IncludeTransitionDenials()
+  method StateForge.Logging.Configuration.StateMachineLoggingOptions IncludeTransitionFailures()
+  method StateForge.Logging.Configuration.StateMachineLoggingOptions IncludeTransitionSuccesses()
+  method StateForge.Logging.Configuration.StateMachineLoggingOptions IncludeValidationDiagnostics()
+  method StateForge.Logging.Configuration.StateMachineLoggingOptions UseDefaultSafeDiagnostics()
+
+static class StateForge.Logging.Diagnostics.SafeDiagnosticFormatter
+  method System.Collections.Generic.IReadOnlyList<System.String> DiagnosticCodes(StateForge.Core.Validation.ValidationFinding finding)
+  method System.Collections.Generic.IReadOnlyList<System.String> DiagnosticCodes<TState, TEvent>(TransitionObservation<TState, TEvent> observation)
+  method System.String SafeValue(System.Object value, StateForge.Logging.Configuration.StateMachineLoggingOptions options)
+
+enum StateForge.Logging.Diagnostics.StateMachineLogCategory : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  field StateForge.Logging.Diagnostics.StateMachineLogCategory TransitionDenied
+  field StateForge.Logging.Diagnostics.StateMachineLogCategory TransitionFailure
+  field StateForge.Logging.Diagnostics.StateMachineLogCategory TransitionSuccess
+  field StateForge.Logging.Diagnostics.StateMachineLogCategory ValidationFinding
+  enum TransitionDenied
+  enum TransitionFailure
+  enum TransitionSuccess
+  enum ValidationFinding
+
+class StateForge.Logging.Diagnostics.StateMachineLogRecord : System.IEquatable<StateForge.Logging.Diagnostics.StateMachineLogRecord>
+  ctor (System.String MachineIdentity, StateForge.Logging.Diagnostics.StateMachineLogCategory Category, Microsoft.Extensions.Logging.EventId EventId, Microsoft.Extensions.Logging.LogLevel Level, System.String SourceState, System.String TargetState, System.String EventIdentity, System.String Outcome, System.Collections.Generic.IReadOnlyList<System.String> DiagnosticCodes, System.String Message)
+  property Microsoft.Extensions.Logging.EventId EventId {get;set;}
+  property Microsoft.Extensions.Logging.LogLevel Level {get;set;}
+  property StateForge.Logging.Diagnostics.StateMachineLogCategory Category {get;set;}
+  property System.Collections.Generic.IReadOnlyList<System.String> DiagnosticCodes {get;set;}
+  property System.String EventIdentity {get;set;}
+  property System.String MachineIdentity {get;set;}
+  property System.String Message {get;set;}
+  property System.String Outcome {get;set;}
+  property System.String SourceState {get;set;}
+  property System.String TargetState {get;set;}
+
+static class StateForge.Logging.Diagnostics.StateMachineLoggingCategories
+  field System.String Transitions
+  field System.String Validation
+
+static class StateForge.Logging.Diagnostics.StateMachineLoggingEvents
+  field Microsoft.Extensions.Logging.EventId TransitionDenied
+  field Microsoft.Extensions.Logging.EventId TransitionFailed
+  field Microsoft.Extensions.Logging.EventId TransitionSucceeded
+  field Microsoft.Extensions.Logging.EventId ValidationFinding
+
+class StateForge.Logging.LoggingPublicApi
+  ctor ()
+  property System.Type ObserverType {get;}
+  property System.Type OptionsType {get;}
+  property System.Type RecordType {get;}
+
+class StateForge.Logging.Observers.LoggingTransitionObserver<TState, TEvent> : ITransitionObserver<TState, TEvent>
+  ctor (Microsoft.Extensions.Logging.ILogger logger, StateForge.Logging.Configuration.StateMachineLoggingOptions options)
+  method System.Threading.Tasks.ValueTask ObserveAsync(TransitionObservation<TState, TEvent> observation, System.Threading.CancellationToken cancellationToken)
+
+static class StateForge.Logging.Observers.StateMachineLoggingScope
+  method System.IDisposable Begin(Microsoft.Extensions.Logging.ILogger logger, StateForge.Logging.Configuration.StateMachineLoggingOptions options, StateForge.Logging.Diagnostics.StateMachineLogRecord record)
+
+class StateForge.Logging.Observers.ValidationFindingLogger
+  ctor (Microsoft.Extensions.Logging.ILogger logger, StateForge.Logging.Configuration.StateMachineLoggingOptions options)
+  method System.Void Log(System.String machineIdentity, StateForge.Core.Validation.ValidationFinding finding)
+
+static class StateForge.Logging.StateMachineLoggingExtensions
+  method ITransitionObserver<TState, TEvent> CreateStateMachineLoggingObserver<TState, TEvent>(Microsoft.Extensions.Logging.ILogger logger, StateForge.Logging.Configuration.StateMachineLoggingOptions options)
+  method StateForge.Logging.Configuration.StateMachineLoggingOptions AddStateMachineLogging(System.Action<StateForge.Logging.Configuration.StateMachineLoggingOptions> configure)

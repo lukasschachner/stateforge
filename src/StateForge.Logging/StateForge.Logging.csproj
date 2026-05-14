@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <PackageId>StateForge.Logging</PackageId>
+    <Title>StateForge Logging Integration</Title>
+    <Description>Optional Microsoft.Extensions.Logging adapter for safe structured state machine transition and validation diagnostics.</Description>
+    <PackageTags>state-machine;fsm;logging;structured-logging</PackageTags>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageReleaseNotes>Adds optional structured logging observers with safe defaults and configurable filters.</PackageReleaseNotes>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\StateForge.Core\StateForge.Core.csproj"/>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions"/>
+  </ItemGroup>
+</Project>

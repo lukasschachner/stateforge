@@ -1,4 +1,4 @@
-# State Machine Library
+# StateForge
 
 A dependency-light .NET finite state machine library for defining typed states and events, validating definitions,
 applying transitions with explicit outcomes, observing transition lifecycles, optionally emitting
@@ -7,7 +7,7 @@ NuGet artifacts for Core, SourceGenerators, Persistence, and OpenTelemetry instr
 
 ## What the library is
 
-State Machine Library is a plain finite state machine toolkit for .NET. It provides strongly typed definitions,
+StateForge is a plain finite state machine toolkit for .NET. It provides strongly typed definitions,
 async-first transition execution, validation findings, explicit transition outcomes, definition introspection, and graph
 export data that callers can adapt to their own tools.
 
@@ -24,29 +24,29 @@ Choose only the packages needed by your application:
 
 | Package                                      | Use when                                                                                                                                                               |
 |----------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `StateMachineLibrary.Core`                   | You need fluent finite state machine definitions, validation, runtime execution, outcomes, permitted-event queries, introspection, and graph data.                     |
-| `StateMachineLibrary.SourceGenerators`       | You want optional build-time declaration syntax that generates Core definitions. It is an analyzer/source-generator package and is not a runtime replacement for Core. |
-| `StateMachineLibrary.Persistence`            | You need provider-neutral persistence contracts and apply-and-persist coordination while keeping storage in application-owned code.                                    |
-| `StateMachineLibrary.OpenTelemetry`          | You want optional OpenTelemetry-compatible activities and metrics from Core transition observations while owning all exporter and pipeline setup.                      |
-| `StateMachineLibrary.Visualization.Mermaid`  | You want deterministic Mermaid state diagram text from exported Core definition graphs.                                                                                |
-| `StateMachineLibrary.Visualization.Graphviz` | You want deterministic Graphviz DOT text from exported Core definition graphs.                                                                                         |
-| `StateMachineLibrary.Visualization.PlantUML` | You want deterministic PlantUML state diagram text from exported Core definition graphs.                                                                               |
+| `StateForge.Core`                   | You need fluent finite state machine definitions, validation, runtime execution, outcomes, permitted-event queries, introspection, and graph data.                     |
+| `StateForge.SourceGenerators`       | You want optional build-time declaration syntax that generates Core definitions. It is an analyzer/source-generator package and is not a runtime replacement for Core. |
+| `StateForge.Persistence`            | You need provider-neutral persistence contracts and apply-and-persist coordination while keeping storage in application-owned code.                                    |
+| `StateForge.OpenTelemetry`          | You want optional OpenTelemetry-compatible activities and metrics from Core transition observations while owning all exporter and pipeline setup.                      |
+| `StateForge.Visualization.Mermaid`  | You want deterministic Mermaid state diagram text from exported Core definition graphs.                                                                                |
+| `StateForge.Visualization.Graphviz` | You want deterministic Graphviz DOT text from exported Core definition graphs.                                                                                         |
+| `StateForge.Visualization.PlantUML` | You want deterministic PlantUML state diagram text from exported Core definition graphs.                                                                               |
 
 ```bash
-dotnet add package StateMachineLibrary.Core --prerelease
-dotnet add package StateMachineLibrary.SourceGenerators --prerelease
-dotnet add package StateMachineLibrary.Persistence --prerelease
-dotnet add package StateMachineLibrary.OpenTelemetry --prerelease
-dotnet add package StateMachineLibrary.Visualization.Mermaid --prerelease
-dotnet add package StateMachineLibrary.Visualization.Graphviz --prerelease
-dotnet add package StateMachineLibrary.Visualization.PlantUML --prerelease
+dotnet add package StateForge.Core --prerelease
+dotnet add package StateForge.SourceGenerators --prerelease
+dotnet add package StateForge.Persistence --prerelease
+dotnet add package StateForge.OpenTelemetry --prerelease
+dotnet add package StateForge.Visualization.Mermaid --prerelease
+dotnet add package StateForge.Visualization.Graphviz --prerelease
+dotnet add package StateForge.Visualization.PlantUML --prerelease
 ```
 
 ## First fluent finite state machine
 
 ```csharp
-using StateMachineLibrary.Core.Definitions;
-using StateMachineLibrary.Core.Execution;
+using StateForge.Core.Definitions;
+using StateForge.Core.Execution;
 
 enum OrderState { Created, Paid, Shipped, Cancelled }
 abstract record OrderEvent;
@@ -83,7 +83,7 @@ See the runnable sample at [`samples/Core.FluentSample`](samples/Core.FluentSamp
 
 ## Optional source generation
 
-`StateMachineLibrary.SourceGenerators` provides attribute/DSL declarations that generate the same Core definition contract (`Definition` and `CreateDefinition`) plus additive event helpers and renderer-neutral `GeneratedMetadata`/`GeneratedGraph` records for tests and documentation. The generator reports stable `SMG###` diagnostics for statically knowable declaration mistakes and keeps Roslyn dependencies private to the analyzer package.
+`StateForge.SourceGenerators` provides attribute/DSL declarations that generate the same Core definition contract (`Definition` and `CreateDefinition`) plus additive event helpers and renderer-neutral `GeneratedMetadata`/`GeneratedGraph` records for tests and documentation. The generator reports stable `SMG###` diagnostics for statically knowable declaration mistakes and keeps Roslyn dependencies private to the analyzer package.
 
 See [`docs/examples/source-generation.md`](docs/examples/source-generation.md) and [`samples/SourceGenerators.Sample`](samples/SourceGenerators.Sample).
 
@@ -237,7 +237,7 @@ See [`docs/examples/interactive-api-frontend-sample.md`](docs/examples/interacti
 Core exposes a dependency-free observer contract for deterministic transition lifecycle notifications:
 
 ```csharp
-using StateMachineLibrary.Core.Execution;
+using StateForge.Core.Execution;
 
 public sealed class RecordingObserver<TState, TEvent> : ITransitionObserver<TState, TEvent>
 {
@@ -267,18 +267,18 @@ See [`samples/Core.ObservationSample`](samples/Core.ObservationSample) and [
 
 ## OpenTelemetry instrumentation
 
-`StateMachineLibrary.OpenTelemetry` adapts Core observations into OpenTelemetry-compatible traces and metrics without
+`StateForge.OpenTelemetry` adapts Core observations into OpenTelemetry-compatible traces and metrics without
 adding telemetry dependencies to Core:
 
 ```csharp
-using StateMachineLibrary.OpenTelemetry;
+using StateForge.OpenTelemetry;
 
 using var observer = new StateMachineTelemetryObserver<OrderState, OrderEvent>();
 var runtime = definition.CreateRuntime(OrderState.Created, observer: observer);
 await runtime.ApplyAsync(new Pay(42m));
 ```
 
-The adapter emits activity source and meter name `StateMachineLibrary.OpenTelemetry`, activity
+The adapter emits activity source and meter name `StateForge.OpenTelemetry`, activity
 `state_machine.transition`, counter `state_machine.transition.attempts`, and histogram
 `state_machine.transition.duration`. If `StateMachineMetadataKeys.Name` is configured, telemetry includes
 `state_machine.name`. Consumers are responsible for registering sources/meters, samplers, processors, exporters, hosting
@@ -292,7 +292,7 @@ See [`samples/OpenTelemetry.InstrumentationSample`](samples/OpenTelemetry.Instru
 The optional source-generator package lets you declare a machine and consume the generated Core definition:
 
 ```csharp
-using StateMachineLibrary.SourceGeneration;
+using StateForge.SourceGeneration;
 
 [StateMachine(typeof(OrderState), typeof(OrderEvent))]
 [State(OrderState.Created)]
@@ -337,9 +337,9 @@ See [`samples/Graph.IntrospectionSample`](samples/Graph.IntrospectionSample) and
 Install any renderer package independently and convert exported graph data into deterministic text diagrams:
 
 ```csharp
-using StateMachineLibrary.Visualization.Graphviz.Rendering;
-using StateMachineLibrary.Visualization.Mermaid.Rendering;
-using StateMachineLibrary.Visualization.PlantUML.Rendering;
+using StateForge.Visualization.Graphviz.Rendering;
+using StateForge.Visualization.Mermaid.Rendering;
+using StateForge.Visualization.PlantUML.Rendering;
 
 var graph = definition.ExportGraph().Graph!;
 var mermaid = MermaidGraphRenderer.Render(graph);
@@ -442,3 +442,10 @@ builder.State(OrderState.Reviewing)
 ```
 
 Completion is recognized after terminal entry actions succeed. Parallel composites complete only when all declared regions are terminal. Completion transitions support guards, transition actions, validation diagnostics, observer trigger metadata, and graph export classification via `GraphTriggerKind.Completion`.
+
+### Optional application integration adapters
+
+- `StateForge.DependencyInjection` registers named or typed definitions, runtime factories, observers, explicit startup validation, and provider-neutral persistence coordination.
+- `StateForge.Logging` projects Core observations and validation findings into safe structured logs using `Microsoft.Extensions.Logging.Abstractions`.
+
+See `docs/examples/application-integration-adapters.md` and `samples/ApplicationIntegration.Sample`.

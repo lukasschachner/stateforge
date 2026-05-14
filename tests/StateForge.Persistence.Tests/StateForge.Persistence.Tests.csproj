@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <LangVersion>latest</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\StateForge.Core\StateForge.Core.csproj"/>
+        <ProjectReference Include="..\..\src\StateForge.Persistence\StateForge.Persistence.csproj"/>
+    </ItemGroup>
+
+</Project>

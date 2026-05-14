@@ -1,0 +1,30 @@
+using StateForge.Core.Definitions;
+
+namespace StateForge.Core.Tests.Concurrency;
+
+public class FastConcurrencyModeTests
+{
+    [Fact]
+    public async Task FastModeDoesNotSerializeOverlappingAttempts()
+    {
+        var current = 0;
+        var max = 0;
+        var definition = StateMachineDefinition<OrderState, OrderEvent>.Create(builder =>
+        {
+            builder.State(OrderState.Created).On<Pay>()
+                .ExecuteAsync(async (_, ct) =>
+                {
+                    var now = Interlocked.Increment(ref current);
+                    max = Math.Max(max, now);
+                    await Task.Delay(100, ct);
+                    Interlocked.Decrement(ref current);
+                })
+                .Self();
+        });
+        var runtime = definition.CreateRuntime(OrderState.Created);
+
+        await Task.WhenAll(runtime.ApplyAsync(new Pay()).AsTask(), runtime.ApplyAsync(new Pay()).AsTask());
+
+        Assert.True(max > 1);
+    }
+}

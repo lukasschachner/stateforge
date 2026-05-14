@@ -11,7 +11,7 @@ public sealed class OpenTelemetryPackageBoundaryTests
         var rule = PackageBoundaryRules.Load()[project.PackageId];
 
         Assert.Empty(ProjectFileAssertions.PackageReferences(project.ProjectPath));
-        Assert.Equal(["../Core/Core.csproj"], ProjectFileAssertions.ProjectReferences(project.ProjectPath));
+        Assert.Equal(["../StateForge.Core/StateForge.Core.csproj"], ProjectFileAssertions.ProjectReferences(project.ProjectPath));
         PackageBoundaryRules.AssertNoForbiddenDependencies(ProjectFileAssertions.PackageReferences(project.ProjectPath),
             rule);
     }

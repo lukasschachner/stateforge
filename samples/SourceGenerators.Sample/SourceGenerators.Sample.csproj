@@ -8,7 +8,7 @@
         <IsPackable>false</IsPackable>
     </PropertyGroup>
     <ItemGroup>
-        <ProjectReference Include="..\..\src\Core\Core.csproj"/>
-        <ProjectReference Include="..\..\src\SourceGenerators\SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
+        <ProjectReference Include="..\..\src\StateForge.Core\StateForge.Core.csproj"/>
+        <ProjectReference Include="..\..\src\StateForge.SourceGenerators\StateForge.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
     </ItemGroup>
 </Project>

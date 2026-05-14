@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <PackageId>StateForge.DependencyInjection</PackageId>
+    <Title>StateForge DependencyInjection Integration</Title>
+    <Description>Optional Microsoft.Extensions.DependencyInjection integration for registering state machine definitions, runtime factories, observers, validation checks, and provider-neutral persistence coordination.</Description>
+    <PackageTags>state-machine;fsm;dependency-injection;composition</PackageTags>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageReleaseNotes>Adds optional application composition helpers without changing Core runtime semantics.</PackageReleaseNotes>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\StateForge.Core\StateForge.Core.csproj"/>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions"/>
+  </ItemGroup>
+</Project>

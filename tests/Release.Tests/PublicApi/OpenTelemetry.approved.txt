@@ -1,8 +1,8 @@
-# Public API snapshot for OpenTelemetry
-class StateMachineLibrary.OpenTelemetry.OpenTelemetryPublicApi
+# Public API snapshot for StateForge.OpenTelemetry
+class StateForge.OpenTelemetry.OpenTelemetryPublicApi
   ctor ()
 
-static class StateMachineLibrary.OpenTelemetry.StateMachineTelemetryNames
+static class StateForge.OpenTelemetry.StateMachineTelemetryNames
   field System.String ActivitySourceName
   field System.String AttemptIdAttribute
   field System.String CommittedAttribute
@@ -22,13 +22,13 @@ static class StateMachineLibrary.OpenTelemetry.StateMachineTelemetryNames
   field System.String TransitionDurationInstrumentName
   field System.String TransitionKindAttribute
 
-class StateMachineLibrary.OpenTelemetry.StateMachineTelemetryObserver<TState, TEvent> : ITransitionObserver<TState, TEvent>, System.IDisposable
+class StateForge.OpenTelemetry.StateMachineTelemetryObserver<TState, TEvent> : ITransitionObserver<TState, TEvent>, System.IDisposable
   ctor ()
-  ctor (StateMachineLibrary.OpenTelemetry.StateMachineTelemetryOptions options)
+  ctor (StateForge.OpenTelemetry.StateMachineTelemetryOptions options)
   method System.Threading.Tasks.ValueTask ObserveAsync(TransitionObservation<TState, TEvent> observation, System.Threading.CancellationToken cancellationToken)
   method System.Void Dispose()
 
-class StateMachineLibrary.OpenTelemetry.StateMachineTelemetryOptions
+class StateForge.OpenTelemetry.StateMachineTelemetryOptions
   ctor ()
   property System.Boolean RecordExceptionDetails {get;set;}
   property System.Func<System.Object, System.String> EventFormatter {get;set;}

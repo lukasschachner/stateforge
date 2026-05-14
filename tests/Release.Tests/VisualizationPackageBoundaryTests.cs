@@ -5,9 +5,9 @@ namespace Release.Tests;
 public sealed class VisualizationPackageBoundaryTests
 {
     [Theory]
-    [InlineData("Visualization.Mermaid", "src/Visualization.Mermaid/Visualization.Mermaid.csproj")]
-    [InlineData("Visualization.Graphviz", "src/Visualization.Graphviz/Visualization.Graphviz.csproj")]
-    [InlineData("Visualization.PlantUML", "src/Visualization.PlantUML/Visualization.PlantUML.csproj")]
+    [InlineData("Visualization.Mermaid", "src/StateForge.Visualization.Mermaid/StateForge.Visualization.Mermaid.csproj")]
+    [InlineData("Visualization.Graphviz", "src/StateForge.Visualization.Graphviz/StateForge.Visualization.Graphviz.csproj")]
+    [InlineData("Visualization.PlantUML", "src/StateForge.Visualization.PlantUML/StateForge.Visualization.PlantUML.csproj")]
     public void VisualizationRenderersDependOnlyOnCoreAndNoForbiddenPackages(string name, string path)
     {
         var project = PackableProject.All.Single(p => p.Name == name);
@@ -17,7 +17,7 @@ public sealed class VisualizationPackageBoundaryTests
         var projectRefs = ProjectFileAssertions.ProjectReferences(project.ProjectPath);
 
         Assert.Empty(packageRefs);
-        Assert.Equal(["../Core/Core.csproj"], projectRefs);
+        Assert.Equal(["../StateForge.Core/StateForge.Core.csproj"], projectRefs);
 
         var rule = PackageBoundaryRules.Load()[project.PackageId];
         PackageBoundaryRules.AssertNoForbiddenDependencies(packageRefs, rule);

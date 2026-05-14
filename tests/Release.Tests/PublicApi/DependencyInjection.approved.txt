@@ -1,0 +1,134 @@
+# Public API snapshot for StateForge.DependencyInjection
+class StateForge.DependencyInjection.DependencyInjectionPublicApi
+  ctor ()
+  property System.Type RegistrationCollectionType {get;}
+  property System.Type RegistrationValidatorType {get;}
+  property System.Type RuntimeFactoryResolverType {get;}
+
+interface StateForge.DependencyInjection.Registration.IStateMachinePersistenceCoordinator<TState, TEvent>
+  method StateMachineRuntime<TState, TEvent> CreateRuntime(StateMachineDefinition<TState, TEvent> definition, TState initialState, StateForge.Core.Execution.ConcurrencyMode concurrencyMode, ITransitionObserver<TState, TEvent> observer)
+
+interface StateForge.DependencyInjection.Registration.IStateMachineRegistration
+  property StateForge.DependencyInjection.Registration.StateMachineIdentity Identity {get;}
+  property System.Boolean ValidateOnStartup {get;}
+  property System.Object Definition {get;}
+  property System.Type EventType {get;}
+  property System.Type StateType {get;}
+
+class StateForge.DependencyInjection.Registration.ObserverRegistration<TState, TEvent>
+  property ITransitionObserver<TState, TEvent> Instance {get;}
+  property System.Int32 Order {get;}
+  property System.Type ServiceType {get;}
+  method ITransitionObserver<TState, TEvent> Resolve(System.IServiceProvider serviceProvider)
+  method StateForge.DependencyInjection.Registration.ObserverRegistration<TState, TEvent> ForInstance(ITransitionObserver<TState, TEvent> observer, System.Int32 order)
+  method StateForge.DependencyInjection.Registration.ObserverRegistration<TState, TEvent> ForService<TObserver>(System.Int32 order)
+
+class StateForge.DependencyInjection.Registration.PersistenceCoordinationOptions<TState, TEvent>
+  ctor (IStateMachinePersistenceCoordinator<TState, TEvent> coordinator)
+  property IStateMachinePersistenceCoordinator<TState, TEvent> Coordinator {get;}
+  property System.Boolean IsEnabled {get;}
+
+class StateForge.DependencyInjection.Registration.StateMachineIdentity : System.IEquatable<StateForge.DependencyInjection.Registration.StateMachineIdentity>
+  ctor (System.String name, System.Type stateType, System.Type eventType)
+  property System.String DisplayName {get;}
+  property System.String Name {get;}
+  property System.Type EventType {get;}
+  property System.Type StateType {get;}
+  method StateForge.DependencyInjection.Registration.StateMachineIdentity Named<TState, TEvent>(System.String name)
+  method StateForge.DependencyInjection.Registration.StateMachineIdentity Typed<TState, TEvent>()
+  method System.Boolean MatchesTypes<TState, TEvent>()
+  method System.String ToString()
+
+class StateForge.DependencyInjection.Registration.StateMachineRegistration<TState, TEvent> : StateForge.DependencyInjection.Registration.IStateMachineRegistration
+  ctor (StateForge.DependencyInjection.Registration.StateMachineIdentity identity, StateMachineDefinition<TState, TEvent> definition, StateMachineRegistrationOptions<TState, TEvent> options)
+  property IReadOnlyList<ObserverRegistration<TState, TEvent>> ObserverRegistrations {get;}
+  property PersistenceCoordinationOptions<TState, TEvent> PersistenceCoordination {get;}
+  property StateForge.DependencyInjection.Registration.StateMachineIdentity Identity {get;}
+  property StateMachineDefinition<TState, TEvent> Definition {get;}
+  property System.Boolean ValidateOnStartup {get;}
+
+class StateForge.DependencyInjection.Registration.StateMachineRegistrationCollection
+  ctor ()
+  property System.Collections.Generic.IReadOnlyList<StateForge.DependencyInjection.Registration.IStateMachineRegistration> Registrations {get;}
+  method StateMachineRegistration<TState, TEvent> Add<TState, TEvent>(StateMachineDefinition<TState, TEvent> definition, System.String name, Action<StateMachineRegistrationOptions<TState, TEvent>> configure)
+  method StateMachineRegistration<TState, TEvent> GetByName<TState, TEvent>(System.String name)
+  method StateMachineRegistration<TState, TEvent> GetTyped<TState, TEvent>()
+
+class StateForge.DependencyInjection.Registration.StateMachineRegistrationException : System.InvalidOperationException, System.Runtime.Serialization.ISerializable
+  ctor (System.String message)
+  ctor (System.String message, System.Exception innerException)
+
+class StateForge.DependencyInjection.Registration.StateMachineRegistrationOptions<TState, TEvent>
+  ctor ()
+  property IReadOnlyList<ObserverRegistration<TState, TEvent>> ObserverRegistrations {get;}
+  property PersistenceCoordinationOptions<TState, TEvent> PersistenceCoordination {get;set;}
+  property System.Boolean ValidateOnStartupEnabled {get;set;}
+  method StateForge.DependencyInjection.Registration.StateMachineRegistrationOptions<TState, TEvent> UseObserver(ITransitionObserver<TState, TEvent> observer, System.Int32 order)
+  method StateForge.DependencyInjection.Registration.StateMachineRegistrationOptions<TState, TEvent> UseObserver<TObserver>(System.Int32 order)
+  method StateForge.DependencyInjection.Registration.StateMachineRegistrationOptions<TState, TEvent> UsePersistence(IStateMachinePersistenceCoordinator<TState, TEvent> coordinator)
+  method StateForge.DependencyInjection.Registration.StateMachineRegistrationOptions<TState, TEvent> ValidateOnApplicationStartup()
+  method StateForge.DependencyInjection.Registration.StateMachineRegistrationOptions<TState, TEvent> ValidateOnStartup()
+  method StateForge.DependencyInjection.Registration.StateMachineRegistrationOptions<TState, TEvent> ValidateOnStartupCheck()
+
+class StateForge.DependencyInjection.Registration.StateMachineRegistrationResult : System.IEquatable<StateForge.DependencyInjection.Registration.StateMachineRegistrationResult>
+  ctor (System.Boolean Succeeded, System.Collections.Generic.IReadOnlyList<System.String> Errors)
+  property StateForge.DependencyInjection.Registration.StateMachineRegistrationResult Success {get;}
+  property System.Boolean Succeeded {get;set;}
+  property System.Collections.Generic.IReadOnlyList<System.String> Errors {get;set;}
+  method StateForge.DependencyInjection.Registration.StateMachineRegistrationResult Failure(System.String[] errors)
+
+interface StateForge.DependencyInjection.Runtime.IStateMachineRuntimeFactory<TState, TEvent>
+  property StateForge.DependencyInjection.Registration.StateMachineIdentity Identity {get;}
+  property StateMachineDefinition<TState, TEvent> Definition {get;}
+  method StateMachineRuntime<TState, TEvent> Create(TState initialState, StateForge.Core.Execution.ConcurrencyMode concurrencyMode)
+  method StateMachineRuntime<TState, TEvent> Create(TState initialState, StateForge.Core.Execution.ConcurrencyMode concurrencyMode, ITransitionObserver<TState, TEvent> observer)
+
+interface StateForge.DependencyInjection.Runtime.IStateMachineRuntimeFactoryResolver
+  method IStateMachineRuntimeFactory<TState, TEvent> GetFactory<TState, TEvent>()
+  method IStateMachineRuntimeFactory<TState, TEvent> GetFactory<TState, TEvent>(System.String name)
+
+class StateForge.DependencyInjection.Runtime.StateMachineRuntimeFactory<TState, TEvent> : IStateMachineRuntimeFactory<TState, TEvent>
+  ctor (System.IServiceProvider serviceProvider, StateMachineRegistration<TState, TEvent> registration)
+  property StateForge.DependencyInjection.Registration.StateMachineIdentity Identity {get;}
+  property StateMachineDefinition<TState, TEvent> Definition {get;}
+  method StateMachineRuntime<TState, TEvent> Create(TState initialState, StateForge.Core.Execution.ConcurrencyMode concurrencyMode)
+  method StateMachineRuntime<TState, TEvent> Create(TState initialState, StateForge.Core.Execution.ConcurrencyMode concurrencyMode, ITransitionObserver<TState, TEvent> observer)
+
+class StateForge.DependencyInjection.Runtime.StateMachineRuntimeFactoryResolver : StateForge.DependencyInjection.Runtime.IStateMachineRuntimeFactoryResolver
+  ctor (System.IServiceProvider serviceProvider, StateForge.DependencyInjection.Registration.StateMachineRegistrationCollection registrations)
+  method IStateMachineRuntimeFactory<TState, TEvent> GetFactory<TState, TEvent>()
+  method IStateMachineRuntimeFactory<TState, TEvent> GetFactory<TState, TEvent>(System.String name)
+
+static class StateForge.DependencyInjection.StateMachineServiceCollectionExtensions
+  method IStateMachineRuntimeFactory<TState, TEvent> GetRequiredStateMachineFactory<TState, TEvent>(System.IServiceProvider serviceProvider)
+  method IStateMachineRuntimeFactory<TState, TEvent> GetRequiredStateMachineFactory<TState, TEvent>(System.IServiceProvider serviceProvider, System.String name)
+  method Microsoft.Extensions.DependencyInjection.IServiceCollection AddStateMachines(Microsoft.Extensions.DependencyInjection.IServiceCollection services, System.Action<StateForge.DependencyInjection.Registration.StateMachineRegistrationCollection> configure)
+  method StateMachineRegistration<TState, TEvent> AddDefinition<TState, TEvent>(StateForge.DependencyInjection.Registration.StateMachineRegistrationCollection machines, StateMachineDefinition<TState, TEvent> definition, Action<StateMachineRegistrationOptions<TState, TEvent>> configure)
+  method StateMachineRegistration<TState, TEvent> AddDefinition<TState, TEvent>(StateForge.DependencyInjection.Registration.StateMachineRegistrationCollection machines, System.String name, StateMachineDefinition<TState, TEvent> definition)
+  method StateMachineRegistration<TState, TEvent> AddDefinition<TState, TEvent>(StateForge.DependencyInjection.Registration.StateMachineRegistrationCollection machines, System.String name, StateMachineDefinition<TState, TEvent> definition, Action<StateMachineRegistrationOptions<TState, TEvent>> configure)
+
+interface StateForge.DependencyInjection.Validation.IStateMachineRegistrationValidator
+  method System.Threading.Tasks.ValueTask<StateForge.DependencyInjection.Validation.StateMachineRegistrationValidationResult> ValidateAsync(System.Collections.Generic.IEnumerable<StateForge.DependencyInjection.Registration.StateMachineIdentity> identities, System.Threading.CancellationToken cancellationToken)
+  method System.Threading.Tasks.ValueTask<StateForge.DependencyInjection.Validation.StateMachineRegistrationValidationResult> ValidateAsync(System.Threading.CancellationToken cancellationToken)
+
+class StateForge.DependencyInjection.Validation.StateMachineRegistrationValidationEntry : System.IEquatable<StateForge.DependencyInjection.Validation.StateMachineRegistrationValidationEntry>
+  ctor (StateForge.DependencyInjection.Registration.StateMachineIdentity Identity, StateForge.Core.Validation.ValidationResult ValidationResult)
+  property StateForge.Core.Validation.ValidationResult ValidationResult {get;set;}
+  property StateForge.DependencyInjection.Registration.StateMachineIdentity Identity {get;set;}
+
+class StateForge.DependencyInjection.Validation.StateMachineRegistrationValidationResult
+  ctor (System.Collections.Generic.IEnumerable<StateForge.DependencyInjection.Validation.StateMachineRegistrationValidationEntry> entries, System.Boolean treatWarningsAsFailures)
+  property System.Boolean Succeeded {get;}
+  property System.Boolean TreatWarningsAsFailures {get;}
+  property System.Collections.Generic.IReadOnlyList<StateForge.DependencyInjection.Validation.StateMachineRegistrationValidationEntry> Entries {get;}
+  method System.String ToDisplayString()
+
+class StateForge.DependencyInjection.Validation.StateMachineRegistrationValidator : StateForge.DependencyInjection.Validation.IStateMachineRegistrationValidator
+  ctor (StateForge.DependencyInjection.Registration.StateMachineRegistrationCollection registrations, StateForge.DependencyInjection.Validation.StateMachineValidationOptions options)
+  method System.Threading.Tasks.ValueTask<StateForge.DependencyInjection.Validation.StateMachineRegistrationValidationResult> ValidateAsync(System.Collections.Generic.IEnumerable<StateForge.DependencyInjection.Registration.StateMachineIdentity> identities, System.Threading.CancellationToken cancellationToken)
+  method System.Threading.Tasks.ValueTask<StateForge.DependencyInjection.Validation.StateMachineRegistrationValidationResult> ValidateAsync(System.Threading.CancellationToken cancellationToken)
+
+class StateForge.DependencyInjection.Validation.StateMachineValidationOptions
+  ctor ()
+  property System.Boolean IncludeAllRegistrations {get;set;}
+  property System.Boolean TreatWarningsAsFailures {get;set;}

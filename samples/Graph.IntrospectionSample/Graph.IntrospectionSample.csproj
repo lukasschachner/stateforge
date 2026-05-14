@@ -8,6 +8,6 @@
         <IsPackable>false</IsPackable>
     </PropertyGroup>
     <ItemGroup>
-        <ProjectReference Include="..\..\src\Core\Core.csproj"/>
+        <ProjectReference Include="..\..\src\StateForge.Core\StateForge.Core.csproj"/>
     </ItemGroup>
 </Project>

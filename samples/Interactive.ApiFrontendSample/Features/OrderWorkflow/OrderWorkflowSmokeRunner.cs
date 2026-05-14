@@ -1,10 +1,21 @@
+using StateForge.DependencyInjection.Validation;
+
 namespace Interactive.ApiFrontendSample.Features.OrderWorkflow;
 
 internal static class OrderWorkflowSmokeRunner
 {
     public static async Task RunAsync()
     {
-        await using var service = new OrderWorkflowRuntimeService();
+        var services = new ServiceCollection();
+        services.AddLogging(builder => builder.AddSimpleConsole(options => options.SingleLine = true));
+        services.AddOrderWorkflowDemo();
+
+        await using var provider = services.BuildServiceProvider();
+        var validation = await provider.GetRequiredService<IStateMachineRegistrationValidator>().ValidateAsync();
+        if (!validation.Succeeded)
+            throw new InvalidOperationException(validation.ToDisplayString());
+
+        var service = provider.GetRequiredService<OrderWorkflowRuntimeService>();
 
         var preview = await service.PreviewAsync(new PartialCapturePayment(0m, 0m, 1299.99m));
         Console.WriteLine(

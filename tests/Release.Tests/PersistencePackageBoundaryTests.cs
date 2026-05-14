@@ -8,7 +8,7 @@ public sealed class PersistencePackageBoundaryTests
     public void PersistenceDependsOnlyOnCoreProjectAndNoForbiddenPackages()
     {
         var project = PackableProject.All.Single(p => p.Name == "Persistence");
-        Assert.Equal(["../Core/Core.csproj"], ProjectFileAssertions.ProjectReferences(project.ProjectPath));
+        Assert.Equal(["../StateForge.Core/StateForge.Core.csproj"], ProjectFileAssertions.ProjectReferences(project.ProjectPath));
         var rule = PackageBoundaryRules.Load()[project.PackageId];
         PackageBoundaryRules.AssertNoForbiddenDependencies(ProjectFileAssertions.PackageReferences(project.ProjectPath),
             rule);

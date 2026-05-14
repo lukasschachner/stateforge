@@ -1,122 +1,122 @@
-# Public API snapshot for Core
-static class StateMachineLibrary.Core.CorePublicApi
+# Public API snapshot for StateForge.Core
+static class StateForge.Core.CorePublicApi
 
-enum StateMachineLibrary.Core.Definitions.ActionKind : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
-  field StateMachineLibrary.Core.Definitions.ActionKind Entry
-  field StateMachineLibrary.Core.Definitions.ActionKind Exit
-  field StateMachineLibrary.Core.Definitions.ActionKind Transition
+enum StateForge.Core.Definitions.ActionKind : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  field StateForge.Core.Definitions.ActionKind Entry
+  field StateForge.Core.Definitions.ActionKind Exit
+  field StateForge.Core.Definitions.ActionKind Transition
   enum Entry
   enum Exit
   enum Transition
 
-class StateMachineLibrary.Core.Definitions.ActionSummary
-  ctor (StateMachineLibrary.Core.Definitions.ActionKind kind, StateMachineLibrary.Core.Execution.TransitionLifecyclePhase phase, System.String displayName, System.Int32 order, StateMachineLibrary.Core.Definitions.MetadataCollection metadata)
-  property StateMachineLibrary.Core.Definitions.ActionKind Kind {get;}
-  property StateMachineLibrary.Core.Definitions.MetadataCollection Metadata {get;}
-  property StateMachineLibrary.Core.Execution.TransitionLifecyclePhase Phase {get;}
+class StateForge.Core.Definitions.ActionSummary
+  ctor (StateForge.Core.Definitions.ActionKind kind, StateForge.Core.Execution.TransitionLifecyclePhase phase, System.String displayName, System.Int32 order, StateForge.Core.Definitions.MetadataCollection metadata)
+  property StateForge.Core.Definitions.ActionKind Kind {get;}
+  property StateForge.Core.Definitions.MetadataCollection Metadata {get;}
+  property StateForge.Core.Execution.TransitionLifecyclePhase Phase {get;}
   property System.Int32 Order {get;}
   property System.String DisplayName {get;}
-  method StateMachineLibrary.Core.Definitions.ActionSummary From<TState, TEvent>(TransitionActionDefinition<TState, TEvent> action)
-  method StateMachineLibrary.Core.Definitions.ActionSummary From<TState>(StateActionDefinition<TState> action)
+  method StateForge.Core.Definitions.ActionSummary From<TState, TEvent>(TransitionActionDefinition<TState, TEvent> action)
+  method StateForge.Core.Definitions.ActionSummary From<TState>(StateActionDefinition<TState> action)
 
-class StateMachineLibrary.Core.Definitions.CompletionTransitionDefinition<TState, TEvent>
-  ctor (TState sourceState, TState targetState, StateMachineLibrary.Core.Definitions.TransitionKind kind, IEnumerable<ConditionDefinition<TState, TEvent>> conditions, IEnumerable<TransitionBehaviorDefinition<TState, TEvent>> behaviors, StateMachineLibrary.Core.Definitions.MetadataCollection metadata, IEnumerable<TransitionActionDefinition<TState, TEvent>> transitionActions, System.Int32 declarationOrder)
+class StateForge.Core.Definitions.CompletionTransitionDefinition<TState, TEvent>
+  ctor (TState sourceState, TState targetState, StateForge.Core.Definitions.TransitionKind kind, IEnumerable<ConditionDefinition<TState, TEvent>> conditions, IEnumerable<TransitionBehaviorDefinition<TState, TEvent>> behaviors, StateForge.Core.Definitions.MetadataCollection metadata, IEnumerable<TransitionActionDefinition<TState, TEvent>> transitionActions, System.Int32 declarationOrder)
   property IReadOnlyList<ConditionDefinition<TState, TEvent>> Conditions {get;}
   property IReadOnlyList<TransitionActionDefinition<TState, TEvent>> TransitionActions {get;}
   property IReadOnlyList<TransitionBehaviorDefinition<TState, TEvent>> Behaviors {get;}
-  property StateMachineLibrary.Core.Definitions.MetadataCollection Metadata {get;}
-  property StateMachineLibrary.Core.Definitions.TransitionKind Kind {get;}
-  property StateMachineLibrary.Core.Definitions.TransitionTriggerKind TriggerKind {get;}
+  property StateForge.Core.Definitions.MetadataCollection Metadata {get;}
+  property StateForge.Core.Definitions.TransitionKind Kind {get;}
+  property StateForge.Core.Definitions.TransitionTriggerKind TriggerKind {get;}
   property System.Int32 DeclarationOrder {get;}
   property TState SourceState {get;}
   property TState TargetState {get;}
   method System.String ToString()
 
-class StateMachineLibrary.Core.Definitions.CompletionTransitionDefinitionBuilder<TState, TEvent>
+class StateForge.Core.Definitions.CompletionTransitionDefinitionBuilder<TState, TEvent>
   method StateDefinitionBuilder<TState, TEvent> GoTo(TState targetState)
   method StateDefinitionBuilder<TState, TEvent> Internal()
   method StateDefinitionBuilder<TState, TEvent> Self()
-  method StateMachineLibrary.Core.Definitions.CompletionTransitionDefinitionBuilder<TState, TEvent> Execute(Action<TransitionContext<TState, TEvent>> behavior, System.String displayName)
-  method StateMachineLibrary.Core.Definitions.CompletionTransitionDefinitionBuilder<TState, TEvent> ExecuteAction(Action<ActionExecutionContext<TState, TEvent>> action, System.String displayName, StateMachineLibrary.Core.Definitions.MetadataCollection metadata)
-  method StateMachineLibrary.Core.Definitions.CompletionTransitionDefinitionBuilder<TState, TEvent> ExecuteActionAsync(Func<ActionExecutionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask> action, System.String displayName, StateMachineLibrary.Core.Definitions.MetadataCollection metadata)
-  method StateMachineLibrary.Core.Definitions.CompletionTransitionDefinitionBuilder<TState, TEvent> ExecuteAsync(Func<TransitionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask> behavior, System.String displayName)
-  method StateMachineLibrary.Core.Definitions.CompletionTransitionDefinitionBuilder<TState, TEvent> OnEntry(Action<TransitionContext<TState, TEvent>> behavior, System.String displayName)
-  method StateMachineLibrary.Core.Definitions.CompletionTransitionDefinitionBuilder<TState, TEvent> OnEntryAsync(Func<TransitionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask> behavior, System.String displayName)
-  method StateMachineLibrary.Core.Definitions.CompletionTransitionDefinitionBuilder<TState, TEvent> OnExit(Action<TransitionContext<TState, TEvent>> behavior, System.String displayName)
-  method StateMachineLibrary.Core.Definitions.CompletionTransitionDefinitionBuilder<TState, TEvent> OnExitAsync(Func<TransitionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask> behavior, System.String displayName)
-  method StateMachineLibrary.Core.Definitions.CompletionTransitionDefinitionBuilder<TState, TEvent> When(Func<TransitionContext<TState, TEvent>, System.Boolean> condition, System.String displayName)
-  method StateMachineLibrary.Core.Definitions.CompletionTransitionDefinitionBuilder<TState, TEvent> WhenAsync(Func<TransitionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<System.Boolean>> condition, System.String displayName)
-  method StateMachineLibrary.Core.Definitions.CompletionTransitionDefinitionBuilder<TState, TEvent> WithMetadata(System.String key, System.Object value)
+  method StateForge.Core.Definitions.CompletionTransitionDefinitionBuilder<TState, TEvent> Execute(Action<TransitionContext<TState, TEvent>> behavior, System.String displayName)
+  method StateForge.Core.Definitions.CompletionTransitionDefinitionBuilder<TState, TEvent> ExecuteAction(Action<ActionExecutionContext<TState, TEvent>> action, System.String displayName, StateForge.Core.Definitions.MetadataCollection metadata)
+  method StateForge.Core.Definitions.CompletionTransitionDefinitionBuilder<TState, TEvent> ExecuteActionAsync(Func<ActionExecutionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask> action, System.String displayName, StateForge.Core.Definitions.MetadataCollection metadata)
+  method StateForge.Core.Definitions.CompletionTransitionDefinitionBuilder<TState, TEvent> ExecuteAsync(Func<TransitionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask> behavior, System.String displayName)
+  method StateForge.Core.Definitions.CompletionTransitionDefinitionBuilder<TState, TEvent> OnEntry(Action<TransitionContext<TState, TEvent>> behavior, System.String displayName)
+  method StateForge.Core.Definitions.CompletionTransitionDefinitionBuilder<TState, TEvent> OnEntryAsync(Func<TransitionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask> behavior, System.String displayName)
+  method StateForge.Core.Definitions.CompletionTransitionDefinitionBuilder<TState, TEvent> OnExit(Action<TransitionContext<TState, TEvent>> behavior, System.String displayName)
+  method StateForge.Core.Definitions.CompletionTransitionDefinitionBuilder<TState, TEvent> OnExitAsync(Func<TransitionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask> behavior, System.String displayName)
+  method StateForge.Core.Definitions.CompletionTransitionDefinitionBuilder<TState, TEvent> When(Func<TransitionContext<TState, TEvent>, System.Boolean> condition, System.String displayName)
+  method StateForge.Core.Definitions.CompletionTransitionDefinitionBuilder<TState, TEvent> WhenAsync(Func<TransitionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<System.Boolean>> condition, System.String displayName)
+  method StateForge.Core.Definitions.CompletionTransitionDefinitionBuilder<TState, TEvent> WithMetadata(System.String key, System.Object value)
 
-class StateMachineLibrary.Core.Definitions.ConditionDefinition<TState, TEvent>
-  ctor (Func<TransitionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<System.Boolean>> evaluateAsync, System.String displayName, StateMachineLibrary.Core.Definitions.MetadataCollection metadata)
+class StateForge.Core.Definitions.ConditionDefinition<TState, TEvent>
+  ctor (Func<TransitionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<System.Boolean>> evaluateAsync, System.String displayName, StateForge.Core.Definitions.MetadataCollection metadata)
   property Func<TransitionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<System.Boolean>> EvaluateAsync {get;}
-  property StateMachineLibrary.Core.Definitions.MetadataCollection Metadata {get;}
+  property StateForge.Core.Definitions.MetadataCollection Metadata {get;}
   property System.String DisplayName {get;}
 
-class StateMachineLibrary.Core.Definitions.EventDefinition<TEvent>
-  property StateMachineLibrary.Core.Definitions.MetadataCollection Metadata {get;}
+class StateForge.Core.Definitions.EventDefinition<TEvent>
+  property StateForge.Core.Definitions.MetadataCollection Metadata {get;}
   property System.String DisplayName {get;}
   property System.String Identity {get;}
-  method StateMachineLibrary.Core.Definitions.EventDefinition<TEvent> ForType<TSpecificEvent>(System.String displayName)
-  method StateMachineLibrary.Core.Definitions.EventDefinition<TEvent> ForValue(TEvent value, IEqualityComparer<TEvent> comparer, System.String displayName)
+  method StateForge.Core.Definitions.EventDefinition<TEvent> ForType<TSpecificEvent>(System.String displayName)
+  method StateForge.Core.Definitions.EventDefinition<TEvent> ForValue(TEvent value, IEqualityComparer<TEvent> comparer, System.String displayName)
   method System.Boolean Matches(TEvent event)
   method System.String ToString()
 
-enum StateMachineLibrary.Core.Definitions.HistoryMode : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
-  field StateMachineLibrary.Core.Definitions.HistoryMode Deep
-  field StateMachineLibrary.Core.Definitions.HistoryMode None
-  field StateMachineLibrary.Core.Definitions.HistoryMode Shallow
+enum StateForge.Core.Definitions.HistoryMode : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  field StateForge.Core.Definitions.HistoryMode Deep
+  field StateForge.Core.Definitions.HistoryMode None
+  field StateForge.Core.Definitions.HistoryMode Shallow
   enum Deep
   enum None
   enum Shallow
 
-class StateMachineLibrary.Core.Definitions.MetadataCollection : System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<System.String, System.Object>>, System.Collections.Generic.IReadOnlyCollection<System.Collections.Generic.KeyValuePair<System.String, System.Object>>, System.Collections.Generic.IReadOnlyDictionary<System.String, System.Object>, System.Collections.IEnumerable
+class StateForge.Core.Definitions.MetadataCollection : System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<System.String, System.Object>>, System.Collections.Generic.IReadOnlyCollection<System.Collections.Generic.KeyValuePair<System.String, System.Object>>, System.Collections.Generic.IReadOnlyDictionary<System.String, System.Object>, System.Collections.IEnumerable
   ctor ()
   ctor (System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<System.String, System.Object>> items)
-  property StateMachineLibrary.Core.Definitions.MetadataCollection Empty {get;}
+  property StateForge.Core.Definitions.MetadataCollection Empty {get;}
   property System.Collections.Generic.IEnumerable<System.Object> Values {get;}
   property System.Collections.Generic.IEnumerable<System.String> Keys {get;}
   property System.Int32 Count {get;}
   property System.Object Item {get;}
-  method StateMachineLibrary.Core.Definitions.MetadataCollection With(System.String key, System.Object value)
+  method StateForge.Core.Definitions.MetadataCollection With(System.String key, System.Object value)
   method System.Boolean ContainsKey(System.String key)
   method System.Boolean TryGetValue(System.String key, System.Object& value)
   method System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<System.String, System.Object>> GetEnumerator()
 
-class StateMachineLibrary.Core.Definitions.ParallelCompletionTransitionDefinitionBuilder<TState, TEvent>
+class StateForge.Core.Definitions.ParallelCompletionTransitionDefinitionBuilder<TState, TEvent>
   method ParallelCompositeDefinitionBuilder<TState, TEvent> GoTo(TState targetState)
   method ParallelCompositeDefinitionBuilder<TState, TEvent> Internal()
   method ParallelCompositeDefinitionBuilder<TState, TEvent> Self()
-  method StateMachineLibrary.Core.Definitions.ParallelCompletionTransitionDefinitionBuilder<TState, TEvent> Execute(Action<TransitionContext<TState, TEvent>> behavior, System.String displayName)
-  method StateMachineLibrary.Core.Definitions.ParallelCompletionTransitionDefinitionBuilder<TState, TEvent> ExecuteAction(Action<ActionExecutionContext<TState, TEvent>> action, System.String displayName, StateMachineLibrary.Core.Definitions.MetadataCollection metadata)
-  method StateMachineLibrary.Core.Definitions.ParallelCompletionTransitionDefinitionBuilder<TState, TEvent> ExecuteActionAsync(Func<ActionExecutionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask> action, System.String displayName, StateMachineLibrary.Core.Definitions.MetadataCollection metadata)
-  method StateMachineLibrary.Core.Definitions.ParallelCompletionTransitionDefinitionBuilder<TState, TEvent> ExecuteAsync(Func<TransitionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask> behavior, System.String displayName)
-  method StateMachineLibrary.Core.Definitions.ParallelCompletionTransitionDefinitionBuilder<TState, TEvent> OnEntry(Action<TransitionContext<TState, TEvent>> behavior, System.String displayName)
-  method StateMachineLibrary.Core.Definitions.ParallelCompletionTransitionDefinitionBuilder<TState, TEvent> OnEntryAsync(Func<TransitionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask> behavior, System.String displayName)
-  method StateMachineLibrary.Core.Definitions.ParallelCompletionTransitionDefinitionBuilder<TState, TEvent> OnExit(Action<TransitionContext<TState, TEvent>> behavior, System.String displayName)
-  method StateMachineLibrary.Core.Definitions.ParallelCompletionTransitionDefinitionBuilder<TState, TEvent> OnExitAsync(Func<TransitionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask> behavior, System.String displayName)
-  method StateMachineLibrary.Core.Definitions.ParallelCompletionTransitionDefinitionBuilder<TState, TEvent> When(Func<TransitionContext<TState, TEvent>, System.Boolean> condition, System.String displayName)
-  method StateMachineLibrary.Core.Definitions.ParallelCompletionTransitionDefinitionBuilder<TState, TEvent> WhenAsync(Func<TransitionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<System.Boolean>> condition, System.String displayName)
-  method StateMachineLibrary.Core.Definitions.ParallelCompletionTransitionDefinitionBuilder<TState, TEvent> WithMetadata(System.String key, System.Object value)
+  method StateForge.Core.Definitions.ParallelCompletionTransitionDefinitionBuilder<TState, TEvent> Execute(Action<TransitionContext<TState, TEvent>> behavior, System.String displayName)
+  method StateForge.Core.Definitions.ParallelCompletionTransitionDefinitionBuilder<TState, TEvent> ExecuteAction(Action<ActionExecutionContext<TState, TEvent>> action, System.String displayName, StateForge.Core.Definitions.MetadataCollection metadata)
+  method StateForge.Core.Definitions.ParallelCompletionTransitionDefinitionBuilder<TState, TEvent> ExecuteActionAsync(Func<ActionExecutionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask> action, System.String displayName, StateForge.Core.Definitions.MetadataCollection metadata)
+  method StateForge.Core.Definitions.ParallelCompletionTransitionDefinitionBuilder<TState, TEvent> ExecuteAsync(Func<TransitionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask> behavior, System.String displayName)
+  method StateForge.Core.Definitions.ParallelCompletionTransitionDefinitionBuilder<TState, TEvent> OnEntry(Action<TransitionContext<TState, TEvent>> behavior, System.String displayName)
+  method StateForge.Core.Definitions.ParallelCompletionTransitionDefinitionBuilder<TState, TEvent> OnEntryAsync(Func<TransitionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask> behavior, System.String displayName)
+  method StateForge.Core.Definitions.ParallelCompletionTransitionDefinitionBuilder<TState, TEvent> OnExit(Action<TransitionContext<TState, TEvent>> behavior, System.String displayName)
+  method StateForge.Core.Definitions.ParallelCompletionTransitionDefinitionBuilder<TState, TEvent> OnExitAsync(Func<TransitionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask> behavior, System.String displayName)
+  method StateForge.Core.Definitions.ParallelCompletionTransitionDefinitionBuilder<TState, TEvent> When(Func<TransitionContext<TState, TEvent>, System.Boolean> condition, System.String displayName)
+  method StateForge.Core.Definitions.ParallelCompletionTransitionDefinitionBuilder<TState, TEvent> WhenAsync(Func<TransitionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<System.Boolean>> condition, System.String displayName)
+  method StateForge.Core.Definitions.ParallelCompletionTransitionDefinitionBuilder<TState, TEvent> WithMetadata(System.String key, System.Object value)
 
-class StateMachineLibrary.Core.Definitions.ParallelCompositeDefinitionBuilder<TState, TEvent>
+class StateForge.Core.Definitions.ParallelCompositeDefinitionBuilder<TState, TEvent>
   property TState CompositeState {get;}
   method ParallelCompletionTransitionDefinitionBuilder<TState, TEvent> OnCompletion()
-  method StateMachineLibrary.Core.Definitions.ParallelCompositeDefinitionBuilder<TState, TEvent> Region(System.String name)
-  method StateMachineLibrary.Core.Definitions.ParallelCompositeDefinitionBuilder<TState, TEvent> Region(System.String name, Action<ParallelRegionDefinitionBuilder<TState, TEvent>> configure)
-  method StateMachineLibrary.Core.Definitions.ParallelCompositeDefinitionBuilder<TState, TEvent> Region(System.String name, TState initialState, IEnumerable<TState> memberStates, IEnumerable<TState> terminalStates, StateMachineLibrary.Core.Definitions.MetadataCollection metadata)
-  method StateMachineLibrary.Core.Definitions.ParallelCompositeDefinitionBuilder<TState, TEvent> Region(System.String name, TState initialState, TState[] memberStates)
-  method StateMachineLibrary.Core.Definitions.ParallelCompositeDefinitionBuilder<TState, TEvent> WithDeepHistory()
-  method StateMachineLibrary.Core.Definitions.ParallelCompositeDefinitionBuilder<TState, TEvent> WithHistory(StateMachineLibrary.Core.Definitions.HistoryMode mode)
-  method StateMachineLibrary.Core.Definitions.ParallelCompositeDefinitionBuilder<TState, TEvent> WithShallowHistory()
+  method StateForge.Core.Definitions.ParallelCompositeDefinitionBuilder<TState, TEvent> Region(System.String name)
+  method StateForge.Core.Definitions.ParallelCompositeDefinitionBuilder<TState, TEvent> Region(System.String name, Action<ParallelRegionDefinitionBuilder<TState, TEvent>> configure)
+  method StateForge.Core.Definitions.ParallelCompositeDefinitionBuilder<TState, TEvent> Region(System.String name, TState initialState, IEnumerable<TState> memberStates, IEnumerable<TState> terminalStates, StateForge.Core.Definitions.MetadataCollection metadata)
+  method StateForge.Core.Definitions.ParallelCompositeDefinitionBuilder<TState, TEvent> Region(System.String name, TState initialState, TState[] memberStates)
+  method StateForge.Core.Definitions.ParallelCompositeDefinitionBuilder<TState, TEvent> WithDeepHistory()
+  method StateForge.Core.Definitions.ParallelCompositeDefinitionBuilder<TState, TEvent> WithHistory(StateForge.Core.Definitions.HistoryMode mode)
+  method StateForge.Core.Definitions.ParallelCompositeDefinitionBuilder<TState, TEvent> WithShallowHistory()
 
-class StateMachineLibrary.Core.Definitions.ParallelRegionDefinition<TState> : IEquatable<StateMachineLibrary.Core.Definitions.ParallelRegionDefinition<TState>>
-  ctor (System.String RegionId, System.String Name, TState OwnerCompositeState, System.Int32 Order, System.Boolean HasInitialState, TState InitialState, IReadOnlyList<TState> MemberStates, IReadOnlyList<TState> TerminalStates, StateMachineLibrary.Core.Definitions.MetadataCollection Metadata)
-  ctor (System.String regionId, System.String name, TState ownerCompositeState, System.Int32 order, TState initialState, IEnumerable<TState> memberStates, IEnumerable<TState> terminalStates, StateMachineLibrary.Core.Definitions.MetadataCollection metadata, System.Boolean hasInitialState)
+class StateForge.Core.Definitions.ParallelRegionDefinition<TState> : IEquatable<StateForge.Core.Definitions.ParallelRegionDefinition<TState>>
+  ctor (System.String RegionId, System.String Name, TState OwnerCompositeState, System.Int32 Order, System.Boolean HasInitialState, TState InitialState, IReadOnlyList<TState> MemberStates, IReadOnlyList<TState> TerminalStates, StateForge.Core.Definitions.MetadataCollection Metadata)
+  ctor (System.String regionId, System.String name, TState ownerCompositeState, System.Int32 order, TState initialState, IEnumerable<TState> memberStates, IEnumerable<TState> terminalStates, StateForge.Core.Definitions.MetadataCollection metadata, System.Boolean hasInitialState)
   property IReadOnlyList<TState> MemberStates {get;set;}
   property IReadOnlyList<TState> TerminalStates {get;set;}
-  property StateMachineLibrary.Core.Definitions.MetadataCollection Metadata {get;set;}
+  property StateForge.Core.Definitions.MetadataCollection Metadata {get;set;}
   property System.Boolean HasInitialState {get;set;}
   property System.Int32 Order {get;set;}
   property System.String Name {get;set;}
@@ -124,41 +124,41 @@ class StateMachineLibrary.Core.Definitions.ParallelRegionDefinition<TState> : IE
   property TState InitialState {get;set;}
   property TState OwnerCompositeState {get;set;}
 
-class StateMachineLibrary.Core.Definitions.ParallelRegionDefinitionBuilder<TState, TEvent>
+class StateForge.Core.Definitions.ParallelRegionDefinitionBuilder<TState, TEvent>
   property System.String RegionId {get;}
   property System.String RegionName {get;}
   property TState CompositeState {get;}
   method StateDefinitionBuilder<TState, TEvent> Initial(TState state)
   method StateDefinitionBuilder<TState, TEvent> State(TState state)
   method StateDefinitionBuilder<TState, TEvent> Terminal(TState state)
-  method StateMachineLibrary.Core.Definitions.ParallelRegionDefinitionBuilder<TState, TEvent> WithMetadata(System.String key, System.Object value)
+  method StateForge.Core.Definitions.ParallelRegionDefinitionBuilder<TState, TEvent> WithMetadata(System.String key, System.Object value)
 
-static class StateMachineLibrary.Core.Definitions.ParallelRegionMetadataKeys
+static class StateForge.Core.Definitions.ParallelRegionMetadataKeys
   field System.String IsParallelComposite
   field System.String OwnerCompositeState
   field System.String RegionId
   field System.String RegionName
   field System.String RegionOrder
 
-class StateMachineLibrary.Core.Definitions.StateActionDefinition<TState>
-  ctor (StateMachineLibrary.Core.Definitions.ActionKind kind, System.Int32 order, System.String displayName, System.Func<System.Object, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask> executeAsync, StateMachineLibrary.Core.Definitions.MetadataCollection metadata)
-  property StateMachineLibrary.Core.Definitions.ActionKind Kind {get;}
-  property StateMachineLibrary.Core.Definitions.ActionSummary Summary {get;}
-  property StateMachineLibrary.Core.Definitions.MetadataCollection Metadata {get;}
-  property StateMachineLibrary.Core.Execution.TransitionLifecyclePhase Phase {get;}
+class StateForge.Core.Definitions.StateActionDefinition<TState>
+  ctor (StateForge.Core.Definitions.ActionKind kind, System.Int32 order, System.String displayName, System.Func<System.Object, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask> executeAsync, StateForge.Core.Definitions.MetadataCollection metadata)
+  property StateForge.Core.Definitions.ActionKind Kind {get;}
+  property StateForge.Core.Definitions.ActionSummary Summary {get;}
+  property StateForge.Core.Definitions.MetadataCollection Metadata {get;}
+  property StateForge.Core.Execution.TransitionLifecyclePhase Phase {get;}
   property System.Int32 Order {get;}
   property System.String DisplayName {get;}
-  method StateMachineLibrary.Core.Definitions.StateActionDefinition<TState> FromAsync<TEvent>(StateMachineLibrary.Core.Definitions.ActionKind kind, System.Int32 order, Func<ActionExecutionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask> executeAsync, System.String displayName, StateMachineLibrary.Core.Definitions.MetadataCollection metadata)
-  method StateMachineLibrary.Core.Definitions.StateActionDefinition<TState> FromSync<TEvent>(StateMachineLibrary.Core.Definitions.ActionKind kind, System.Int32 order, Action<ActionExecutionContext<TState, TEvent>> execute, System.String displayName, StateMachineLibrary.Core.Definitions.MetadataCollection metadata)
+  method StateForge.Core.Definitions.StateActionDefinition<TState> FromAsync<TEvent>(StateForge.Core.Definitions.ActionKind kind, System.Int32 order, Func<ActionExecutionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask> executeAsync, System.String displayName, StateForge.Core.Definitions.MetadataCollection metadata)
+  method StateForge.Core.Definitions.StateActionDefinition<TState> FromSync<TEvent>(StateForge.Core.Definitions.ActionKind kind, System.Int32 order, Action<ActionExecutionContext<TState, TEvent>> execute, System.String displayName, StateForge.Core.Definitions.MetadataCollection metadata)
   method System.Threading.Tasks.ValueTask ExecuteAsync<TEvent>(ActionExecutionContext<TState, TEvent> context, System.Threading.CancellationToken cancellationToken)
 
-class StateMachineLibrary.Core.Definitions.StateDefinition<TState> : IEquatable<StateMachineLibrary.Core.Definitions.StateDefinition<TState>>
-  ctor (TState value, System.Boolean isTerminal, StateMachineLibrary.Core.Definitions.MetadataCollection metadata, IEnumerable<StateActionDefinition<TState>> entryActions, IEnumerable<StateActionDefinition<TState>> exitActions, StateHierarchyDefinition<TState> hierarchy)
+class StateForge.Core.Definitions.StateDefinition<TState> : IEquatable<StateForge.Core.Definitions.StateDefinition<TState>>
+  ctor (TState value, System.Boolean isTerminal, StateForge.Core.Definitions.MetadataCollection metadata, IEnumerable<StateActionDefinition<TState>> entryActions, IEnumerable<StateActionDefinition<TState>> exitActions, StateHierarchyDefinition<TState> hierarchy)
   property IReadOnlyList<StateActionDefinition<TState>> EntryActions {get;set;}
   property IReadOnlyList<StateActionDefinition<TState>> ExitActions {get;set;}
+  property StateForge.Core.Definitions.HistoryMode HistoryMode {get;}
+  property StateForge.Core.Definitions.MetadataCollection Metadata {get;set;}
   property StateHierarchyDefinition<TState> Hierarchy {get;set;}
-  property StateMachineLibrary.Core.Definitions.HistoryMode HistoryMode {get;}
-  property StateMachineLibrary.Core.Definitions.MetadataCollection Metadata {get;set;}
   property System.Boolean HasHistory {get;}
   property System.Boolean HasHistoryFallback {get;}
   property System.Boolean HasInitialChild {get;}
@@ -169,37 +169,37 @@ class StateMachineLibrary.Core.Definitions.StateDefinition<TState> : IEquatable<
   property TState ParentState {get;}
   property TState Value {get;set;}
 
-class StateMachineLibrary.Core.Definitions.StateDefinitionBuilder<TState, TEvent>
+class StateForge.Core.Definitions.StateDefinitionBuilder<TState, TEvent>
   property TState State {get;}
   method CompletionTransitionDefinitionBuilder<TState, TEvent> OnCompletion()
-  method StateMachineLibrary.Core.Definitions.StateDefinitionBuilder<TState, TEvent> ChildOf(TState parentState)
-  method StateMachineLibrary.Core.Definitions.StateDefinitionBuilder<TState, TEvent> Composite(TState initialChildState)
-  method StateMachineLibrary.Core.Definitions.StateDefinitionBuilder<TState, TEvent> InParallelRegion(TState compositeState, System.String regionName)
-  method StateMachineLibrary.Core.Definitions.StateDefinitionBuilder<TState, TEvent> InRegion(TState compositeState, System.String regionName)
-  method StateMachineLibrary.Core.Definitions.StateDefinitionBuilder<TState, TEvent> InitialChild(TState initialChildState)
-  method StateMachineLibrary.Core.Definitions.StateDefinitionBuilder<TState, TEvent> OnEntry(Action<ActionExecutionContext<TState, TEvent>> action, System.String displayName, StateMachineLibrary.Core.Definitions.MetadataCollection metadata)
-  method StateMachineLibrary.Core.Definitions.StateDefinitionBuilder<TState, TEvent> OnEntryAsync(Func<ActionExecutionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask> action, System.String displayName, StateMachineLibrary.Core.Definitions.MetadataCollection metadata)
-  method StateMachineLibrary.Core.Definitions.StateDefinitionBuilder<TState, TEvent> OnExit(Action<ActionExecutionContext<TState, TEvent>> action, System.String displayName, StateMachineLibrary.Core.Definitions.MetadataCollection metadata)
-  method StateMachineLibrary.Core.Definitions.StateDefinitionBuilder<TState, TEvent> OnExitAsync(Func<ActionExecutionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask> action, System.String displayName, StateMachineLibrary.Core.Definitions.MetadataCollection metadata)
-  method StateMachineLibrary.Core.Definitions.StateDefinitionBuilder<TState, TEvent> ParallelComposite()
-  method StateMachineLibrary.Core.Definitions.StateDefinitionBuilder<TState, TEvent> Terminal()
-  method StateMachineLibrary.Core.Definitions.StateDefinitionBuilder<TState, TEvent> WithDeepHistory()
-  method StateMachineLibrary.Core.Definitions.StateDefinitionBuilder<TState, TEvent> WithDeepHistory(TState fallbackChildState)
-  method StateMachineLibrary.Core.Definitions.StateDefinitionBuilder<TState, TEvent> WithHistory(StateMachineLibrary.Core.Definitions.HistoryMode mode)
-  method StateMachineLibrary.Core.Definitions.StateDefinitionBuilder<TState, TEvent> WithHistory(StateMachineLibrary.Core.Definitions.HistoryMode mode, TState fallbackChildState)
-  method StateMachineLibrary.Core.Definitions.StateDefinitionBuilder<TState, TEvent> WithHistory(TState fallbackChildState, StateMachineLibrary.Core.Definitions.HistoryMode mode)
-  method StateMachineLibrary.Core.Definitions.StateDefinitionBuilder<TState, TEvent> WithInitialChild(TState initialChildState)
-  method StateMachineLibrary.Core.Definitions.StateDefinitionBuilder<TState, TEvent> WithMetadata(System.String key, System.Object value)
-  method StateMachineLibrary.Core.Definitions.StateDefinitionBuilder<TState, TEvent> WithParent(TState parentState)
-  method StateMachineLibrary.Core.Definitions.StateDefinitionBuilder<TState, TEvent> WithShallowHistory()
-  method StateMachineLibrary.Core.Definitions.StateDefinitionBuilder<TState, TEvent> WithShallowHistory(TState fallbackChildState)
+  method StateForge.Core.Definitions.StateDefinitionBuilder<TState, TEvent> ChildOf(TState parentState)
+  method StateForge.Core.Definitions.StateDefinitionBuilder<TState, TEvent> Composite(TState initialChildState)
+  method StateForge.Core.Definitions.StateDefinitionBuilder<TState, TEvent> InParallelRegion(TState compositeState, System.String regionName)
+  method StateForge.Core.Definitions.StateDefinitionBuilder<TState, TEvent> InRegion(TState compositeState, System.String regionName)
+  method StateForge.Core.Definitions.StateDefinitionBuilder<TState, TEvent> InitialChild(TState initialChildState)
+  method StateForge.Core.Definitions.StateDefinitionBuilder<TState, TEvent> OnEntry(Action<ActionExecutionContext<TState, TEvent>> action, System.String displayName, StateForge.Core.Definitions.MetadataCollection metadata)
+  method StateForge.Core.Definitions.StateDefinitionBuilder<TState, TEvent> OnEntryAsync(Func<ActionExecutionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask> action, System.String displayName, StateForge.Core.Definitions.MetadataCollection metadata)
+  method StateForge.Core.Definitions.StateDefinitionBuilder<TState, TEvent> OnExit(Action<ActionExecutionContext<TState, TEvent>> action, System.String displayName, StateForge.Core.Definitions.MetadataCollection metadata)
+  method StateForge.Core.Definitions.StateDefinitionBuilder<TState, TEvent> OnExitAsync(Func<ActionExecutionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask> action, System.String displayName, StateForge.Core.Definitions.MetadataCollection metadata)
+  method StateForge.Core.Definitions.StateDefinitionBuilder<TState, TEvent> ParallelComposite()
+  method StateForge.Core.Definitions.StateDefinitionBuilder<TState, TEvent> Terminal()
+  method StateForge.Core.Definitions.StateDefinitionBuilder<TState, TEvent> WithDeepHistory()
+  method StateForge.Core.Definitions.StateDefinitionBuilder<TState, TEvent> WithDeepHistory(TState fallbackChildState)
+  method StateForge.Core.Definitions.StateDefinitionBuilder<TState, TEvent> WithHistory(StateForge.Core.Definitions.HistoryMode mode)
+  method StateForge.Core.Definitions.StateDefinitionBuilder<TState, TEvent> WithHistory(StateForge.Core.Definitions.HistoryMode mode, TState fallbackChildState)
+  method StateForge.Core.Definitions.StateDefinitionBuilder<TState, TEvent> WithHistory(TState fallbackChildState, StateForge.Core.Definitions.HistoryMode mode)
+  method StateForge.Core.Definitions.StateDefinitionBuilder<TState, TEvent> WithInitialChild(TState initialChildState)
+  method StateForge.Core.Definitions.StateDefinitionBuilder<TState, TEvent> WithMetadata(System.String key, System.Object value)
+  method StateForge.Core.Definitions.StateDefinitionBuilder<TState, TEvent> WithParent(TState parentState)
+  method StateForge.Core.Definitions.StateDefinitionBuilder<TState, TEvent> WithShallowHistory()
+  method StateForge.Core.Definitions.StateDefinitionBuilder<TState, TEvent> WithShallowHistory(TState fallbackChildState)
   method TransitionDefinitionBuilder<TState, TEvent> On(TEvent eventValue)
   method TransitionDefinitionBuilder<TState, TEvent> On<TSpecificEvent>()
 
-class StateMachineLibrary.Core.Definitions.StateHierarchyDefinition<TState> : IEquatable<StateMachineLibrary.Core.Definitions.StateHierarchyDefinition<TState>>
-  ctor (System.Boolean hasParent, TState parentState, System.Boolean hasInitialChild, TState initialChildState, StateMachineLibrary.Core.Definitions.HistoryMode historyMode, System.Boolean hasHistoryFallback, TState historyFallbackState, System.Boolean isParallelComposite, System.String parallelRegionId)
-  property StateMachineLibrary.Core.Definitions.HistoryMode HistoryMode {get;set;}
-  property StateMachineLibrary.Core.Definitions.StateHierarchyDefinition<TState> Empty {get;}
+class StateForge.Core.Definitions.StateHierarchyDefinition<TState> : IEquatable<StateForge.Core.Definitions.StateHierarchyDefinition<TState>>
+  ctor (System.Boolean hasParent, TState parentState, System.Boolean hasInitialChild, TState initialChildState, StateForge.Core.Definitions.HistoryMode historyMode, System.Boolean hasHistoryFallback, TState historyFallbackState, System.Boolean isParallelComposite, System.String parallelRegionId)
+  property StateForge.Core.Definitions.HistoryMode HistoryMode {get;set;}
+  property StateForge.Core.Definitions.StateHierarchyDefinition<TState> Empty {get;}
   property System.Boolean HasHierarchyMetadata {get;}
   property System.Boolean HasHistory {get;}
   property System.Boolean HasHistoryFallback {get;set;}
@@ -211,13 +211,13 @@ class StateMachineLibrary.Core.Definitions.StateHierarchyDefinition<TState> : IE
   property TState HistoryFallbackState {get;set;}
   property TState InitialChildState {get;set;}
   property TState ParentState {get;set;}
-  method StateMachineLibrary.Core.Definitions.StateHierarchyDefinition<TState> AsParallelComposite()
-  method StateMachineLibrary.Core.Definitions.StateHierarchyDefinition<TState> InParallelRegion(System.String regionId)
-  method StateMachineLibrary.Core.Definitions.StateHierarchyDefinition<TState> WithHistory(StateMachineLibrary.Core.Definitions.HistoryMode mode, System.Boolean hasFallback, TState fallbackState)
-  method StateMachineLibrary.Core.Definitions.StateHierarchyDefinition<TState> WithInitialChild(TState initialChildState)
-  method StateMachineLibrary.Core.Definitions.StateHierarchyDefinition<TState> WithParent(TState parentState)
+  method StateForge.Core.Definitions.StateHierarchyDefinition<TState> AsParallelComposite()
+  method StateForge.Core.Definitions.StateHierarchyDefinition<TState> InParallelRegion(System.String regionId)
+  method StateForge.Core.Definitions.StateHierarchyDefinition<TState> WithHistory(StateForge.Core.Definitions.HistoryMode mode, System.Boolean hasFallback, TState fallbackState)
+  method StateForge.Core.Definitions.StateHierarchyDefinition<TState> WithInitialChild(TState initialChildState)
+  method StateForge.Core.Definitions.StateHierarchyDefinition<TState> WithParent(TState parentState)
 
-class StateMachineLibrary.Core.Definitions.StateMachineDefinition<TState, TEvent>
+class StateForge.Core.Definitions.StateMachineDefinition<TState, TEvent>
   property IReadOnlyList<CompletionTransitionDefinition<TState, TEvent>> CompletionTransitions {get;}
   property IReadOnlyList<EventDefinition<TEvent>> Events {get;}
   property IReadOnlyList<ParallelRegionDefinition<TState>> ParallelRegions {get;}
@@ -225,23 +225,23 @@ class StateMachineLibrary.Core.Definitions.StateMachineDefinition<TState, TEvent
   property IReadOnlyList<StateDefinition<TState>> States {get;}
   property IReadOnlyList<StateDefinition<TState>> TerminalStates {get;}
   property IReadOnlyList<TransitionDefinition<TState, TEvent>> Transitions {get;}
-  property StateMachineLibrary.Core.Definitions.MetadataCollection Metadata {get;}
+  property StateForge.Core.Definitions.MetadataCollection Metadata {get;}
   property System.Boolean HasHierarchy {get;}
   property System.Boolean HasHistory {get;}
   property System.Boolean HasParallelRegions {get;}
   method ActiveStatePath<TState> GetActiveStatePath(TState activeLeafState)
   method ActiveStateSnapshotValidationResult<TState> ValidateActiveStateSnapshot(ActiveStateSnapshot<TState> snapshot)
   method DefinitionIntrospection<TState, TEvent> Introspect()
-  method ExternalStateMachineRuntime<TState, TEvent> CreateRuntime(IStateAccessor<TState> accessor, StateMachineLibrary.Core.Execution.ConcurrencyMode concurrencyMode, ITransitionObserver<TState, TEvent> observer)
+  method ExternalStateMachineRuntime<TState, TEvent> CreateRuntime(IStateAccessor<TState> accessor, StateForge.Core.Execution.ConcurrencyMode concurrencyMode, ITransitionObserver<TState, TEvent> observer)
   method GraphExportResult<TState, TEvent> ExportGraph()
   method IReadOnlyList<ParallelRegionDefinition<TState>> GetParallelRegions(TState compositeState)
   method IReadOnlyList<StateDefinition<TState>> GetChildren(TState parentState)
   method StateDefinition<TState> FindState(TState state)
-  method StateMachineLibrary.Core.Definitions.StateMachineDefinition<TState, TEvent> Create(Action<StateMachineDefinitionBuilder<TState, TEvent>> configure)
-  method StateMachineLibrary.Core.Validation.ValidationResult Validate()
-  method StateMachineLibrary.Core.Validation.ValidationResult ValidateParallelHistorySnapshot(ParallelHistorySnapshot<TState> snapshot)
-  method StateMachineRuntime<TState, TEvent> CreateRuntime(ActiveStateSnapshot<TState> snapshot, StateMachineLibrary.Core.Execution.ConcurrencyMode concurrencyMode, ITransitionObserver<TState, TEvent> observer)
-  method StateMachineRuntime<TState, TEvent> CreateRuntime(TState initialState, StateMachineLibrary.Core.Execution.ConcurrencyMode concurrencyMode, ITransitionObserver<TState, TEvent> observer)
+  method StateForge.Core.Definitions.StateMachineDefinition<TState, TEvent> Create(Action<StateMachineDefinitionBuilder<TState, TEvent>> configure)
+  method StateForge.Core.Validation.ValidationResult Validate()
+  method StateForge.Core.Validation.ValidationResult ValidateParallelHistorySnapshot(ParallelHistorySnapshot<TState> snapshot)
+  method StateMachineRuntime<TState, TEvent> CreateRuntime(ActiveStateSnapshot<TState> snapshot, StateForge.Core.Execution.ConcurrencyMode concurrencyMode, ITransitionObserver<TState, TEvent> observer)
+  method StateMachineRuntime<TState, TEvent> CreateRuntime(TState initialState, StateForge.Core.Execution.ConcurrencyMode concurrencyMode, ITransitionObserver<TState, TEvent> observer)
   method System.Boolean ContainsState(TState state)
   method System.Boolean HasHistoryFor(TState compositeState)
   method System.Boolean IsCompositeState(TState state)
@@ -259,105 +259,105 @@ class StateMachineLibrary.Core.Definitions.StateMachineDefinition<TState, TEvent
   method ValueTask<TransitionOutcome<TState, TEvent>> ApplyAsync(TState currentState, TEvent event, System.Threading.CancellationToken cancellationToken, ITransitionObserver<TState, TEvent> observer)
   method ValueTask<TransitionPreviewResult<TState, TEvent>> PreviewAsync(ActiveStateShape<TState> activeStateShape, TEvent event, System.Threading.CancellationToken cancellationToken)
 
-class StateMachineLibrary.Core.Definitions.StateMachineDefinitionBuilder<TState, TEvent>
+class StateForge.Core.Definitions.StateMachineDefinitionBuilder<TState, TEvent>
   ctor ()
   method ParallelCompositeDefinitionBuilder<TState, TEvent> ParallelComposite(TState compositeState)
   method ParallelCompositeDefinitionBuilder<TState, TEvent> ParallelComposite(TState compositeState, Action<ParallelCompositeDefinitionBuilder<TState, TEvent>> configure)
   method StateDefinitionBuilder<TState, TEvent> State(TState value)
-  method StateMachineLibrary.Core.Definitions.StateMachineDefinitionBuilder<TState, TEvent> ChildState(TState value, TState parentState)
-  method StateMachineLibrary.Core.Definitions.StateMachineDefinitionBuilder<TState, TEvent> CompositeState(TState value, TState initialChildState)
-  method StateMachineLibrary.Core.Definitions.StateMachineDefinitionBuilder<TState, TEvent> EnableHistory(TState compositeState, StateMachineLibrary.Core.Definitions.HistoryMode mode)
-  method StateMachineLibrary.Core.Definitions.StateMachineDefinitionBuilder<TState, TEvent> EnableHistory(TState compositeState, TState fallbackChildState, StateMachineLibrary.Core.Definitions.HistoryMode mode)
-  method StateMachineLibrary.Core.Definitions.StateMachineDefinitionBuilder<TState, TEvent> ParallelCompositeState(TState compositeState)
-  method StateMachineLibrary.Core.Definitions.StateMachineDefinitionBuilder<TState, TEvent> ParallelRegion(TState compositeState, System.String name)
-  method StateMachineLibrary.Core.Definitions.StateMachineDefinitionBuilder<TState, TEvent> ParallelRegion(TState compositeState, System.String name, Action<ParallelRegionDefinitionBuilder<TState, TEvent>> configure)
-  method StateMachineLibrary.Core.Definitions.StateMachineDefinitionBuilder<TState, TEvent> ParallelRegion(TState compositeState, System.String name, TState initialState, TState[] memberStates)
-  method StateMachineLibrary.Core.Definitions.StateMachineDefinitionBuilder<TState, TEvent> SetInitialChild(TState compositeState, TState initialChildState)
-  method StateMachineLibrary.Core.Definitions.StateMachineDefinitionBuilder<TState, TEvent> SetParent(TState childState, TState parentState)
-  method StateMachineLibrary.Core.Definitions.StateMachineDefinitionBuilder<TState, TEvent> WithMetadata(System.String key, System.Object value)
+  method StateForge.Core.Definitions.StateMachineDefinitionBuilder<TState, TEvent> ChildState(TState value, TState parentState)
+  method StateForge.Core.Definitions.StateMachineDefinitionBuilder<TState, TEvent> CompositeState(TState value, TState initialChildState)
+  method StateForge.Core.Definitions.StateMachineDefinitionBuilder<TState, TEvent> EnableHistory(TState compositeState, StateForge.Core.Definitions.HistoryMode mode)
+  method StateForge.Core.Definitions.StateMachineDefinitionBuilder<TState, TEvent> EnableHistory(TState compositeState, TState fallbackChildState, StateForge.Core.Definitions.HistoryMode mode)
+  method StateForge.Core.Definitions.StateMachineDefinitionBuilder<TState, TEvent> ParallelCompositeState(TState compositeState)
+  method StateForge.Core.Definitions.StateMachineDefinitionBuilder<TState, TEvent> ParallelRegion(TState compositeState, System.String name)
+  method StateForge.Core.Definitions.StateMachineDefinitionBuilder<TState, TEvent> ParallelRegion(TState compositeState, System.String name, Action<ParallelRegionDefinitionBuilder<TState, TEvent>> configure)
+  method StateForge.Core.Definitions.StateMachineDefinitionBuilder<TState, TEvent> ParallelRegion(TState compositeState, System.String name, TState initialState, TState[] memberStates)
+  method StateForge.Core.Definitions.StateMachineDefinitionBuilder<TState, TEvent> SetInitialChild(TState compositeState, TState initialChildState)
+  method StateForge.Core.Definitions.StateMachineDefinitionBuilder<TState, TEvent> SetParent(TState childState, TState parentState)
+  method StateForge.Core.Definitions.StateMachineDefinitionBuilder<TState, TEvent> WithMetadata(System.String key, System.Object value)
 
-static class StateMachineLibrary.Core.Definitions.StateMachineMetadataKeys
+static class StateForge.Core.Definitions.StateMachineMetadataKeys
   field System.String DefinitionFingerprint
   field System.String Name
 
-class StateMachineLibrary.Core.Definitions.StateRegionMembershipDefinition<TState> : IEquatable<StateMachineLibrary.Core.Definitions.StateRegionMembershipDefinition<TState>>
+class StateForge.Core.Definitions.StateRegionMembershipDefinition<TState> : IEquatable<StateForge.Core.Definitions.StateRegionMembershipDefinition<TState>>
   ctor (TState State, System.String RegionId, TState OwnerCompositeState, System.Int32 Depth)
   property System.Int32 Depth {get;set;}
   property System.String RegionId {get;set;}
   property TState OwnerCompositeState {get;set;}
   property TState State {get;set;}
 
-class StateMachineLibrary.Core.Definitions.TransitionActionDefinition<TState, TEvent>
-  ctor (System.Int32 order, System.String displayName, Func<ActionExecutionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask> executeAsync, StateMachineLibrary.Core.Definitions.MetadataCollection metadata)
+class StateForge.Core.Definitions.TransitionActionDefinition<TState, TEvent>
+  ctor (System.Int32 order, System.String displayName, Func<ActionExecutionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask> executeAsync, StateForge.Core.Definitions.MetadataCollection metadata)
   property Func<ActionExecutionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask> ExecuteAsync {get;}
-  property StateMachineLibrary.Core.Definitions.ActionKind Kind {get;}
-  property StateMachineLibrary.Core.Definitions.ActionSummary Summary {get;}
-  property StateMachineLibrary.Core.Definitions.MetadataCollection Metadata {get;}
-  property StateMachineLibrary.Core.Execution.TransitionLifecyclePhase Phase {get;}
+  property StateForge.Core.Definitions.ActionKind Kind {get;}
+  property StateForge.Core.Definitions.ActionSummary Summary {get;}
+  property StateForge.Core.Definitions.MetadataCollection Metadata {get;}
+  property StateForge.Core.Execution.TransitionLifecyclePhase Phase {get;}
   property System.Int32 Order {get;}
   property System.String DisplayName {get;}
-  method StateMachineLibrary.Core.Definitions.TransitionActionDefinition<TState, TEvent> FromAsync(System.Int32 order, Func<ActionExecutionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask> executeAsync, System.String displayName, StateMachineLibrary.Core.Definitions.MetadataCollection metadata)
-  method StateMachineLibrary.Core.Definitions.TransitionActionDefinition<TState, TEvent> FromSync(System.Int32 order, Action<ActionExecutionContext<TState, TEvent>> execute, System.String displayName, StateMachineLibrary.Core.Definitions.MetadataCollection metadata)
+  method StateForge.Core.Definitions.TransitionActionDefinition<TState, TEvent> FromAsync(System.Int32 order, Func<ActionExecutionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask> executeAsync, System.String displayName, StateForge.Core.Definitions.MetadataCollection metadata)
+  method StateForge.Core.Definitions.TransitionActionDefinition<TState, TEvent> FromSync(System.Int32 order, Action<ActionExecutionContext<TState, TEvent>> execute, System.String displayName, StateForge.Core.Definitions.MetadataCollection metadata)
 
-class StateMachineLibrary.Core.Definitions.TransitionBehaviorDefinition<TState, TEvent>
-  ctor (StateMachineLibrary.Core.Execution.TransitionLifecyclePhase phase, Func<TransitionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask> executeAsync, System.String displayName, StateMachineLibrary.Core.Definitions.MetadataCollection metadata)
+class StateForge.Core.Definitions.TransitionBehaviorDefinition<TState, TEvent>
+  ctor (StateForge.Core.Execution.TransitionLifecyclePhase phase, Func<TransitionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask> executeAsync, System.String displayName, StateForge.Core.Definitions.MetadataCollection metadata)
   property Func<TransitionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask> ExecuteAsync {get;}
-  property StateMachineLibrary.Core.Definitions.MetadataCollection Metadata {get;}
-  property StateMachineLibrary.Core.Execution.TransitionLifecyclePhase Phase {get;}
+  property StateForge.Core.Definitions.MetadataCollection Metadata {get;}
+  property StateForge.Core.Execution.TransitionLifecyclePhase Phase {get;}
   property System.String DisplayName {get;}
 
-class StateMachineLibrary.Core.Definitions.TransitionDefinition<TState, TEvent>
-  ctor (TState sourceState, EventDefinition<TEvent> eventDefinition, TState targetState, StateMachineLibrary.Core.Definitions.TransitionKind kind, IEnumerable<ConditionDefinition<TState, TEvent>> conditions, IEnumerable<TransitionBehaviorDefinition<TState, TEvent>> behaviors, StateMachineLibrary.Core.Definitions.MetadataCollection metadata, IEnumerable<TransitionActionDefinition<TState, TEvent>> transitionActions, StateMachineLibrary.Core.Definitions.TransitionTriggerKind triggerKind, CompletionTransitionDefinition<TState, TEvent> completionTransition)
+class StateForge.Core.Definitions.TransitionDefinition<TState, TEvent>
+  ctor (TState sourceState, EventDefinition<TEvent> eventDefinition, TState targetState, StateForge.Core.Definitions.TransitionKind kind, IEnumerable<ConditionDefinition<TState, TEvent>> conditions, IEnumerable<TransitionBehaviorDefinition<TState, TEvent>> behaviors, StateForge.Core.Definitions.MetadataCollection metadata, IEnumerable<TransitionActionDefinition<TState, TEvent>> transitionActions, StateForge.Core.Definitions.TransitionTriggerKind triggerKind, CompletionTransitionDefinition<TState, TEvent> completionTransition)
   property CompletionTransitionDefinition<TState, TEvent> CompletionTransition {get;}
   property EventDefinition<TEvent> Event {get;}
   property IReadOnlyList<ConditionDefinition<TState, TEvent>> Conditions {get;}
   property IReadOnlyList<TransitionActionDefinition<TState, TEvent>> TransitionActions {get;}
   property IReadOnlyList<TransitionBehaviorDefinition<TState, TEvent>> Behaviors {get;}
-  property StateMachineLibrary.Core.Definitions.MetadataCollection Metadata {get;}
-  property StateMachineLibrary.Core.Definitions.TransitionKind Kind {get;}
-  property StateMachineLibrary.Core.Definitions.TransitionTriggerKind TriggerKind {get;}
+  property StateForge.Core.Definitions.MetadataCollection Metadata {get;}
+  property StateForge.Core.Definitions.TransitionKind Kind {get;}
+  property StateForge.Core.Definitions.TransitionTriggerKind TriggerKind {get;}
   property System.Boolean IsCompletionTriggered {get;}
   property TState SourceState {get;}
   property TState TargetState {get;}
   method System.String ToString()
 
-class StateMachineLibrary.Core.Definitions.TransitionDefinitionBuilder<TState, TEvent>
+class StateForge.Core.Definitions.TransitionDefinitionBuilder<TState, TEvent>
   method StateDefinitionBuilder<TState, TEvent> GoTo(TState targetState)
   method StateDefinitionBuilder<TState, TEvent> Internal()
   method StateDefinitionBuilder<TState, TEvent> Self()
-  method StateMachineLibrary.Core.Definitions.TransitionDefinitionBuilder<TState, TEvent> Execute(Action<TransitionContext<TState, TEvent>> behavior, System.String displayName)
-  method StateMachineLibrary.Core.Definitions.TransitionDefinitionBuilder<TState, TEvent> ExecuteAction(Action<ActionExecutionContext<TState, TEvent>> action, System.String displayName, StateMachineLibrary.Core.Definitions.MetadataCollection metadata)
-  method StateMachineLibrary.Core.Definitions.TransitionDefinitionBuilder<TState, TEvent> ExecuteActionAsync(Func<ActionExecutionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask> action, System.String displayName, StateMachineLibrary.Core.Definitions.MetadataCollection metadata)
-  method StateMachineLibrary.Core.Definitions.TransitionDefinitionBuilder<TState, TEvent> ExecuteAsync(Func<TransitionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask> behavior, System.String displayName)
-  method StateMachineLibrary.Core.Definitions.TransitionDefinitionBuilder<TState, TEvent> OnEntry(Action<TransitionContext<TState, TEvent>> behavior, System.String displayName)
-  method StateMachineLibrary.Core.Definitions.TransitionDefinitionBuilder<TState, TEvent> OnEntryAsync(Func<TransitionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask> behavior, System.String displayName)
-  method StateMachineLibrary.Core.Definitions.TransitionDefinitionBuilder<TState, TEvent> OnExit(Action<TransitionContext<TState, TEvent>> behavior, System.String displayName)
-  method StateMachineLibrary.Core.Definitions.TransitionDefinitionBuilder<TState, TEvent> OnExitAsync(Func<TransitionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask> behavior, System.String displayName)
-  method StateMachineLibrary.Core.Definitions.TransitionDefinitionBuilder<TState, TEvent> When(Func<TransitionContext<TState, TEvent>, System.Boolean> condition, System.String displayName)
-  method StateMachineLibrary.Core.Definitions.TransitionDefinitionBuilder<TState, TEvent> WhenAsync(Func<TransitionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<System.Boolean>> condition, System.String displayName)
-  method StateMachineLibrary.Core.Definitions.TransitionDefinitionBuilder<TState, TEvent> WithMetadata(System.String key, System.Object value)
+  method StateForge.Core.Definitions.TransitionDefinitionBuilder<TState, TEvent> Execute(Action<TransitionContext<TState, TEvent>> behavior, System.String displayName)
+  method StateForge.Core.Definitions.TransitionDefinitionBuilder<TState, TEvent> ExecuteAction(Action<ActionExecutionContext<TState, TEvent>> action, System.String displayName, StateForge.Core.Definitions.MetadataCollection metadata)
+  method StateForge.Core.Definitions.TransitionDefinitionBuilder<TState, TEvent> ExecuteActionAsync(Func<ActionExecutionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask> action, System.String displayName, StateForge.Core.Definitions.MetadataCollection metadata)
+  method StateForge.Core.Definitions.TransitionDefinitionBuilder<TState, TEvent> ExecuteAsync(Func<TransitionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask> behavior, System.String displayName)
+  method StateForge.Core.Definitions.TransitionDefinitionBuilder<TState, TEvent> OnEntry(Action<TransitionContext<TState, TEvent>> behavior, System.String displayName)
+  method StateForge.Core.Definitions.TransitionDefinitionBuilder<TState, TEvent> OnEntryAsync(Func<TransitionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask> behavior, System.String displayName)
+  method StateForge.Core.Definitions.TransitionDefinitionBuilder<TState, TEvent> OnExit(Action<TransitionContext<TState, TEvent>> behavior, System.String displayName)
+  method StateForge.Core.Definitions.TransitionDefinitionBuilder<TState, TEvent> OnExitAsync(Func<TransitionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask> behavior, System.String displayName)
+  method StateForge.Core.Definitions.TransitionDefinitionBuilder<TState, TEvent> When(Func<TransitionContext<TState, TEvent>, System.Boolean> condition, System.String displayName)
+  method StateForge.Core.Definitions.TransitionDefinitionBuilder<TState, TEvent> WhenAsync(Func<TransitionContext<TState, TEvent>, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<System.Boolean>> condition, System.String displayName)
+  method StateForge.Core.Definitions.TransitionDefinitionBuilder<TState, TEvent> WithMetadata(System.String key, System.Object value)
 
-enum StateMachineLibrary.Core.Definitions.TransitionKind : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
-  field StateMachineLibrary.Core.Definitions.TransitionKind External
-  field StateMachineLibrary.Core.Definitions.TransitionKind Internal
-  field StateMachineLibrary.Core.Definitions.TransitionKind Self
+enum StateForge.Core.Definitions.TransitionKind : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  field StateForge.Core.Definitions.TransitionKind External
+  field StateForge.Core.Definitions.TransitionKind Internal
+  field StateForge.Core.Definitions.TransitionKind Self
   enum External
   enum Internal
   enum Self
 
-enum StateMachineLibrary.Core.Definitions.TransitionTriggerKind : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
-  field StateMachineLibrary.Core.Definitions.TransitionTriggerKind Completion
-  field StateMachineLibrary.Core.Definitions.TransitionTriggerKind Event
+enum StateForge.Core.Definitions.TransitionTriggerKind : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  field StateForge.Core.Definitions.TransitionTriggerKind Completion
+  field StateForge.Core.Definitions.TransitionTriggerKind Event
   enum Completion
   enum Event
 
-class StateMachineLibrary.Core.Diagnostics.GuardOutcomeDiagnostic
+class StateForge.Core.Diagnostics.GuardOutcomeDiagnostic
   ctor (System.Boolean wasEnabled, System.Collections.Generic.IEnumerable<System.String> conditionSummaries, System.String transitionId)
   property System.Boolean WasEnabled {get;}
   property System.Collections.Generic.IReadOnlyList<System.String> ConditionSummaries {get;}
   property System.String TransitionId {get;}
 
-class StateMachineLibrary.Core.Diagnostics.InvalidActiveShapeDiagnostic
+class StateForge.Core.Diagnostics.InvalidActiveShapeDiagnostic
   ctor (System.Object compositeState, System.String regionId, System.String regionName, System.String expectedShape, System.Collections.Generic.IEnumerable<System.Object> actualActiveStates, System.Collections.Generic.IEnumerable<System.String> missingRegions, System.Collections.Generic.IEnumerable<System.String> duplicateRegions)
   property System.Collections.Generic.IReadOnlyList<System.Object> ActualActiveStates {get;}
   property System.Collections.Generic.IReadOnlyList<System.String> DuplicateRegions {get;}
@@ -367,12 +367,12 @@ class StateMachineLibrary.Core.Diagnostics.InvalidActiveShapeDiagnostic
   property System.String RegionId {get;}
   property System.String RegionName {get;}
 
-class StateMachineLibrary.Core.Diagnostics.TransitionConflictDiagnostic
-  ctor (StateMachineLibrary.Core.Diagnostics.TransitionConflictKind kind, System.String message, StateMachineLibrary.Core.Definitions.TransitionTriggerKind triggerKind, System.Object event, System.String eventIdentity, System.Object completionScope, System.Object conflictScope, System.Object compositeState, System.String sourceRegionId, System.String sourceRegionName, System.String targetRegionId, System.String targetRegionName, System.Collections.Generic.IEnumerable<StateMachineLibrary.Core.Diagnostics.TransitionConflictParticipant> participants, StateMachineLibrary.Core.Diagnostics.InvalidActiveShapeDiagnostic invalidShape, System.String validationCode)
-  property StateMachineLibrary.Core.Definitions.TransitionTriggerKind TriggerKind {get;}
-  property StateMachineLibrary.Core.Diagnostics.InvalidActiveShapeDiagnostic InvalidShape {get;}
-  property StateMachineLibrary.Core.Diagnostics.TransitionConflictKind Kind {get;}
-  property System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Core.Diagnostics.TransitionConflictParticipant> Participants {get;}
+class StateForge.Core.Diagnostics.TransitionConflictDiagnostic
+  ctor (StateForge.Core.Diagnostics.TransitionConflictKind kind, System.String message, StateForge.Core.Definitions.TransitionTriggerKind triggerKind, System.Object event, System.String eventIdentity, System.Object completionScope, System.Object conflictScope, System.Object compositeState, System.String sourceRegionId, System.String sourceRegionName, System.String targetRegionId, System.String targetRegionName, System.Collections.Generic.IEnumerable<StateForge.Core.Diagnostics.TransitionConflictParticipant> participants, StateForge.Core.Diagnostics.InvalidActiveShapeDiagnostic invalidShape, System.String validationCode)
+  property StateForge.Core.Definitions.TransitionTriggerKind TriggerKind {get;}
+  property StateForge.Core.Diagnostics.InvalidActiveShapeDiagnostic InvalidShape {get;}
+  property StateForge.Core.Diagnostics.TransitionConflictKind Kind {get;}
+  property System.Collections.Generic.IReadOnlyList<StateForge.Core.Diagnostics.TransitionConflictParticipant> Participants {get;}
   property System.Object CompletionScope {get;}
   property System.Object CompositeState {get;}
   property System.Object ConflictScope {get;}
@@ -385,13 +385,13 @@ class StateMachineLibrary.Core.Diagnostics.TransitionConflictDiagnostic
   property System.String TargetRegionName {get;}
   property System.String ValidationCode {get;}
 
-enum StateMachineLibrary.Core.Diagnostics.TransitionConflictKind : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
-  field StateMachineLibrary.Core.Diagnostics.TransitionConflictKind AmbiguousGuardOutcome
-  field StateMachineLibrary.Core.Diagnostics.TransitionConflictKind CompletionConflict
-  field StateMachineLibrary.Core.Diagnostics.TransitionConflictKind CrossRegionBoundary
-  field StateMachineLibrary.Core.Diagnostics.TransitionConflictKind DuplicateSourceScope
-  field StateMachineLibrary.Core.Diagnostics.TransitionConflictKind InvalidPostShape
-  field StateMachineLibrary.Core.Diagnostics.TransitionConflictKind ParentRegionalConflict
+enum StateForge.Core.Diagnostics.TransitionConflictKind : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  field StateForge.Core.Diagnostics.TransitionConflictKind AmbiguousGuardOutcome
+  field StateForge.Core.Diagnostics.TransitionConflictKind CompletionConflict
+  field StateForge.Core.Diagnostics.TransitionConflictKind CrossRegionBoundary
+  field StateForge.Core.Diagnostics.TransitionConflictKind DuplicateSourceScope
+  field StateForge.Core.Diagnostics.TransitionConflictKind InvalidPostShape
+  field StateForge.Core.Diagnostics.TransitionConflictKind ParentRegionalConflict
   enum AmbiguousGuardOutcome
   enum CompletionConflict
   enum CrossRegionBoundary
@@ -399,11 +399,11 @@ enum StateMachineLibrary.Core.Diagnostics.TransitionConflictKind : System.ICompa
   enum InvalidPostShape
   enum ParentRegionalConflict
 
-class StateMachineLibrary.Core.Diagnostics.TransitionConflictParticipant
-  ctor (StateMachineLibrary.Core.Diagnostics.TransitionConflictParticipantRole role, System.String transitionId, StateMachineLibrary.Core.Definitions.TransitionTriggerKind triggerKind, System.Object event, System.String eventIdentity, System.Object sourceState, System.Object targetState, System.Object compositeState, System.String regionId, System.String regionName, StateMachineLibrary.Core.Diagnostics.GuardOutcomeDiagnostic guardOutcome, System.Int32 order)
-  property StateMachineLibrary.Core.Definitions.TransitionTriggerKind TriggerKind {get;}
-  property StateMachineLibrary.Core.Diagnostics.GuardOutcomeDiagnostic GuardOutcome {get;}
-  property StateMachineLibrary.Core.Diagnostics.TransitionConflictParticipantRole Role {get;}
+class StateForge.Core.Diagnostics.TransitionConflictParticipant
+  ctor (StateForge.Core.Diagnostics.TransitionConflictParticipantRole role, System.String transitionId, StateForge.Core.Definitions.TransitionTriggerKind triggerKind, System.Object event, System.String eventIdentity, System.Object sourceState, System.Object targetState, System.Object compositeState, System.String regionId, System.String regionName, StateForge.Core.Diagnostics.GuardOutcomeDiagnostic guardOutcome, System.Int32 order)
+  property StateForge.Core.Definitions.TransitionTriggerKind TriggerKind {get;}
+  property StateForge.Core.Diagnostics.GuardOutcomeDiagnostic GuardOutcome {get;}
+  property StateForge.Core.Diagnostics.TransitionConflictParticipantRole Role {get;}
   property System.Int32 Order {get;}
   property System.Object CompositeState {get;}
   property System.Object Event {get;}
@@ -414,17 +414,17 @@ class StateMachineLibrary.Core.Diagnostics.TransitionConflictParticipant
   property System.String RegionName {get;}
   property System.String TransitionId {get;}
 
-enum StateMachineLibrary.Core.Diagnostics.TransitionConflictParticipantRole : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
-  field StateMachineLibrary.Core.Diagnostics.TransitionConflictParticipantRole CompetingTransition
-  field StateMachineLibrary.Core.Diagnostics.TransitionConflictParticipantRole CompletionTransition
-  field StateMachineLibrary.Core.Diagnostics.TransitionConflictParticipantRole Composite
-  field StateMachineLibrary.Core.Diagnostics.TransitionConflictParticipantRole Event
-  field StateMachineLibrary.Core.Diagnostics.TransitionConflictParticipantRole InvalidShapeMember
-  field StateMachineLibrary.Core.Diagnostics.TransitionConflictParticipantRole ParentTransition
-  field StateMachineLibrary.Core.Diagnostics.TransitionConflictParticipantRole Region
-  field StateMachineLibrary.Core.Diagnostics.TransitionConflictParticipantRole RegionalTransition
-  field StateMachineLibrary.Core.Diagnostics.TransitionConflictParticipantRole SourceState
-  field StateMachineLibrary.Core.Diagnostics.TransitionConflictParticipantRole TargetState
+enum StateForge.Core.Diagnostics.TransitionConflictParticipantRole : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  field StateForge.Core.Diagnostics.TransitionConflictParticipantRole CompetingTransition
+  field StateForge.Core.Diagnostics.TransitionConflictParticipantRole CompletionTransition
+  field StateForge.Core.Diagnostics.TransitionConflictParticipantRole Composite
+  field StateForge.Core.Diagnostics.TransitionConflictParticipantRole Event
+  field StateForge.Core.Diagnostics.TransitionConflictParticipantRole InvalidShapeMember
+  field StateForge.Core.Diagnostics.TransitionConflictParticipantRole ParentTransition
+  field StateForge.Core.Diagnostics.TransitionConflictParticipantRole Region
+  field StateForge.Core.Diagnostics.TransitionConflictParticipantRole RegionalTransition
+  field StateForge.Core.Diagnostics.TransitionConflictParticipantRole SourceState
+  field StateForge.Core.Diagnostics.TransitionConflictParticipantRole TargetState
   enum CompetingTransition
   enum CompletionTransition
   enum Composite
@@ -436,12 +436,12 @@ enum StateMachineLibrary.Core.Diagnostics.TransitionConflictParticipantRole : Sy
   enum SourceState
   enum TargetState
 
-class StateMachineLibrary.Core.Diagnostics.TransitionDenialDiagnostic
-  ctor (StateMachineLibrary.Core.Diagnostics.TransitionDenialReason reason, System.String message, StateMachineLibrary.Core.Execution.TransitionLifecyclePhase phase, System.Object state, System.String eventIdentity, System.String transitionId, System.Collections.Generic.IReadOnlyList<System.String> candidateTransitionIds, System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Core.Diagnostics.TransitionPreviewGuardDiagnostic> guardDiagnostics, System.Collections.Generic.IReadOnlyList<System.String> validationCodes, System.String regionId, System.String regionName, System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Core.Diagnostics.TransitionConflictDiagnostic> conflictDiagnostics)
-  property StateMachineLibrary.Core.Diagnostics.TransitionDenialReason Reason {get;}
-  property StateMachineLibrary.Core.Execution.TransitionLifecyclePhase Phase {get;}
-  property System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Core.Diagnostics.TransitionConflictDiagnostic> ConflictDiagnostics {get;}
-  property System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Core.Diagnostics.TransitionPreviewGuardDiagnostic> GuardDiagnostics {get;}
+class StateForge.Core.Diagnostics.TransitionDenialDiagnostic
+  ctor (StateForge.Core.Diagnostics.TransitionDenialReason reason, System.String message, StateForge.Core.Execution.TransitionLifecyclePhase phase, System.Object state, System.String eventIdentity, System.String transitionId, System.Collections.Generic.IReadOnlyList<System.String> candidateTransitionIds, System.Collections.Generic.IReadOnlyList<StateForge.Core.Diagnostics.TransitionPreviewGuardDiagnostic> guardDiagnostics, System.Collections.Generic.IReadOnlyList<System.String> validationCodes, System.String regionId, System.String regionName, System.Collections.Generic.IReadOnlyList<StateForge.Core.Diagnostics.TransitionConflictDiagnostic> conflictDiagnostics)
+  property StateForge.Core.Diagnostics.TransitionDenialReason Reason {get;}
+  property StateForge.Core.Execution.TransitionLifecyclePhase Phase {get;}
+  property System.Collections.Generic.IReadOnlyList<StateForge.Core.Diagnostics.TransitionConflictDiagnostic> ConflictDiagnostics {get;}
+  property System.Collections.Generic.IReadOnlyList<StateForge.Core.Diagnostics.TransitionPreviewGuardDiagnostic> GuardDiagnostics {get;}
   property System.Collections.Generic.IReadOnlyList<System.String> CandidateTransitionIds {get;}
   property System.Collections.Generic.IReadOnlyList<System.String> ValidationCodes {get;}
   property System.Object State {get;}
@@ -451,18 +451,18 @@ class StateMachineLibrary.Core.Diagnostics.TransitionDenialDiagnostic
   property System.String RegionName {get;}
   property System.String TransitionId {get;}
 
-enum StateMachineLibrary.Core.Diagnostics.TransitionDenialReason : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
-  field StateMachineLibrary.Core.Diagnostics.TransitionDenialReason AmbiguousTransitions
-  field StateMachineLibrary.Core.Diagnostics.TransitionDenialReason FailedGuards
-  field StateMachineLibrary.Core.Diagnostics.TransitionDenialReason GuardEvaluationCancelled
-  field StateMachineLibrary.Core.Diagnostics.TransitionDenialReason GuardEvaluationFailed
-  field StateMachineLibrary.Core.Diagnostics.TransitionDenialReason InvalidActiveShape
-  field StateMachineLibrary.Core.Diagnostics.TransitionDenialReason NoMatchingEvent
-  field StateMachineLibrary.Core.Diagnostics.TransitionDenialReason TerminalState
-  field StateMachineLibrary.Core.Diagnostics.TransitionDenialReason UnknownCurrentState
-  field StateMachineLibrary.Core.Diagnostics.TransitionDenialReason UnknownEvent
-  field StateMachineLibrary.Core.Diagnostics.TransitionDenialReason UnsupportedPrediction
-  field StateMachineLibrary.Core.Diagnostics.TransitionDenialReason ValidationConflicts
+enum StateForge.Core.Diagnostics.TransitionDenialReason : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  field StateForge.Core.Diagnostics.TransitionDenialReason AmbiguousTransitions
+  field StateForge.Core.Diagnostics.TransitionDenialReason FailedGuards
+  field StateForge.Core.Diagnostics.TransitionDenialReason GuardEvaluationCancelled
+  field StateForge.Core.Diagnostics.TransitionDenialReason GuardEvaluationFailed
+  field StateForge.Core.Diagnostics.TransitionDenialReason InvalidActiveShape
+  field StateForge.Core.Diagnostics.TransitionDenialReason NoMatchingEvent
+  field StateForge.Core.Diagnostics.TransitionDenialReason TerminalState
+  field StateForge.Core.Diagnostics.TransitionDenialReason UnknownCurrentState
+  field StateForge.Core.Diagnostics.TransitionDenialReason UnknownEvent
+  field StateForge.Core.Diagnostics.TransitionDenialReason UnsupportedPrediction
+  field StateForge.Core.Diagnostics.TransitionDenialReason ValidationConflicts
   enum AmbiguousTransitions
   enum FailedGuards
   enum GuardEvaluationCancelled
@@ -475,10 +475,10 @@ enum StateMachineLibrary.Core.Diagnostics.TransitionDenialReason : System.ICompa
   enum UnsupportedPrediction
   enum ValidationConflicts
 
-class StateMachineLibrary.Core.Diagnostics.TransitionPreviewCandidate
-  ctor (System.String transitionId, System.Object sourceState, System.String eventIdentity, System.Object targetState, StateMachineLibrary.Core.Definitions.TransitionTriggerKind triggerKind, System.String selectionRole, System.String regionId, System.String regionName, System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Core.Diagnostics.TransitionPreviewGuardDiagnostic> guardDiagnostics)
-  property StateMachineLibrary.Core.Definitions.TransitionTriggerKind TriggerKind {get;}
-  property System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Core.Diagnostics.TransitionPreviewGuardDiagnostic> GuardDiagnostics {get;}
+class StateForge.Core.Diagnostics.TransitionPreviewCandidate
+  ctor (System.String transitionId, System.Object sourceState, System.String eventIdentity, System.Object targetState, StateForge.Core.Definitions.TransitionTriggerKind triggerKind, System.String selectionRole, System.String regionId, System.String regionName, System.Collections.Generic.IReadOnlyList<StateForge.Core.Diagnostics.TransitionPreviewGuardDiagnostic> guardDiagnostics)
+  property StateForge.Core.Definitions.TransitionTriggerKind TriggerKind {get;}
+  property System.Collections.Generic.IReadOnlyList<StateForge.Core.Diagnostics.TransitionPreviewGuardDiagnostic> GuardDiagnostics {get;}
   property System.Object SourceState {get;}
   property System.Object TargetState {get;}
   property System.String EventIdentity {get;}
@@ -487,32 +487,32 @@ class StateMachineLibrary.Core.Diagnostics.TransitionPreviewCandidate
   property System.String SelectionRole {get;}
   property System.String TransitionId {get;}
 
-class StateMachineLibrary.Core.Diagnostics.TransitionPreviewGuardDiagnostic
-  ctor (System.String transitionId, System.Int32 guardIndex, System.String displayName, StateMachineLibrary.Core.Diagnostics.TransitionPreviewGuardStatus status, System.String message)
-  property StateMachineLibrary.Core.Diagnostics.TransitionPreviewGuardStatus Status {get;}
+class StateForge.Core.Diagnostics.TransitionPreviewGuardDiagnostic
+  ctor (System.String transitionId, System.Int32 guardIndex, System.String displayName, StateForge.Core.Diagnostics.TransitionPreviewGuardStatus status, System.String message)
+  property StateForge.Core.Diagnostics.TransitionPreviewGuardStatus Status {get;}
   property System.Int32 GuardIndex {get;}
   property System.String DisplayName {get;}
   property System.String Message {get;}
   property System.String TransitionId {get;}
 
-enum StateMachineLibrary.Core.Diagnostics.TransitionPreviewGuardStatus : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
-  field StateMachineLibrary.Core.Diagnostics.TransitionPreviewGuardStatus Cancelled
-  field StateMachineLibrary.Core.Diagnostics.TransitionPreviewGuardStatus Error
-  field StateMachineLibrary.Core.Diagnostics.TransitionPreviewGuardStatus Failed
-  field StateMachineLibrary.Core.Diagnostics.TransitionPreviewGuardStatus Passed
-  field StateMachineLibrary.Core.Diagnostics.TransitionPreviewGuardStatus Skipped
+enum StateForge.Core.Diagnostics.TransitionPreviewGuardStatus : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  field StateForge.Core.Diagnostics.TransitionPreviewGuardStatus Cancelled
+  field StateForge.Core.Diagnostics.TransitionPreviewGuardStatus Error
+  field StateForge.Core.Diagnostics.TransitionPreviewGuardStatus Failed
+  field StateForge.Core.Diagnostics.TransitionPreviewGuardStatus Passed
+  field StateForge.Core.Diagnostics.TransitionPreviewGuardStatus Skipped
   enum Cancelled
   enum Error
   enum Failed
   enum Passed
   enum Skipped
 
-class StateMachineLibrary.Core.Execution.ActionExecutionContext<TState, TEvent>
-  ctor (StateMachineDefinition<TState, TEvent> definition, TState sourceState, TState targetState, TEvent event, TransitionDefinition<TState, TEvent> transition, StateMachineLibrary.Core.Execution.TransitionLifecyclePhase phase, System.Threading.CancellationToken cancellationToken, StateMachineLibrary.Core.Definitions.MetadataCollection metadata, System.String regionId, System.String regionName, System.Boolean isRegionalCompletion, StateMachineLibrary.Core.Definitions.TransitionTriggerKind? triggerKind)
+class StateForge.Core.Execution.ActionExecutionContext<TState, TEvent>
+  ctor (StateMachineDefinition<TState, TEvent> definition, TState sourceState, TState targetState, TEvent event, TransitionDefinition<TState, TEvent> transition, StateForge.Core.Execution.TransitionLifecyclePhase phase, System.Threading.CancellationToken cancellationToken, StateForge.Core.Definitions.MetadataCollection metadata, System.String regionId, System.String regionName, System.Boolean isRegionalCompletion, StateForge.Core.Definitions.TransitionTriggerKind? triggerKind)
+  property StateForge.Core.Definitions.MetadataCollection Metadata {get;}
+  property StateForge.Core.Definitions.TransitionTriggerKind TriggerKind {get;}
+  property StateForge.Core.Execution.TransitionLifecyclePhase Phase {get;}
   property StateMachineDefinition<TState, TEvent> Definition {get;}
-  property StateMachineLibrary.Core.Definitions.MetadataCollection Metadata {get;}
-  property StateMachineLibrary.Core.Definitions.TransitionTriggerKind TriggerKind {get;}
-  property StateMachineLibrary.Core.Execution.TransitionLifecyclePhase Phase {get;}
   property System.Boolean IsCompletionTrigger {get;}
   property System.Boolean IsRegionalCompletion {get;}
   property System.String RegionId {get;}
@@ -523,13 +523,13 @@ class StateMachineLibrary.Core.Execution.ActionExecutionContext<TState, TEvent>
   property TState TargetState {get;}
   property TransitionDefinition<TState, TEvent> Transition {get;}
 
-class StateMachineLibrary.Core.Execution.ActionExecutionException : System.Exception, System.Runtime.Serialization.ISerializable
-  ctor (StateMachineLibrary.Core.Definitions.ActionSummary action, System.Object owner, System.Exception innerException)
-  property StateMachineLibrary.Core.Definitions.ActionSummary Action {get;}
-  property StateMachineLibrary.Core.Execution.TransitionLifecyclePhase Phase {get;}
+class StateForge.Core.Execution.ActionExecutionException : System.Exception, System.Runtime.Serialization.ISerializable
+  ctor (StateForge.Core.Definitions.ActionSummary action, System.Object owner, System.Exception innerException)
+  property StateForge.Core.Definitions.ActionSummary Action {get;}
+  property StateForge.Core.Execution.TransitionLifecyclePhase Phase {get;}
   property System.Object Owner {get;}
 
-class StateMachineLibrary.Core.Execution.ActiveRegionEntry<TState> : IEquatable<StateMachineLibrary.Core.Execution.ActiveRegionEntry<TState>>
+class StateForge.Core.Execution.ActiveRegionEntry<TState> : IEquatable<StateForge.Core.Execution.ActiveRegionEntry<TState>>
   ctor (System.String RegionId, System.String RegionName, TState ActiveLeafState, ActiveStatePath<TState> ActivePath, System.Boolean IsTerminal)
   property ActiveStatePath<TState> ActivePath {get;set;}
   property System.Boolean IsTerminal {get;set;}
@@ -537,7 +537,7 @@ class StateMachineLibrary.Core.Execution.ActiveRegionEntry<TState> : IEquatable<
   property System.String RegionName {get;set;}
   property TState ActiveLeafState {get;set;}
 
-class StateMachineLibrary.Core.Execution.ActiveRegionSnapshot<TState> : IEquatable<StateMachineLibrary.Core.Execution.ActiveRegionSnapshot<TState>>
+class StateForge.Core.Execution.ActiveRegionSnapshot<TState> : IEquatable<StateForge.Core.Execution.ActiveRegionSnapshot<TState>>
   ctor (System.String RegionId, System.String RegionName, TState ActiveLeafState, ActiveStatePath<TState> ActivePath, System.Boolean IsTerminal)
   property ActiveStatePath<TState> ActivePath {get;set;}
   property System.Boolean IsTerminal {get;set;}
@@ -545,7 +545,7 @@ class StateMachineLibrary.Core.Execution.ActiveRegionSnapshot<TState> : IEquatab
   property System.String RegionName {get;set;}
   property TState ActiveLeafState {get;set;}
 
-class StateMachineLibrary.Core.Execution.ActiveStatePath<TState>
+class StateForge.Core.Execution.ActiveStatePath<TState>
   ctor (IEnumerable<TState> statesRootToLeaf)
   property IReadOnlyList<TState> AncestorsRootToParent {get;}
   property IReadOnlyList<TState> StatesRootToLeaf {get;}
@@ -554,54 +554,54 @@ class StateMachineLibrary.Core.Execution.ActiveStatePath<TState>
   method System.Boolean Contains(TState state, IEqualityComparer<TState> comparer)
   method System.String ToString()
 
-class StateMachineLibrary.Core.Execution.ActiveStateShape<TState>
+class StateForge.Core.Execution.ActiveStateShape<TState>
   property IReadOnlyList<ActiveRegionEntry<TState>> ActiveRegions {get;}
-  property StateMachineLibrary.Core.Execution.ActiveStateShapeKind Kind {get;}
+  property StateForge.Core.Execution.ActiveStateShapeKind Kind {get;}
   property System.Boolean IsParallel {get;}
   property System.Int64 Sequence {get;}
   property TState ActiveLeafState {get;}
   property TState OwningCompositeState {get;}
   method ActiveStateSnapshot<TState> ToActiveStateSnapshot<TEvent>(StateMachineDefinition<TState, TEvent> definition, System.String definitionFingerprint)
   method IReadOnlyList<ActiveRegionSnapshot<TState>> ToOrderedRegionSnapshots<TEvent>(StateMachineDefinition<TState, TEvent> definition)
-  method StateMachineLibrary.Core.Execution.ActiveStateShape<TState> Parallel(TState owningCompositeState, IEnumerable<ActiveRegionEntry<TState>> activeRegions, System.Int64 sequence)
-  method StateMachineLibrary.Core.Execution.ActiveStateShape<TState> Single(TState activeLeafState, System.Int64 sequence)
+  method StateForge.Core.Execution.ActiveStateShape<TState> Parallel(TState owningCompositeState, IEnumerable<ActiveRegionEntry<TState>> activeRegions, System.Int64 sequence)
+  method StateForge.Core.Execution.ActiveStateShape<TState> Single(TState activeLeafState, System.Int64 sequence)
   method TState RequireSingleLeaf()
 
-enum StateMachineLibrary.Core.Execution.ActiveStateShapeKind : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
-  field StateMachineLibrary.Core.Execution.ActiveStateShapeKind Parallel
-  field StateMachineLibrary.Core.Execution.ActiveStateShapeKind SingleLeaf
+enum StateForge.Core.Execution.ActiveStateShapeKind : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  field StateForge.Core.Execution.ActiveStateShapeKind Parallel
+  field StateForge.Core.Execution.ActiveStateShapeKind SingleLeaf
   enum Parallel
   enum SingleLeaf
 
-class StateMachineLibrary.Core.Execution.ActiveStateSnapshot<TState>
-  ctor (StateMachineLibrary.Core.Execution.ActiveStateSnapshotKind kind, TState activeLeafState, ActiveStatePath<TState> activePath, TState owningCompositeState, IEnumerable<ActiveRegionSnapshot<TState>> regionSnapshots, System.Int64 sequence, System.String definitionFingerprint)
+class StateForge.Core.Execution.ActiveStateSnapshot<TState>
+  ctor (StateForge.Core.Execution.ActiveStateSnapshotKind kind, TState activeLeafState, ActiveStatePath<TState> activePath, TState owningCompositeState, IEnumerable<ActiveRegionSnapshot<TState>> regionSnapshots, System.Int64 sequence, System.String definitionFingerprint)
   property ActiveStatePath<TState> ActivePath {get;}
   property IReadOnlyList<ActiveRegionSnapshot<TState>> RegionSnapshots {get;}
-  property StateMachineLibrary.Core.Execution.ActiveStateSnapshotKind Kind {get;}
+  property StateForge.Core.Execution.ActiveStateSnapshotKind Kind {get;}
   property System.Int64 Sequence {get;}
   property System.String DefinitionFingerprint {get;}
   property TState ActiveLeafState {get;}
   property TState OwningCompositeState {get;}
-  method StateMachineLibrary.Core.Execution.ActiveStateSnapshot<TState> Hierarchical(TState activeLeafState, ActiveStatePath<TState> activePath, System.Int64 sequence, System.String definitionFingerprint)
-  method StateMachineLibrary.Core.Execution.ActiveStateSnapshot<TState> Parallel(TState owningCompositeState, IEnumerable<ActiveRegionSnapshot<TState>> regionSnapshots, System.Int64 sequence, System.String definitionFingerprint)
-  method StateMachineLibrary.Core.Execution.ActiveStateSnapshot<TState> SingleLeaf(TState activeLeafState, System.Int64 sequence, System.String definitionFingerprint)
+  method StateForge.Core.Execution.ActiveStateSnapshot<TState> Hierarchical(TState activeLeafState, ActiveStatePath<TState> activePath, System.Int64 sequence, System.String definitionFingerprint)
+  method StateForge.Core.Execution.ActiveStateSnapshot<TState> Parallel(TState owningCompositeState, IEnumerable<ActiveRegionSnapshot<TState>> regionSnapshots, System.Int64 sequence, System.String definitionFingerprint)
+  method StateForge.Core.Execution.ActiveStateSnapshot<TState> SingleLeaf(TState activeLeafState, System.Int64 sequence, System.String definitionFingerprint)
 
-enum StateMachineLibrary.Core.Execution.ActiveStateSnapshotKind : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
-  field StateMachineLibrary.Core.Execution.ActiveStateSnapshotKind Hierarchical
-  field StateMachineLibrary.Core.Execution.ActiveStateSnapshotKind Parallel
-  field StateMachineLibrary.Core.Execution.ActiveStateSnapshotKind SingleLeaf
+enum StateForge.Core.Execution.ActiveStateSnapshotKind : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  field StateForge.Core.Execution.ActiveStateSnapshotKind Hierarchical
+  field StateForge.Core.Execution.ActiveStateSnapshotKind Parallel
+  field StateForge.Core.Execution.ActiveStateSnapshotKind SingleLeaf
   enum Hierarchical
   enum Parallel
   enum SingleLeaf
 
-class StateMachineLibrary.Core.Execution.CompositeHistoryRecord<TState> : IEquatable<StateMachineLibrary.Core.Execution.CompositeHistoryRecord<TState>>
+class StateForge.Core.Execution.CompositeHistoryRecord<TState> : IEquatable<StateForge.Core.Execution.CompositeHistoryRecord<TState>>
   ctor (TState CompositeState, TState LastActiveDirectChildState, TState LastActiveDescendantLeafState, System.Int64 LastUpdatedSequence)
   property System.Int64 LastUpdatedSequence {get;set;}
   property TState CompositeState {get;set;}
   property TState LastActiveDescendantLeafState {get;set;}
   property TState LastActiveDirectChildState {get;set;}
 
-class StateMachineLibrary.Core.Execution.CompositeHistorySnapshot<TState> : IEquatable<StateMachineLibrary.Core.Execution.CompositeHistorySnapshot<TState>>
+class StateForge.Core.Execution.CompositeHistorySnapshot<TState> : IEquatable<StateForge.Core.Execution.CompositeHistorySnapshot<TState>>
   ctor (TState CompositeState, System.Boolean HasRecordedHistory, TState RecordedDirectChildState, TState RecordedDeepLeafState, TState FallbackChildState, System.Int64 LastUpdatedSequence)
   property System.Boolean HasRecordedHistory {get;set;}
   property System.Int64 LastUpdatedSequence {get;set;}
@@ -610,39 +610,39 @@ class StateMachineLibrary.Core.Execution.CompositeHistorySnapshot<TState> : IEqu
   property TState RecordedDeepLeafState {get;set;}
   property TState RecordedDirectChildState {get;set;}
 
-class StateMachineLibrary.Core.Execution.CompositeTransitionObserver<TState, TEvent> : ITransitionObserver<TState, TEvent>
+class StateForge.Core.Execution.CompositeTransitionObserver<TState, TEvent> : ITransitionObserver<TState, TEvent>
   ctor (IEnumerable<ITransitionObserver<TState, TEvent>> observers)
   ctor (ITransitionObserver<TState, TEvent>[] observers)
   property IReadOnlyList<ITransitionObserver<TState, TEvent>> Observers {get;}
   method System.Threading.Tasks.ValueTask ObserveAsync(TransitionObservation<TState, TEvent> observation, System.Threading.CancellationToken cancellationToken)
 
-enum StateMachineLibrary.Core.Execution.ConcurrencyMode : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
-  field StateMachineLibrary.Core.Execution.ConcurrencyMode Fast
-  field StateMachineLibrary.Core.Execution.ConcurrencyMode Serialized
+enum StateForge.Core.Execution.ConcurrencyMode : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  field StateForge.Core.Execution.ConcurrencyMode Fast
+  field StateForge.Core.Execution.ConcurrencyMode Serialized
   enum Fast
   enum Serialized
 
-class StateMachineLibrary.Core.Execution.ExternalStateMachineRuntime<TState, TEvent> : System.IAsyncDisposable
+class StateForge.Core.Execution.ExternalStateMachineRuntime<TState, TEvent> : System.IAsyncDisposable
   property IReadOnlyList<CompositeHistorySnapshot<TState>> HistorySnapshots {get;}
   property IReadOnlyList<ParallelHistorySnapshot<TState>> ParallelHistorySnapshots {get;}
   property IStateAccessor<TState> StateAccessor {get;}
+  property StateForge.Core.Execution.ConcurrencyMode ConcurrencyMode {get;}
   property StateMachineDefinition<TState, TEvent> Definition {get;}
-  property StateMachineLibrary.Core.Execution.ConcurrencyMode ConcurrencyMode {get;}
   method System.Threading.Tasks.ValueTask DisposeAsync()
   method ValueTask<ActiveStateShape<TState>> GetActiveStateShapeAsync(System.Threading.CancellationToken cancellationToken)
   method ValueTask<ActiveStateSnapshot<TState>> CaptureActiveStateSnapshotAsync(System.String definitionFingerprint, System.Threading.CancellationToken cancellationToken)
-  method ValueTask<GraphExportResult<TState, TEvent>> ExportGraphAsync(StateMachineLibrary.Core.Introspection.RuntimeGraphExportOptions options, System.Threading.CancellationToken cancellationToken)
+  method ValueTask<GraphExportResult<TState, TEvent>> ExportGraphAsync(StateForge.Core.Introspection.RuntimeGraphExportOptions options, System.Threading.CancellationToken cancellationToken)
   method ValueTask<GraphExportResult<TState, TEvent>> ExportGraphAsync(System.Threading.CancellationToken cancellationToken)
   method ValueTask<IReadOnlyList<EventDefinition<TEvent>>> GetPermittedEventsAsync(System.Threading.CancellationToken cancellationToken)
   method ValueTask<TState> GetCurrentStateAsync(System.Threading.CancellationToken cancellationToken)
   method ValueTask<TransitionOutcome<TState, TEvent>> ApplyAsync(TEvent event, System.Threading.CancellationToken cancellationToken)
   method ValueTask<TransitionPreviewResult<TState, TEvent>> PreviewAsync(TEvent event, System.Threading.CancellationToken cancellationToken)
 
-class StateMachineLibrary.Core.Execution.FilteredTransitionObserver<TState, TEvent> : ITransitionObserver<TState, TEvent>
+class StateForge.Core.Execution.FilteredTransitionObserver<TState, TEvent> : ITransitionObserver<TState, TEvent>
   ctor (ITransitionObserver<TState, TEvent> inner, Func<TransitionObservation<TState, TEvent>, System.Boolean> predicate)
   method System.Threading.Tasks.ValueTask ObserveAsync(TransitionObservation<TState, TEvent> observation, System.Threading.CancellationToken cancellationToken)
 
-class StateMachineLibrary.Core.Execution.HierarchyTransitionMetadata<TState> : IEquatable<StateMachineLibrary.Core.Execution.HierarchyTransitionMetadata<TState>>
+class StateForge.Core.Execution.HierarchyTransitionMetadata<TState> : IEquatable<StateForge.Core.Execution.HierarchyTransitionMetadata<TState>>
   ctor (TState DeclaredSourceState, TState DeclaredTargetState, TState ResolvedSourceState, TState ResolvedTargetLeafState, ActiveStatePath<TState> SourcePath, ActiveStatePath<TState> TargetPath, System.Boolean SourceMatchedAncestor, System.Boolean TargetResolvedThroughInitialChild)
   property ActiveStatePath<TState> SourcePath {get;set;}
   property ActiveStatePath<TState> TargetPath {get;set;}
@@ -653,55 +653,55 @@ class StateMachineLibrary.Core.Execution.HierarchyTransitionMetadata<TState> : I
   property TState ResolvedSourceState {get;set;}
   property TState ResolvedTargetLeafState {get;set;}
 
-interface StateMachineLibrary.Core.Execution.IStateAccessor<TState>
+interface StateForge.Core.Execution.IStateAccessor<TState>
   method System.Threading.Tasks.ValueTask SetAsync(TState state, System.Threading.CancellationToken cancellationToken)
   method ValueTask<TState> GetAsync(System.Threading.CancellationToken cancellationToken)
 
-interface StateMachineLibrary.Core.Execution.ITransitionObserver<TState, TEvent>
+interface StateForge.Core.Execution.ITransitionObserver<TState, TEvent>
   method System.Threading.Tasks.ValueTask ObserveAsync(TransitionObservation<TState, TEvent> observation, System.Threading.CancellationToken cancellationToken)
 
-class StateMachineLibrary.Core.Execution.NestedCompletion<TState> : IEquatable<StateMachineLibrary.Core.Execution.NestedCompletion<TState>>
-  ctor (TState CompletedState, TState CompletionScopeState, StateMachineLibrary.Core.Execution.NestedCompletionKind Kind, System.Boolean IsParallelCompletion, System.Collections.Generic.IReadOnlyList<System.String> CompletedRegionIds)
-  property StateMachineLibrary.Core.Execution.NestedCompletionKind Kind {get;set;}
+class StateForge.Core.Execution.NestedCompletion<TState> : IEquatable<StateForge.Core.Execution.NestedCompletion<TState>>
+  ctor (TState CompletedState, TState CompletionScopeState, StateForge.Core.Execution.NestedCompletionKind Kind, System.Boolean IsParallelCompletion, System.Collections.Generic.IReadOnlyList<System.String> CompletedRegionIds)
+  property StateForge.Core.Execution.NestedCompletionKind Kind {get;set;}
   property System.Boolean IsParallelCompletion {get;set;}
   property System.Collections.Generic.IReadOnlyList<System.String> CompletedRegionIds {get;set;}
   property TState CompletedState {get;set;}
   property TState CompletionScopeState {get;set;}
 
-enum StateMachineLibrary.Core.Execution.NestedCompletionKind : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
-  field StateMachineLibrary.Core.Execution.NestedCompletionKind Child
-  field StateMachineLibrary.Core.Execution.NestedCompletionKind Composite
-  field StateMachineLibrary.Core.Execution.NestedCompletionKind Machine
+enum StateForge.Core.Execution.NestedCompletionKind : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  field StateForge.Core.Execution.NestedCompletionKind Child
+  field StateForge.Core.Execution.NestedCompletionKind Composite
+  field StateForge.Core.Execution.NestedCompletionKind Machine
   enum Child
   enum Composite
   enum Machine
 
-enum StateMachineLibrary.Core.Execution.ParallelHistoryRestoreKind : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
-  field StateMachineLibrary.Core.Execution.ParallelHistoryRestoreKind Fallback
-  field StateMachineLibrary.Core.Execution.ParallelHistoryRestoreKind Recorded
+enum StateForge.Core.Execution.ParallelHistoryRestoreKind : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  field StateForge.Core.Execution.ParallelHistoryRestoreKind Fallback
+  field StateForge.Core.Execution.ParallelHistoryRestoreKind Recorded
   enum Fallback
   enum Recorded
 
-class StateMachineLibrary.Core.Execution.ParallelHistoryRestorePlan<TState> : IEquatable<StateMachineLibrary.Core.Execution.ParallelHistoryRestorePlan<TState>>
-  ctor (TState CompositeState, StateMachineLibrary.Core.Definitions.HistoryMode HistoryMode, IReadOnlyList<ParallelRegionRestoreEntry<TState>> RestoreEntries, System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Core.Validation.ValidationFinding> ValidationFindings, ActiveStateShape<TState> PreRestoreShape, ActiveStateShape<TState> PlannedPostRestoreShape)
+class StateForge.Core.Execution.ParallelHistoryRestorePlan<TState> : IEquatable<StateForge.Core.Execution.ParallelHistoryRestorePlan<TState>>
+  ctor (TState CompositeState, StateForge.Core.Definitions.HistoryMode HistoryMode, IReadOnlyList<ParallelRegionRestoreEntry<TState>> RestoreEntries, System.Collections.Generic.IReadOnlyList<StateForge.Core.Validation.ValidationFinding> ValidationFindings, ActiveStateShape<TState> PreRestoreShape, ActiveStateShape<TState> PlannedPostRestoreShape)
   property ActiveStateShape<TState> PlannedPostRestoreShape {get;set;}
   property ActiveStateShape<TState> PreRestoreShape {get;set;}
   property IReadOnlyList<ParallelRegionRestoreEntry<TState>> RestoreEntries {get;set;}
-  property StateMachineLibrary.Core.Definitions.HistoryMode HistoryMode {get;set;}
+  property StateForge.Core.Definitions.HistoryMode HistoryMode {get;set;}
   property System.Boolean IsValid {get;}
   property System.Boolean UsesFallback {get;}
-  property System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Core.Validation.ValidationFinding> ValidationFindings {get;set;}
+  property System.Collections.Generic.IReadOnlyList<StateForge.Core.Validation.ValidationFinding> ValidationFindings {get;set;}
   property TState CompositeState {get;set;}
 
-class StateMachineLibrary.Core.Execution.ParallelHistorySnapshot<TState> : IEquatable<StateMachineLibrary.Core.Execution.ParallelHistorySnapshot<TState>>
-  ctor (TState CompositeState, StateMachineLibrary.Core.Definitions.HistoryMode HistoryMode, IReadOnlyList<ParallelRegionHistoryEntry<TState>> RegionEntries, System.Boolean HasCompleteRecordedShape, System.Int64 LastUpdatedSequence)
+class StateForge.Core.Execution.ParallelHistorySnapshot<TState> : IEquatable<StateForge.Core.Execution.ParallelHistorySnapshot<TState>>
+  ctor (TState CompositeState, StateForge.Core.Definitions.HistoryMode HistoryMode, IReadOnlyList<ParallelRegionHistoryEntry<TState>> RegionEntries, System.Boolean HasCompleteRecordedShape, System.Int64 LastUpdatedSequence)
   property IReadOnlyList<ParallelRegionHistoryEntry<TState>> RegionEntries {get;set;}
-  property StateMachineLibrary.Core.Definitions.HistoryMode HistoryMode {get;set;}
+  property StateForge.Core.Definitions.HistoryMode HistoryMode {get;set;}
   property System.Boolean HasCompleteRecordedShape {get;set;}
   property System.Int64 LastUpdatedSequence {get;set;}
   property TState CompositeState {get;set;}
 
-class StateMachineLibrary.Core.Execution.ParallelRegionHistoryEntry<TState> : IEquatable<StateMachineLibrary.Core.Execution.ParallelRegionHistoryEntry<TState>>
+class StateForge.Core.Execution.ParallelRegionHistoryEntry<TState> : IEquatable<StateForge.Core.Execution.ParallelRegionHistoryEntry<TState>>
   ctor (System.String RegionId, System.String RegionName, System.Int32 RegionOrder, TState LastActiveLeafState, ActiveStatePath<TState> LastActivePath, System.Int64 LastUpdatedSequence)
   property ActiveStatePath<TState> LastActivePath {get;set;}
   property System.Int32 RegionOrder {get;set;}
@@ -710,41 +710,41 @@ class StateMachineLibrary.Core.Execution.ParallelRegionHistoryEntry<TState> : IE
   property System.String RegionName {get;set;}
   property TState LastActiveLeafState {get;set;}
 
-class StateMachineLibrary.Core.Execution.ParallelRegionRestoreEntry<TState> : IEquatable<StateMachineLibrary.Core.Execution.ParallelRegionRestoreEntry<TState>>
-  ctor (System.String RegionId, System.String RegionName, System.Int32 RegionOrder, StateMachineLibrary.Core.Execution.ParallelHistoryRestoreKind RestoreKind, TState ResolvedLeafState, ActiveStatePath<TState> ResolvedPath, System.Int64? SourceHistoryEntrySequence)
+class StateForge.Core.Execution.ParallelRegionRestoreEntry<TState> : IEquatable<StateForge.Core.Execution.ParallelRegionRestoreEntry<TState>>
+  ctor (System.String RegionId, System.String RegionName, System.Int32 RegionOrder, StateForge.Core.Execution.ParallelHistoryRestoreKind RestoreKind, TState ResolvedLeafState, ActiveStatePath<TState> ResolvedPath, System.Int64? SourceHistoryEntrySequence)
   property ActiveStatePath<TState> ResolvedPath {get;set;}
-  property StateMachineLibrary.Core.Execution.ParallelHistoryRestoreKind RestoreKind {get;set;}
+  property StateForge.Core.Execution.ParallelHistoryRestoreKind RestoreKind {get;set;}
   property System.Int32 RegionOrder {get;set;}
   property System.Int64? SourceHistoryEntrySequence {get;set;}
   property System.String RegionId {get;set;}
   property System.String RegionName {get;set;}
   property TState ResolvedLeafState {get;set;}
 
-static class StateMachineLibrary.Core.Execution.StateAccessor
+static class StateForge.Core.Execution.StateAccessor
   method IStateAccessor<TState> Create<TState>(Func<System.Threading.CancellationToken, ValueTask<TState>> getAsync, Func<TState, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask> setAsync)
   method IStateAccessor<TState> Create<TState>(Func<TState> get, Action<TState> set)
 
-class StateMachineLibrary.Core.Execution.StateMachineRuntime<TState, TEvent> : System.IAsyncDisposable
+class StateForge.Core.Execution.StateMachineRuntime<TState, TEvent> : System.IAsyncDisposable
   property ActiveStatePath<TState> ActiveStatePath {get;}
   property ActiveStateShape<TState> ActiveStateShape {get;set;}
   property IReadOnlyList<CompositeHistorySnapshot<TState>> HistorySnapshots {get;}
   property IReadOnlyList<ParallelHistorySnapshot<TState>> ParallelHistorySnapshots {get;}
+  property StateForge.Core.Execution.ConcurrencyMode ConcurrencyMode {get;}
   property StateMachineDefinition<TState, TEvent> Definition {get;}
-  property StateMachineLibrary.Core.Execution.ConcurrencyMode ConcurrencyMode {get;}
   property TState CurrentState {get;set;}
   method ActiveStateSnapshot<TState> CaptureActiveStateSnapshot(System.String definitionFingerprint)
   method GraphExportResult<TState, TEvent> ExportGraph()
-  method GraphExportResult<TState, TEvent> ExportGraph(StateMachineLibrary.Core.Introspection.RuntimeGraphExportOptions options)
+  method GraphExportResult<TState, TEvent> ExportGraph(StateForge.Core.Introspection.RuntimeGraphExportOptions options)
   method System.Threading.Tasks.ValueTask DisposeAsync()
   method ValueTask<IReadOnlyList<EventDefinition<TEvent>>> GetPermittedEventsAsync(System.Threading.CancellationToken cancellationToken)
   method ValueTask<TransitionOutcome<TState, TEvent>> ApplyAsync(TEvent event, System.Threading.CancellationToken cancellationToken)
   method ValueTask<TransitionPreviewResult<TState, TEvent>> PreviewAsync(TEvent event, System.Threading.CancellationToken cancellationToken)
 
-class StateMachineLibrary.Core.Execution.TransitionContext<TState, TEvent>
-  ctor (StateMachineDefinition<TState, TEvent> definition, TState sourceState, TEvent event, System.Threading.CancellationToken cancellationToken, TransitionDefinition<TState, TEvent> transition, TState targetState, StateMachineLibrary.Core.Definitions.MetadataCollection metadata, StateMachineLibrary.Core.Definitions.TransitionTriggerKind? triggerKind)
+class StateForge.Core.Execution.TransitionContext<TState, TEvent>
+  ctor (StateMachineDefinition<TState, TEvent> definition, TState sourceState, TEvent event, System.Threading.CancellationToken cancellationToken, TransitionDefinition<TState, TEvent> transition, TState targetState, StateForge.Core.Definitions.MetadataCollection metadata, StateForge.Core.Definitions.TransitionTriggerKind? triggerKind)
+  property StateForge.Core.Definitions.MetadataCollection Metadata {get;}
+  property StateForge.Core.Definitions.TransitionTriggerKind TriggerKind {get;}
   property StateMachineDefinition<TState, TEvent> Definition {get;}
-  property StateMachineLibrary.Core.Definitions.MetadataCollection Metadata {get;}
-  property StateMachineLibrary.Core.Definitions.TransitionTriggerKind TriggerKind {get;}
   property System.Boolean IsCompletionTrigger {get;}
   property System.Threading.CancellationToken CancellationToken {get;}
   property TEvent Event {get;}
@@ -752,27 +752,27 @@ class StateMachineLibrary.Core.Execution.TransitionContext<TState, TEvent>
   property TState TargetState {get;}
   property TransitionDefinition<TState, TEvent> Transition {get;}
 
-class StateMachineLibrary.Core.Execution.TransitionDiagnostics
-  ctor (System.String summary, StateMachineLibrary.Core.Execution.TransitionLifecyclePhase phase, System.Exception exception, System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Core.Validation.ValidationFinding> validationFindings, System.String affectedElement, System.Object hierarchyMetadata, System.Object parallelMetadata, System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Core.Diagnostics.TransitionConflictDiagnostic> conflictDiagnostics, System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Core.Diagnostics.TransitionDenialDiagnostic> denialDiagnostics)
-  property StateMachineLibrary.Core.Execution.TransitionDiagnostics None {get;}
-  property StateMachineLibrary.Core.Execution.TransitionLifecyclePhase Phase {get;}
-  property System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Core.Diagnostics.TransitionConflictDiagnostic> ConflictDiagnostics {get;}
-  property System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Core.Diagnostics.TransitionDenialDiagnostic> DenialDiagnostics {get;}
-  property System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Core.Validation.ValidationFinding> ValidationFindings {get;}
+class StateForge.Core.Execution.TransitionDiagnostics
+  ctor (System.String summary, StateForge.Core.Execution.TransitionLifecyclePhase phase, System.Exception exception, System.Collections.Generic.IReadOnlyList<StateForge.Core.Validation.ValidationFinding> validationFindings, System.String affectedElement, System.Object hierarchyMetadata, System.Object parallelMetadata, System.Collections.Generic.IReadOnlyList<StateForge.Core.Diagnostics.TransitionConflictDiagnostic> conflictDiagnostics, System.Collections.Generic.IReadOnlyList<StateForge.Core.Diagnostics.TransitionDenialDiagnostic> denialDiagnostics)
+  property StateForge.Core.Execution.TransitionDiagnostics None {get;}
+  property StateForge.Core.Execution.TransitionLifecyclePhase Phase {get;}
+  property System.Collections.Generic.IReadOnlyList<StateForge.Core.Diagnostics.TransitionConflictDiagnostic> ConflictDiagnostics {get;}
+  property System.Collections.Generic.IReadOnlyList<StateForge.Core.Diagnostics.TransitionDenialDiagnostic> DenialDiagnostics {get;}
+  property System.Collections.Generic.IReadOnlyList<StateForge.Core.Validation.ValidationFinding> ValidationFindings {get;}
   property System.Exception Exception {get;}
   property System.Object HierarchyMetadata {get;}
   property System.Object ParallelMetadata {get;}
   property System.String AffectedElement {get;}
   property System.String Summary {get;}
 
-enum StateMachineLibrary.Core.Execution.TransitionLifecyclePhase : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
-  field StateMachineLibrary.Core.Execution.TransitionLifecyclePhase Commit
-  field StateMachineLibrary.Core.Execution.TransitionLifecyclePhase Condition
-  field StateMachineLibrary.Core.Execution.TransitionLifecyclePhase Entry
-  field StateMachineLibrary.Core.Execution.TransitionLifecyclePhase Exit
-  field StateMachineLibrary.Core.Execution.TransitionLifecyclePhase Matching
-  field StateMachineLibrary.Core.Execution.TransitionLifecyclePhase None
-  field StateMachineLibrary.Core.Execution.TransitionLifecyclePhase Transition
+enum StateForge.Core.Execution.TransitionLifecyclePhase : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  field StateForge.Core.Execution.TransitionLifecyclePhase Commit
+  field StateForge.Core.Execution.TransitionLifecyclePhase Condition
+  field StateForge.Core.Execution.TransitionLifecyclePhase Entry
+  field StateForge.Core.Execution.TransitionLifecyclePhase Exit
+  field StateForge.Core.Execution.TransitionLifecyclePhase Matching
+  field StateForge.Core.Execution.TransitionLifecyclePhase None
+  field StateForge.Core.Execution.TransitionLifecyclePhase Transition
   enum Commit
   enum Condition
   enum Entry
@@ -781,16 +781,16 @@ enum StateMachineLibrary.Core.Execution.TransitionLifecyclePhase : System.ICompa
   enum None
   enum Transition
 
-class StateMachineLibrary.Core.Execution.TransitionObservation<TState, TEvent>
-  ctor (System.Guid attemptId, StateMachineLibrary.Core.Execution.TransitionObservationKind kind, StateMachineLibrary.Core.Execution.TransitionLifecyclePhase phase, System.String machineName, TState sourceState, TState targetState, TState resultingState, TEvent event, System.Type eventType, StateMachineLibrary.Core.Definitions.TransitionKind? transitionKind, StateMachineLibrary.Core.Definitions.TransitionTriggerKind triggerKind, StateMachineLibrary.Core.Execution.TransitionOutcomeCategory? outcomeCategory, System.Boolean committed, StateMachineLibrary.Core.Execution.TransitionDiagnostics diagnostics, System.DateTimeOffset occurredAt, System.TimeSpan? elapsed, TransitionOutcome<TState, TEvent> outcome, ActiveStatePath<TState> activeStatePath, ActiveStateShape<TState> activeStateShape)
+class StateForge.Core.Execution.TransitionObservation<TState, TEvent>
+  ctor (System.Guid attemptId, StateForge.Core.Execution.TransitionObservationKind kind, StateForge.Core.Execution.TransitionLifecyclePhase phase, System.String machineName, TState sourceState, TState targetState, TState resultingState, TEvent event, System.Type eventType, StateForge.Core.Definitions.TransitionKind? transitionKind, StateForge.Core.Definitions.TransitionTriggerKind triggerKind, StateForge.Core.Execution.TransitionOutcomeCategory? outcomeCategory, System.Boolean committed, StateForge.Core.Execution.TransitionDiagnostics diagnostics, System.DateTimeOffset occurredAt, System.TimeSpan? elapsed, TransitionOutcome<TState, TEvent> outcome, ActiveStatePath<TState> activeStatePath, ActiveStateShape<TState> activeStateShape)
   property ActiveStatePath<TState> ActiveStatePath {get;}
   property ActiveStateShape<TState> ActiveStateShape {get;}
-  property StateMachineLibrary.Core.Definitions.TransitionKind? TransitionKind {get;}
-  property StateMachineLibrary.Core.Definitions.TransitionTriggerKind TriggerKind {get;}
-  property StateMachineLibrary.Core.Execution.TransitionDiagnostics Diagnostics {get;}
-  property StateMachineLibrary.Core.Execution.TransitionLifecyclePhase Phase {get;}
-  property StateMachineLibrary.Core.Execution.TransitionObservationKind Kind {get;}
-  property StateMachineLibrary.Core.Execution.TransitionOutcomeCategory? OutcomeCategory {get;}
+  property StateForge.Core.Definitions.TransitionKind? TransitionKind {get;}
+  property StateForge.Core.Definitions.TransitionTriggerKind TriggerKind {get;}
+  property StateForge.Core.Execution.TransitionDiagnostics Diagnostics {get;}
+  property StateForge.Core.Execution.TransitionLifecyclePhase Phase {get;}
+  property StateForge.Core.Execution.TransitionObservationKind Kind {get;}
+  property StateForge.Core.Execution.TransitionOutcomeCategory? OutcomeCategory {get;}
   property System.Boolean Committed {get;}
   property System.Boolean IsCompletionTrigger {get;}
   property System.DateTimeOffset OccurredAt {get;}
@@ -804,16 +804,16 @@ class StateMachineLibrary.Core.Execution.TransitionObservation<TState, TEvent>
   property TState TargetState {get;}
   property TransitionOutcome<TState, TEvent> Outcome {get;}
 
-enum StateMachineLibrary.Core.Execution.TransitionObservationKind : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
-  field StateMachineLibrary.Core.Execution.TransitionObservationKind BehaviorFailed
-  field StateMachineLibrary.Core.Execution.TransitionObservationKind Cancelled
-  field StateMachineLibrary.Core.Execution.TransitionObservationKind Committed
-  field StateMachineLibrary.Core.Execution.TransitionObservationKind Completed
-  field StateMachineLibrary.Core.Execution.TransitionObservationKind ConditionDenied
-  field StateMachineLibrary.Core.Execution.TransitionObservationKind NotPermitted
-  field StateMachineLibrary.Core.Execution.TransitionObservationKind Outcome
-  field StateMachineLibrary.Core.Execution.TransitionObservationKind Started
-  field StateMachineLibrary.Core.Execution.TransitionObservationKind ValidationFailure
+enum StateForge.Core.Execution.TransitionObservationKind : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  field StateForge.Core.Execution.TransitionObservationKind BehaviorFailed
+  field StateForge.Core.Execution.TransitionObservationKind Cancelled
+  field StateForge.Core.Execution.TransitionObservationKind Committed
+  field StateForge.Core.Execution.TransitionObservationKind Completed
+  field StateForge.Core.Execution.TransitionObservationKind ConditionDenied
+  field StateForge.Core.Execution.TransitionObservationKind NotPermitted
+  field StateForge.Core.Execution.TransitionObservationKind Outcome
+  field StateForge.Core.Execution.TransitionObservationKind Started
+  field StateForge.Core.Execution.TransitionObservationKind ValidationFailure
   enum BehaviorFailed
   enum Cancelled
   enum Committed
@@ -824,36 +824,36 @@ enum StateMachineLibrary.Core.Execution.TransitionObservationKind : System.IComp
   enum Started
   enum ValidationFailure
 
-class StateMachineLibrary.Core.Execution.TransitionOutcome<TState, TEvent>
+class StateForge.Core.Execution.TransitionOutcome<TState, TEvent>
   property ActiveStatePath<TState> ActiveStatePath {get;}
   property ActiveStateShape<TState> ActiveStateShape {get;}
   property IReadOnlyList<CompositeHistorySnapshot<TState>> HistorySnapshots {get;}
   property IReadOnlyList<TransitionDefinition<TState, TEvent>> ParallelTransitions {get;}
-  property StateMachineLibrary.Core.Execution.TransitionDiagnostics Diagnostics {get;}
-  property StateMachineLibrary.Core.Execution.TransitionOutcomeCategory Category {get;}
+  property StateForge.Core.Execution.TransitionDiagnostics Diagnostics {get;}
+  property StateForge.Core.Execution.TransitionOutcomeCategory Category {get;}
   property System.Boolean Committed {get;}
   property System.Boolean IsSuccess {get;}
-  property System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Core.Diagnostics.TransitionConflictDiagnostic> ConflictDiagnostics {get;}
-  property System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Core.Diagnostics.TransitionDenialDiagnostic> DenialDiagnostics {get;}
+  property System.Collections.Generic.IReadOnlyList<StateForge.Core.Diagnostics.TransitionConflictDiagnostic> ConflictDiagnostics {get;}
+  property System.Collections.Generic.IReadOnlyList<StateForge.Core.Diagnostics.TransitionDenialDiagnostic> DenialDiagnostics {get;}
   property TEvent Event {get;}
   property TState ActiveLeafState {get;}
   property TState PreviousState {get;}
   property TState ResultingState {get;}
   property TransitionDefinition<TState, TEvent> Transition {get;}
-  method StateMachineLibrary.Core.Execution.TransitionOutcome<TState, TEvent> BehaviorFailure(TState previousState, TState resultingState, TEvent event, TransitionDefinition<TState, TEvent> transition, StateMachineLibrary.Core.Execution.TransitionDiagnostics diagnostics, System.Boolean committed)
-  method StateMachineLibrary.Core.Execution.TransitionOutcome<TState, TEvent> Cancelled(TState previousState, TState resultingState, TEvent event, TransitionDefinition<TState, TEvent> transition, StateMachineLibrary.Core.Execution.TransitionDiagnostics diagnostics, System.Boolean committed)
-  method StateMachineLibrary.Core.Execution.TransitionOutcome<TState, TEvent> Denied(TState state, TEvent event, TransitionDefinition<TState, TEvent> transition, StateMachineLibrary.Core.Execution.TransitionDiagnostics diagnostics)
-  method StateMachineLibrary.Core.Execution.TransitionOutcome<TState, TEvent> NotPermitted(TState state, TEvent event, StateMachineLibrary.Core.Execution.TransitionDiagnostics diagnostics)
-  method StateMachineLibrary.Core.Execution.TransitionOutcome<TState, TEvent> Success(TState previousState, TState resultingState, TEvent event, TransitionDefinition<TState, TEvent> transition, ActiveStatePath<TState> activeStatePath, IEnumerable<CompositeHistorySnapshot<TState>> historySnapshots, ActiveStateShape<TState> activeStateShape, IEnumerable<TransitionDefinition<TState, TEvent>> parallelTransitions)
-  method StateMachineLibrary.Core.Execution.TransitionOutcome<TState, TEvent> ValidationFailure(TState state, TEvent event, StateMachineLibrary.Core.Execution.TransitionDiagnostics diagnostics)
+  method StateForge.Core.Execution.TransitionOutcome<TState, TEvent> BehaviorFailure(TState previousState, TState resultingState, TEvent event, TransitionDefinition<TState, TEvent> transition, StateForge.Core.Execution.TransitionDiagnostics diagnostics, System.Boolean committed)
+  method StateForge.Core.Execution.TransitionOutcome<TState, TEvent> Cancelled(TState previousState, TState resultingState, TEvent event, TransitionDefinition<TState, TEvent> transition, StateForge.Core.Execution.TransitionDiagnostics diagnostics, System.Boolean committed)
+  method StateForge.Core.Execution.TransitionOutcome<TState, TEvent> Denied(TState state, TEvent event, TransitionDefinition<TState, TEvent> transition, StateForge.Core.Execution.TransitionDiagnostics diagnostics)
+  method StateForge.Core.Execution.TransitionOutcome<TState, TEvent> NotPermitted(TState state, TEvent event, StateForge.Core.Execution.TransitionDiagnostics diagnostics)
+  method StateForge.Core.Execution.TransitionOutcome<TState, TEvent> Success(TState previousState, TState resultingState, TEvent event, TransitionDefinition<TState, TEvent> transition, ActiveStatePath<TState> activeStatePath, IEnumerable<CompositeHistorySnapshot<TState>> historySnapshots, ActiveStateShape<TState> activeStateShape, IEnumerable<TransitionDefinition<TState, TEvent>> parallelTransitions)
+  method StateForge.Core.Execution.TransitionOutcome<TState, TEvent> ValidationFailure(TState state, TEvent event, StateForge.Core.Execution.TransitionDiagnostics diagnostics)
 
-enum StateMachineLibrary.Core.Execution.TransitionOutcomeCategory : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
-  field StateMachineLibrary.Core.Execution.TransitionOutcomeCategory BehaviorFailure
-  field StateMachineLibrary.Core.Execution.TransitionOutcomeCategory Cancelled
-  field StateMachineLibrary.Core.Execution.TransitionOutcomeCategory Denied
-  field StateMachineLibrary.Core.Execution.TransitionOutcomeCategory NotPermitted
-  field StateMachineLibrary.Core.Execution.TransitionOutcomeCategory Success
-  field StateMachineLibrary.Core.Execution.TransitionOutcomeCategory ValidationFailure
+enum StateForge.Core.Execution.TransitionOutcomeCategory : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  field StateForge.Core.Execution.TransitionOutcomeCategory BehaviorFailure
+  field StateForge.Core.Execution.TransitionOutcomeCategory Cancelled
+  field StateForge.Core.Execution.TransitionOutcomeCategory Denied
+  field StateForge.Core.Execution.TransitionOutcomeCategory NotPermitted
+  field StateForge.Core.Execution.TransitionOutcomeCategory Success
+  field StateForge.Core.Execution.TransitionOutcomeCategory ValidationFailure
   enum BehaviorFailure
   enum Cancelled
   enum Denied
@@ -861,38 +861,38 @@ enum StateMachineLibrary.Core.Execution.TransitionOutcomeCategory : System.IComp
   enum Success
   enum ValidationFailure
 
-enum StateMachineLibrary.Core.Execution.TransitionPredictionCompleteness : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
-  field StateMachineLibrary.Core.Execution.TransitionPredictionCompleteness Complete
-  field StateMachineLibrary.Core.Execution.TransitionPredictionCompleteness Partial
-  field StateMachineLibrary.Core.Execution.TransitionPredictionCompleteness Unknown
+enum StateForge.Core.Execution.TransitionPredictionCompleteness : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  field StateForge.Core.Execution.TransitionPredictionCompleteness Complete
+  field StateForge.Core.Execution.TransitionPredictionCompleteness Partial
+  field StateForge.Core.Execution.TransitionPredictionCompleteness Unknown
   enum Complete
   enum Partial
   enum Unknown
 
-class StateMachineLibrary.Core.Execution.TransitionPreviewResult<TState, TEvent>
-  ctor (StateMachineLibrary.Core.Execution.TransitionPreviewStatus status, TEvent event, ActiveStateShape<TState> currentActiveShape, TransitionDefinition<TState, TEvent> selectedTransition, IReadOnlyList<TransitionDefinition<TState, TEvent>> parallelTransitions, System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Core.Diagnostics.TransitionPreviewCandidate> candidateTransitions, System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Core.Diagnostics.TransitionPreviewGuardDiagnostic> guardDiagnostics, TState expectedTargetState, ActiveStateShape<TState> expectedActiveShape, StateMachineLibrary.Core.Execution.TransitionPredictionCompleteness predictionCompleteness, StateMachineLibrary.Core.Diagnostics.TransitionDenialDiagnostic denialDiagnostic, System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Core.Validation.ValidationFinding> validationFindings, System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Core.Diagnostics.TransitionConflictDiagnostic> conflictDiagnostics)
+class StateForge.Core.Execution.TransitionPreviewResult<TState, TEvent>
+  ctor (StateForge.Core.Execution.TransitionPreviewStatus status, TEvent event, ActiveStateShape<TState> currentActiveShape, TransitionDefinition<TState, TEvent> selectedTransition, IReadOnlyList<TransitionDefinition<TState, TEvent>> parallelTransitions, System.Collections.Generic.IReadOnlyList<StateForge.Core.Diagnostics.TransitionPreviewCandidate> candidateTransitions, System.Collections.Generic.IReadOnlyList<StateForge.Core.Diagnostics.TransitionPreviewGuardDiagnostic> guardDiagnostics, TState expectedTargetState, ActiveStateShape<TState> expectedActiveShape, StateForge.Core.Execution.TransitionPredictionCompleteness predictionCompleteness, StateForge.Core.Diagnostics.TransitionDenialDiagnostic denialDiagnostic, System.Collections.Generic.IReadOnlyList<StateForge.Core.Validation.ValidationFinding> validationFindings, System.Collections.Generic.IReadOnlyList<StateForge.Core.Diagnostics.TransitionConflictDiagnostic> conflictDiagnostics)
   property ActiveStateShape<TState> CurrentActiveShape {get;}
   property ActiveStateShape<TState> ExpectedActiveShape {get;}
   property IReadOnlyList<TransitionDefinition<TState, TEvent>> ParallelTransitions {get;}
-  property StateMachineLibrary.Core.Diagnostics.TransitionDenialDiagnostic DenialDiagnostic {get;}
-  property StateMachineLibrary.Core.Execution.TransitionPredictionCompleteness PredictionCompleteness {get;}
-  property StateMachineLibrary.Core.Execution.TransitionPreviewStatus Status {get;}
+  property StateForge.Core.Diagnostics.TransitionDenialDiagnostic DenialDiagnostic {get;}
+  property StateForge.Core.Execution.TransitionPredictionCompleteness PredictionCompleteness {get;}
+  property StateForge.Core.Execution.TransitionPreviewStatus Status {get;}
   property System.Boolean IsPermitted {get;}
-  property System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Core.Diagnostics.TransitionConflictDiagnostic> ConflictDiagnostics {get;}
-  property System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Core.Diagnostics.TransitionPreviewCandidate> CandidateTransitions {get;}
-  property System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Core.Diagnostics.TransitionPreviewGuardDiagnostic> GuardDiagnostics {get;}
-  property System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Core.Validation.ValidationFinding> ValidationFindings {get;}
+  property System.Collections.Generic.IReadOnlyList<StateForge.Core.Diagnostics.TransitionConflictDiagnostic> ConflictDiagnostics {get;}
+  property System.Collections.Generic.IReadOnlyList<StateForge.Core.Diagnostics.TransitionPreviewCandidate> CandidateTransitions {get;}
+  property System.Collections.Generic.IReadOnlyList<StateForge.Core.Diagnostics.TransitionPreviewGuardDiagnostic> GuardDiagnostics {get;}
+  property System.Collections.Generic.IReadOnlyList<StateForge.Core.Validation.ValidationFinding> ValidationFindings {get;}
   property TEvent Event {get;}
   property TState ExpectedTargetState {get;}
   property TransitionDefinition<TState, TEvent> SelectedTransition {get;}
 
-enum StateMachineLibrary.Core.Execution.TransitionPreviewStatus : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
-  field StateMachineLibrary.Core.Execution.TransitionPreviewStatus Cancelled
-  field StateMachineLibrary.Core.Execution.TransitionPreviewStatus Denied
-  field StateMachineLibrary.Core.Execution.TransitionPreviewStatus GuardEvaluationFailed
-  field StateMachineLibrary.Core.Execution.TransitionPreviewStatus InvalidActiveShape
-  field StateMachineLibrary.Core.Execution.TransitionPreviewStatus Permitted
-  field StateMachineLibrary.Core.Execution.TransitionPreviewStatus ValidationFailure
+enum StateForge.Core.Execution.TransitionPreviewStatus : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  field StateForge.Core.Execution.TransitionPreviewStatus Cancelled
+  field StateForge.Core.Execution.TransitionPreviewStatus Denied
+  field StateForge.Core.Execution.TransitionPreviewStatus GuardEvaluationFailed
+  field StateForge.Core.Execution.TransitionPreviewStatus InvalidActiveShape
+  field StateForge.Core.Execution.TransitionPreviewStatus Permitted
+  field StateForge.Core.Execution.TransitionPreviewStatus ValidationFailure
   enum Cancelled
   enum Denied
   enum GuardEvaluationFailed
@@ -900,9 +900,9 @@ enum StateMachineLibrary.Core.Execution.TransitionPreviewStatus : System.ICompar
   enum Permitted
   enum ValidationFailure
 
-class StateMachineLibrary.Core.Introspection.DefinitionGraph<TState, TEvent>
-  ctor (System.String id, System.String label, IEnumerable<GraphNode<TState>> nodes, IEnumerable<GraphEdge<TState, TEvent>> edges, StateMachineLibrary.Core.Definitions.MetadataCollection metadata, StateMachineLibrary.Core.Validation.ValidationResult validation, IEnumerable<GraphHierarchyRelationship<TState>> parentChildRelationships, IEnumerable<GraphInitialChildMarker<TState>> initialChildMarkers, IEnumerable<GraphHistoryMarker<TState>> historyMarkers, StateMachineLibrary.Core.Introspection.GraphHierarchyMetadata hierarchy, IEnumerable<GraphRegionMetadata<TState>> regions)
-  ctor (System.String id, System.String label, IEnumerable<GraphNode<TState>> nodes, IEnumerable<GraphEdge<TState, TEvent>> edges, StateMachineLibrary.Core.Definitions.MetadataCollection metadata, StateMachineLibrary.Core.Validation.ValidationResult validation, IEnumerable<GraphHierarchyRelationship<TState>> parentChildRelationships, IEnumerable<GraphInitialChildMarker<TState>> initialChildMarkers, IEnumerable<GraphHistoryMarker<TState>> historyMarkers, StateMachineLibrary.Core.Introspection.GraphHierarchyMetadata hierarchy, IEnumerable<GraphRegionMetadata<TState>> regions, GraphActiveStateOverlay<TState> runtimeOverlay)
+class StateForge.Core.Introspection.DefinitionGraph<TState, TEvent>
+  ctor (System.String id, System.String label, IEnumerable<GraphNode<TState>> nodes, IEnumerable<GraphEdge<TState, TEvent>> edges, StateForge.Core.Definitions.MetadataCollection metadata, StateForge.Core.Validation.ValidationResult validation, IEnumerable<GraphHierarchyRelationship<TState>> parentChildRelationships, IEnumerable<GraphInitialChildMarker<TState>> initialChildMarkers, IEnumerable<GraphHistoryMarker<TState>> historyMarkers, StateForge.Core.Introspection.GraphHierarchyMetadata hierarchy, IEnumerable<GraphRegionMetadata<TState>> regions)
+  ctor (System.String id, System.String label, IEnumerable<GraphNode<TState>> nodes, IEnumerable<GraphEdge<TState, TEvent>> edges, StateForge.Core.Definitions.MetadataCollection metadata, StateForge.Core.Validation.ValidationResult validation, IEnumerable<GraphHierarchyRelationship<TState>> parentChildRelationships, IEnumerable<GraphInitialChildMarker<TState>> initialChildMarkers, IEnumerable<GraphHistoryMarker<TState>> historyMarkers, StateForge.Core.Introspection.GraphHierarchyMetadata hierarchy, IEnumerable<GraphRegionMetadata<TState>> regions, GraphActiveStateOverlay<TState> runtimeOverlay)
   property GraphActiveStateOverlay<TState> RuntimeOverlay {get;}
   property IReadOnlyList<GraphEdge<TState, TEvent>> Edges {get;}
   property IReadOnlyList<GraphHierarchyRelationship<TState>> ParentChildRelationships {get;}
@@ -910,16 +910,16 @@ class StateMachineLibrary.Core.Introspection.DefinitionGraph<TState, TEvent>
   property IReadOnlyList<GraphInitialChildMarker<TState>> InitialChildMarkers {get;}
   property IReadOnlyList<GraphNode<TState>> Nodes {get;}
   property IReadOnlyList<GraphRegionMetadata<TState>> Regions {get;}
-  property StateMachineLibrary.Core.Definitions.MetadataCollection Metadata {get;}
-  property StateMachineLibrary.Core.Introspection.GraphHierarchyMetadata Hierarchy {get;}
-  property StateMachineLibrary.Core.Validation.ValidationResult Validation {get;}
+  property StateForge.Core.Definitions.MetadataCollection Metadata {get;}
+  property StateForge.Core.Introspection.GraphHierarchyMetadata Hierarchy {get;}
+  property StateForge.Core.Validation.ValidationResult Validation {get;}
   property System.String Id {get;}
   property System.String Label {get;}
 
-static class StateMachineLibrary.Core.Introspection.DefinitionGraphExporter
+static class StateForge.Core.Introspection.DefinitionGraphExporter
   method GraphExportResult<TState, TEvent> ExportGraph<TState, TEvent>(StateMachineDefinition<TState, TEvent> definition)
 
-class StateMachineLibrary.Core.Introspection.DefinitionIntrospection<TState, TEvent>
+class StateForge.Core.Introspection.DefinitionIntrospection<TState, TEvent>
   ctor (StateMachineDefinition<TState, TEvent> definition)
   property IReadOnlyList<CompletionTransitionDefinition<TState, TEvent>> DeclaredCompletionTransitions {get;}
   property IReadOnlyList<EventDefinition<TEvent>> DeclaredEvents {get;}
@@ -939,20 +939,20 @@ class StateMachineLibrary.Core.Introspection.DefinitionIntrospection<TState, TEv
   method IReadOnlyList<ParallelRegionDefinition<TState>> RegionsOf(TState compositeState)
   method IReadOnlyList<StateDefinition<TState>> ChildrenOf(TState parentState)
   method IReadOnlyList<TransitionDefinition<TState, TEvent>> OutgoingTransitions(TState state)
-  method StateMachineLibrary.Core.Definitions.HistoryMode GetParallelHistoryMode(TState compositeState)
-  method StateMachineLibrary.Core.Execution.ActiveStateSnapshotKind GetActiveStateSnapshotKind(TState activeLeafState)
+  method StateForge.Core.Definitions.HistoryMode GetParallelHistoryMode(TState compositeState)
+  method StateForge.Core.Execution.ActiveStateSnapshotKind GetActiveStateSnapshotKind(TState activeLeafState)
   method System.Boolean IsParallelComposite(TState state)
   method System.Boolean TryGetRegionMembership(TState state, StateRegionMembershipDefinition<TState>& membership)
 
-class StateMachineLibrary.Core.Introspection.GraphActionSummary
-  ctor (System.String ownerId, StateMachineLibrary.Core.Definitions.ActionKind kind, System.String displayName, System.Int32 order, StateMachineLibrary.Core.Definitions.MetadataCollection metadata)
-  property StateMachineLibrary.Core.Definitions.ActionKind Kind {get;}
-  property StateMachineLibrary.Core.Definitions.MetadataCollection Metadata {get;}
+class StateForge.Core.Introspection.GraphActionSummary
+  ctor (System.String ownerId, StateForge.Core.Definitions.ActionKind kind, System.String displayName, System.Int32 order, StateForge.Core.Definitions.MetadataCollection metadata)
+  property StateForge.Core.Definitions.ActionKind Kind {get;}
+  property StateForge.Core.Definitions.MetadataCollection Metadata {get;}
   property System.Int32 Order {get;}
   property System.String DisplayName {get;}
   property System.String OwnerId {get;}
 
-class StateMachineLibrary.Core.Introspection.GraphActiveRegionOverlay<TState>
+class StateForge.Core.Introspection.GraphActiveRegionOverlay<TState>
   ctor (System.String regionId, System.String regionName, System.Int32 regionOrder, TState activeLeafState, System.String activeLeafNodeId, IEnumerable<TState> activePath, System.Collections.Generic.IEnumerable<System.String> activePathNodeIds, System.Boolean isTerminal, System.Boolean isComplete, System.Int64 sequence)
   property IReadOnlyList<TState> ActivePath {get;}
   property System.Boolean IsComplete {get;}
@@ -965,11 +965,11 @@ class StateMachineLibrary.Core.Introspection.GraphActiveRegionOverlay<TState>
   property System.String RegionName {get;}
   property TState ActiveLeafState {get;}
 
-class StateMachineLibrary.Core.Introspection.GraphActiveStateOverlay<TState>
-  ctor (StateMachineLibrary.Core.Introspection.GraphActiveStateOverlayKind shapeKind, System.Int64 sequence, TState activeLeafState, System.String activeLeafNodeId, IEnumerable<TState> activePath, System.Collections.Generic.IEnumerable<System.String> activePathNodeIds, TState owningCompositeState, System.String owningCompositeNodeId, System.Boolean isTerminal, System.Boolean isComplete, TState completionScopeState, System.Collections.Generic.IEnumerable<System.String> completedRegionIds, IEnumerable<GraphActiveRegionOverlay<TState>> regions)
+class StateForge.Core.Introspection.GraphActiveStateOverlay<TState>
+  ctor (StateForge.Core.Introspection.GraphActiveStateOverlayKind shapeKind, System.Int64 sequence, TState activeLeafState, System.String activeLeafNodeId, IEnumerable<TState> activePath, System.Collections.Generic.IEnumerable<System.String> activePathNodeIds, TState owningCompositeState, System.String owningCompositeNodeId, System.Boolean isTerminal, System.Boolean isComplete, TState completionScopeState, System.Collections.Generic.IEnumerable<System.String> completedRegionIds, IEnumerable<GraphActiveRegionOverlay<TState>> regions)
   property IReadOnlyList<GraphActiveRegionOverlay<TState>> Regions {get;}
   property IReadOnlyList<TState> ActivePath {get;}
-  property StateMachineLibrary.Core.Introspection.GraphActiveStateOverlayKind ShapeKind {get;}
+  property StateForge.Core.Introspection.GraphActiveStateOverlayKind ShapeKind {get;}
   property System.Boolean IsComplete {get;}
   property System.Boolean IsTerminal {get;}
   property System.Collections.Generic.IReadOnlyList<System.String> ActivePathNodeIds {get;}
@@ -981,48 +981,48 @@ class StateMachineLibrary.Core.Introspection.GraphActiveStateOverlay<TState>
   property TState CompletionScopeState {get;}
   property TState OwningCompositeState {get;}
 
-enum StateMachineLibrary.Core.Introspection.GraphActiveStateOverlayKind : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
-  field StateMachineLibrary.Core.Introspection.GraphActiveStateOverlayKind Hierarchical
-  field StateMachineLibrary.Core.Introspection.GraphActiveStateOverlayKind Parallel
-  field StateMachineLibrary.Core.Introspection.GraphActiveStateOverlayKind SingleLeaf
+enum StateForge.Core.Introspection.GraphActiveStateOverlayKind : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  field StateForge.Core.Introspection.GraphActiveStateOverlayKind Hierarchical
+  field StateForge.Core.Introspection.GraphActiveStateOverlayKind Parallel
+  field StateForge.Core.Introspection.GraphActiveStateOverlayKind SingleLeaf
   enum Hierarchical
   enum Parallel
   enum SingleLeaf
 
-class StateMachineLibrary.Core.Introspection.GraphConditionDescriptor
-  ctor (System.Int32 position, System.String displayName, StateMachineLibrary.Core.Definitions.MetadataCollection metadata)
-  property StateMachineLibrary.Core.Definitions.MetadataCollection Metadata {get;}
+class StateForge.Core.Introspection.GraphConditionDescriptor
+  ctor (System.Int32 position, System.String displayName, StateForge.Core.Definitions.MetadataCollection metadata)
+  property StateForge.Core.Definitions.MetadataCollection Metadata {get;}
   property System.Int32 Position {get;}
   property System.String DisplayName {get;}
 
-class StateMachineLibrary.Core.Introspection.GraphConditionSummary<TState, TEvent>
-  ctor (StateMachineLibrary.Core.Introspection.GraphConditionSummaryKind kind, System.String displayText, System.Collections.Generic.IEnumerable<StateMachineLibrary.Core.Introspection.GraphConditionDescriptor> conditions, StateMachineLibrary.Core.Definitions.MetadataCollection metadata)
-  property StateMachineLibrary.Core.Definitions.MetadataCollection Metadata {get;}
-  property StateMachineLibrary.Core.Introspection.GraphConditionSummaryKind Kind {get;}
-  property System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Core.Introspection.GraphConditionDescriptor> Conditions {get;}
+class StateForge.Core.Introspection.GraphConditionSummary<TState, TEvent>
+  ctor (StateForge.Core.Introspection.GraphConditionSummaryKind kind, System.String displayText, System.Collections.Generic.IEnumerable<StateForge.Core.Introspection.GraphConditionDescriptor> conditions, StateForge.Core.Definitions.MetadataCollection metadata)
+  property StateForge.Core.Definitions.MetadataCollection Metadata {get;}
+  property StateForge.Core.Introspection.GraphConditionSummaryKind Kind {get;}
+  property System.Collections.Generic.IReadOnlyList<StateForge.Core.Introspection.GraphConditionDescriptor> Conditions {get;}
   property System.String DisplayText {get;}
 
-enum StateMachineLibrary.Core.Introspection.GraphConditionSummaryKind : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
-  field StateMachineLibrary.Core.Introspection.GraphConditionSummaryKind All
-  field StateMachineLibrary.Core.Introspection.GraphConditionSummaryKind None
-  field StateMachineLibrary.Core.Introspection.GraphConditionSummaryKind Unavailable
+enum StateForge.Core.Introspection.GraphConditionSummaryKind : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  field StateForge.Core.Introspection.GraphConditionSummaryKind All
+  field StateForge.Core.Introspection.GraphConditionSummaryKind None
+  field StateForge.Core.Introspection.GraphConditionSummaryKind Unavailable
   enum All
   enum None
   enum Unavailable
 
-class StateMachineLibrary.Core.Introspection.GraphEdge<TState, TEvent>
-  ctor (System.String id, System.String sourceNodeId, System.String targetNodeId, TState sourceState, TState targetState, System.String label, GraphEventDescriptor<TEvent> event, StateMachineLibrary.Core.Definitions.TransitionKind kind, GraphConditionSummary<TState, TEvent> conditions, StateMachineLibrary.Core.Definitions.MetadataCollection metadata, System.Collections.Generic.IEnumerable<StateMachineLibrary.Core.Introspection.GraphActionSummary> transitionActions, System.Boolean sourceIsComposite, System.Boolean targetIsComposite, System.Boolean targetResolvesThroughInitialChild, TState resolvedTargetLeafState, System.String hierarchyRelationship, System.String regionClassification, System.String sourceRegionId, System.String targetRegionId, StateMachineLibrary.Core.Introspection.GraphTriggerKind triggerKind, System.Boolean sourceIsParallel)
+class StateForge.Core.Introspection.GraphEdge<TState, TEvent>
+  ctor (System.String id, System.String sourceNodeId, System.String targetNodeId, TState sourceState, TState targetState, System.String label, GraphEventDescriptor<TEvent> event, StateForge.Core.Definitions.TransitionKind kind, GraphConditionSummary<TState, TEvent> conditions, StateForge.Core.Definitions.MetadataCollection metadata, System.Collections.Generic.IEnumerable<StateForge.Core.Introspection.GraphActionSummary> transitionActions, System.Boolean sourceIsComposite, System.Boolean targetIsComposite, System.Boolean targetResolvesThroughInitialChild, TState resolvedTargetLeafState, System.String hierarchyRelationship, System.String regionClassification, System.String sourceRegionId, System.String targetRegionId, StateForge.Core.Introspection.GraphTriggerKind triggerKind, System.Boolean sourceIsParallel)
   property GraphConditionSummary<TState, TEvent> Conditions {get;}
   property GraphEventDescriptor<TEvent> Event {get;}
-  property StateMachineLibrary.Core.Definitions.MetadataCollection Metadata {get;}
-  property StateMachineLibrary.Core.Definitions.TransitionKind Kind {get;}
-  property StateMachineLibrary.Core.Introspection.GraphTriggerKind TriggerKind {get;}
+  property StateForge.Core.Definitions.MetadataCollection Metadata {get;}
+  property StateForge.Core.Definitions.TransitionKind Kind {get;}
+  property StateForge.Core.Introspection.GraphTriggerKind TriggerKind {get;}
   property System.Boolean IsCompletionEdge {get;}
   property System.Boolean SourceIsComposite {get;}
   property System.Boolean SourceIsParallel {get;}
   property System.Boolean TargetIsComposite {get;}
   property System.Boolean TargetResolvesThroughInitialChild {get;}
-  property System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Core.Introspection.GraphActionSummary> TransitionActions {get;}
+  property System.Collections.Generic.IReadOnlyList<StateForge.Core.Introspection.GraphActionSummary> TransitionActions {get;}
   property System.String HierarchyRelationship {get;}
   property System.String Id {get;}
   property System.String Label {get;}
@@ -1035,53 +1035,53 @@ class StateMachineLibrary.Core.Introspection.GraphEdge<TState, TEvent>
   property TState SourceState {get;}
   property TState TargetState {get;}
 
-class StateMachineLibrary.Core.Introspection.GraphEventDescriptor<TEvent>
-  ctor (System.String identity, System.String displayName, StateMachineLibrary.Core.Definitions.MetadataCollection metadata, System.String category)
-  property StateMachineLibrary.Core.Definitions.MetadataCollection Metadata {get;}
+class StateForge.Core.Introspection.GraphEventDescriptor<TEvent>
+  ctor (System.String identity, System.String displayName, StateForge.Core.Definitions.MetadataCollection metadata, System.String category)
+  property StateForge.Core.Definitions.MetadataCollection Metadata {get;}
   property System.String Category {get;}
   property System.String DisplayName {get;}
   property System.String Identity {get;}
 
-class StateMachineLibrary.Core.Introspection.GraphExportResult<TState, TEvent>
+class StateForge.Core.Introspection.GraphExportResult<TState, TEvent>
   property DefinitionGraph<TState, TEvent> Graph {get;}
-  property StateMachineLibrary.Core.Validation.ValidationResult Validation {get;}
+  property StateForge.Core.Validation.ValidationResult Validation {get;}
   property System.Boolean Succeeded {get;}
   property System.String FailureSummary {get;}
-  method StateMachineLibrary.Core.Introspection.GraphExportResult<TState, TEvent> Failure(StateMachineLibrary.Core.Validation.ValidationResult validation)
-  method StateMachineLibrary.Core.Introspection.GraphExportResult<TState, TEvent> Success(DefinitionGraph<TState, TEvent> graph, StateMachineLibrary.Core.Validation.ValidationResult validation)
+  method StateForge.Core.Introspection.GraphExportResult<TState, TEvent> Failure(StateForge.Core.Validation.ValidationResult validation)
+  method StateForge.Core.Introspection.GraphExportResult<TState, TEvent> Success(DefinitionGraph<TState, TEvent> graph, StateForge.Core.Validation.ValidationResult validation)
 
-class StateMachineLibrary.Core.Introspection.GraphHierarchyMetadata : System.IEquatable<StateMachineLibrary.Core.Introspection.GraphHierarchyMetadata>
+class StateForge.Core.Introspection.GraphHierarchyMetadata : System.IEquatable<StateForge.Core.Introspection.GraphHierarchyMetadata>
   ctor (System.Boolean HasHierarchy, System.Int32 RelationshipCount, System.Int32 InitialChildMarkerCount, System.Int32 HistoryMarkerCount)
-  property StateMachineLibrary.Core.Introspection.GraphHierarchyMetadata None {get;}
+  property StateForge.Core.Introspection.GraphHierarchyMetadata None {get;}
   property System.Boolean HasHierarchy {get;set;}
   property System.Int32 HistoryMarkerCount {get;set;}
   property System.Int32 InitialChildMarkerCount {get;set;}
   property System.Int32 RelationshipCount {get;set;}
 
-class StateMachineLibrary.Core.Introspection.GraphHierarchyRelationship<TState> : IEquatable<StateMachineLibrary.Core.Introspection.GraphHierarchyRelationship<TState>>
+class StateForge.Core.Introspection.GraphHierarchyRelationship<TState> : IEquatable<StateForge.Core.Introspection.GraphHierarchyRelationship<TState>>
   ctor (TState ParentState, TState ChildState, System.Int32 Depth, System.Int32 SiblingOrder)
   property System.Int32 Depth {get;set;}
   property System.Int32 SiblingOrder {get;set;}
   property TState ChildState {get;set;}
   property TState ParentState {get;set;}
 
-class StateMachineLibrary.Core.Introspection.GraphHistoryMarker<TState> : IEquatable<StateMachineLibrary.Core.Introspection.GraphHistoryMarker<TState>>
+class StateForge.Core.Introspection.GraphHistoryMarker<TState> : IEquatable<StateForge.Core.Introspection.GraphHistoryMarker<TState>>
   ctor (TState CompositeState, System.String HistoryMode, TState FallbackTargetState, System.Boolean DeepHistoryDeterministic)
   property System.Boolean DeepHistoryDeterministic {get;set;}
   property System.String HistoryMode {get;set;}
   property TState CompositeState {get;set;}
   property TState FallbackTargetState {get;set;}
 
-class StateMachineLibrary.Core.Introspection.GraphInitialChildMarker<TState> : IEquatable<StateMachineLibrary.Core.Introspection.GraphInitialChildMarker<TState>>
+class StateForge.Core.Introspection.GraphInitialChildMarker<TState> : IEquatable<StateForge.Core.Introspection.GraphInitialChildMarker<TState>>
   ctor (TState CompositeState, TState InitialChildState, TState ResolvedInitialLeafState, IReadOnlyList<TState> ResolvedPath)
   property IReadOnlyList<TState> ResolvedPath {get;set;}
   property TState CompositeState {get;set;}
   property TState InitialChildState {get;set;}
   property TState ResolvedInitialLeafState {get;set;}
 
-class StateMachineLibrary.Core.Introspection.GraphNode<TState>
-  ctor (System.String id, TState state, System.String label, System.Boolean isTerminal, StateMachineLibrary.Core.Definitions.MetadataCollection metadata, System.Collections.Generic.IEnumerable<StateMachineLibrary.Core.Introspection.GraphActionSummary> entryActions, System.Collections.Generic.IEnumerable<StateMachineLibrary.Core.Introspection.GraphActionSummary> exitActions, System.Boolean isComposite, System.Boolean isLeaf, System.Boolean hasParent, TState parentState, System.Int32 childCount, System.Boolean hasInitialChild, TState initialChildState, System.Boolean hasHistory, System.String historyMode, System.Boolean hasHistoryFallback, TState historyFallbackState, System.Boolean isParallelComposite, System.String parallelRegionId, System.String parallelRegionName, System.Int32? parallelRegionOrder)
-  property StateMachineLibrary.Core.Definitions.MetadataCollection Metadata {get;}
+class StateForge.Core.Introspection.GraphNode<TState>
+  ctor (System.String id, TState state, System.String label, System.Boolean isTerminal, StateForge.Core.Definitions.MetadataCollection metadata, System.Collections.Generic.IEnumerable<StateForge.Core.Introspection.GraphActionSummary> entryActions, System.Collections.Generic.IEnumerable<StateForge.Core.Introspection.GraphActionSummary> exitActions, System.Boolean isComposite, System.Boolean isLeaf, System.Boolean hasParent, TState parentState, System.Int32 childCount, System.Boolean hasInitialChild, TState initialChildState, System.Boolean hasHistory, System.String historyMode, System.Boolean hasHistoryFallback, TState historyFallbackState, System.Boolean isParallelComposite, System.String parallelRegionId, System.String parallelRegionName, System.Int32? parallelRegionOrder)
+  property StateForge.Core.Definitions.MetadataCollection Metadata {get;}
   property System.Boolean HasHistory {get;}
   property System.Boolean HasHistoryFallback {get;}
   property System.Boolean HasInitialChild {get;}
@@ -1090,8 +1090,8 @@ class StateMachineLibrary.Core.Introspection.GraphNode<TState>
   property System.Boolean IsLeaf {get;}
   property System.Boolean IsParallelComposite {get;}
   property System.Boolean IsTerminal {get;}
-  property System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Core.Introspection.GraphActionSummary> EntryActions {get;}
-  property System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Core.Introspection.GraphActionSummary> ExitActions {get;}
+  property System.Collections.Generic.IReadOnlyList<StateForge.Core.Introspection.GraphActionSummary> EntryActions {get;}
+  property System.Collections.Generic.IReadOnlyList<StateForge.Core.Introspection.GraphActionSummary> ExitActions {get;}
   property System.Int32 ChildCount {get;}
   property System.Int32? ParallelRegionOrder {get;}
   property System.String HistoryMode {get;}
@@ -1104,7 +1104,7 @@ class StateMachineLibrary.Core.Introspection.GraphNode<TState>
   property TState ParentState {get;}
   property TState State {get;}
 
-class StateMachineLibrary.Core.Introspection.GraphRegionMetadata<TState> : IEquatable<StateMachineLibrary.Core.Introspection.GraphRegionMetadata<TState>>
+class StateForge.Core.Introspection.GraphRegionMetadata<TState> : IEquatable<StateForge.Core.Introspection.GraphRegionMetadata<TState>>
   ctor (TState CompositeState, System.String RegionId, System.String RegionName, System.Int32 RegionOrder, TState InitialState, IReadOnlyList<TState> TerminalStates, IReadOnlyList<TState> MemberStates, TState ActiveLeafState, System.String ParallelHistoryMode, System.Boolean ParallelHistorySupported, TState ParallelHistoryFallbackState)
   property IReadOnlyList<TState> MemberStates {get;set;}
   property IReadOnlyList<TState> TerminalStates {get;set;}
@@ -1118,37 +1118,37 @@ class StateMachineLibrary.Core.Introspection.GraphRegionMetadata<TState> : IEqua
   property TState InitialState {get;set;}
   property TState ParallelHistoryFallbackState {get;set;}
 
-enum StateMachineLibrary.Core.Introspection.GraphTriggerKind : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
-  field StateMachineLibrary.Core.Introspection.GraphTriggerKind Completion
-  field StateMachineLibrary.Core.Introspection.GraphTriggerKind Event
+enum StateForge.Core.Introspection.GraphTriggerKind : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  field StateForge.Core.Introspection.GraphTriggerKind Completion
+  field StateForge.Core.Introspection.GraphTriggerKind Event
   enum Completion
   enum Event
 
-class StateMachineLibrary.Core.Introspection.ParallelHistoryDefinitionMetadata<TState> : IEquatable<StateMachineLibrary.Core.Introspection.ParallelHistoryDefinitionMetadata<TState>>
-  ctor (TState CompositeState, StateMachineLibrary.Core.Definitions.HistoryMode HistoryMode, IReadOnlyList<ParallelHistoryRegionFallbackMetadata<TState>> RegionFallbacks)
+class StateForge.Core.Introspection.ParallelHistoryDefinitionMetadata<TState> : IEquatable<StateForge.Core.Introspection.ParallelHistoryDefinitionMetadata<TState>>
+  ctor (TState CompositeState, StateForge.Core.Definitions.HistoryMode HistoryMode, IReadOnlyList<ParallelHistoryRegionFallbackMetadata<TState>> RegionFallbacks)
   property IReadOnlyList<ParallelHistoryRegionFallbackMetadata<TState>> RegionFallbacks {get;set;}
-  property StateMachineLibrary.Core.Definitions.HistoryMode HistoryMode {get;set;}
+  property StateForge.Core.Definitions.HistoryMode HistoryMode {get;set;}
   property TState CompositeState {get;set;}
 
-class StateMachineLibrary.Core.Introspection.ParallelHistoryRegionFallbackMetadata<TState> : IEquatable<StateMachineLibrary.Core.Introspection.ParallelHistoryRegionFallbackMetadata<TState>>
+class StateForge.Core.Introspection.ParallelHistoryRegionFallbackMetadata<TState> : IEquatable<StateForge.Core.Introspection.ParallelHistoryRegionFallbackMetadata<TState>>
   ctor (System.String RegionId, System.String RegionName, System.Int32 RegionOrder, TState FallbackState)
   property System.Int32 RegionOrder {get;set;}
   property System.String RegionId {get;set;}
   property System.String RegionName {get;set;}
   property TState FallbackState {get;set;}
 
-class StateMachineLibrary.Core.Introspection.RuntimeGraphExportOptions
+class StateForge.Core.Introspection.RuntimeGraphExportOptions
   ctor ()
-  property StateMachineLibrary.Core.Introspection.RuntimeGraphOverlayMode OverlayMode {get;set;}
+  property StateForge.Core.Introspection.RuntimeGraphOverlayMode OverlayMode {get;set;}
   property System.Boolean ValidateActiveShape {get;set;}
 
-enum StateMachineLibrary.Core.Introspection.RuntimeGraphOverlayMode : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
-  field StateMachineLibrary.Core.Introspection.RuntimeGraphOverlayMode ActiveState
-  field StateMachineLibrary.Core.Introspection.RuntimeGraphOverlayMode None
+enum StateForge.Core.Introspection.RuntimeGraphOverlayMode : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  field StateForge.Core.Introspection.RuntimeGraphOverlayMode ActiveState
+  field StateForge.Core.Introspection.RuntimeGraphOverlayMode None
   enum ActiveState
   enum None
 
-static class StateMachineLibrary.Core.Validation.ActiveStateSnapshotValidationCodes
+static class StateForge.Core.Validation.ActiveStateSnapshotValidationCodes
   field System.String DefinitionInvalid
   field System.String DuplicateRegion
   field System.String FingerprintMismatch
@@ -1167,9 +1167,9 @@ static class StateMachineLibrary.Core.Validation.ActiveStateSnapshotValidationCo
   field System.String UnknownRegion
   field System.String UnknownState
 
-class StateMachineLibrary.Core.Validation.ActiveStateSnapshotValidationDiagnostic<TState> : IEquatable<StateMachineLibrary.Core.Validation.ActiveStateSnapshotValidationDiagnostic<TState>>
-  ctor (System.String Code, System.String Message, StateMachineLibrary.Core.Execution.ActiveStateSnapshotKind? SnapshotKind, System.Int64? Sequence, TState ReferencedState, TState OwningCompositeState, System.String RegionId, System.String RegionName, TState PathSegment)
-  property StateMachineLibrary.Core.Execution.ActiveStateSnapshotKind? SnapshotKind {get;set;}
+class StateForge.Core.Validation.ActiveStateSnapshotValidationDiagnostic<TState> : IEquatable<StateForge.Core.Validation.ActiveStateSnapshotValidationDiagnostic<TState>>
+  ctor (System.String Code, System.String Message, StateForge.Core.Execution.ActiveStateSnapshotKind? SnapshotKind, System.Int64? Sequence, TState ReferencedState, TState OwningCompositeState, System.String RegionId, System.String RegionName, TState PathSegment)
+  property StateForge.Core.Execution.ActiveStateSnapshotKind? SnapshotKind {get;set;}
   property System.Int64? Sequence {get;set;}
   property System.String Code {get;set;}
   property System.String Message {get;set;}
@@ -1179,27 +1179,27 @@ class StateMachineLibrary.Core.Validation.ActiveStateSnapshotValidationDiagnosti
   property TState PathSegment {get;set;}
   property TState ReferencedState {get;set;}
 
-class StateMachineLibrary.Core.Validation.ActiveStateSnapshotValidationException<TState> : System.InvalidOperationException, System.Runtime.Serialization.ISerializable
+class StateForge.Core.Validation.ActiveStateSnapshotValidationException<TState> : System.InvalidOperationException, System.Runtime.Serialization.ISerializable
   ctor (ActiveStateSnapshotValidationResult<TState> validationResult)
   property ActiveStateSnapshotValidationResult<TState> ValidationResult {get;}
 
-class StateMachineLibrary.Core.Validation.ActiveStateSnapshotValidationResult<TState>
+class StateForge.Core.Validation.ActiveStateSnapshotValidationResult<TState>
   ctor (IEnumerable<ActiveStateSnapshotValidationDiagnostic<TState>> diagnostics)
   property IReadOnlyList<ActiveStateSnapshotValidationDiagnostic<TState>> Diagnostics {get;}
-  property StateMachineLibrary.Core.Validation.ActiveStateSnapshotValidationResult<TState> Valid {get;}
+  property StateForge.Core.Validation.ActiveStateSnapshotValidationResult<TState> Valid {get;}
   property System.Boolean IsValid {get;}
 
-static class StateMachineLibrary.Core.Validation.ActiveStateSnapshotValidator
+static class StateForge.Core.Validation.ActiveStateSnapshotValidator
   method ActiveStateSnapshotValidationResult<TState> Validate<TState, TEvent>(StateMachineDefinition<TState, TEvent> definition, ActiveStateSnapshot<TState> snapshot)
 
-static class StateMachineLibrary.Core.Validation.CompletionTransitionValidationCodes
+static class StateForge.Core.Validation.CompletionTransitionValidationCodes
   field System.String AmbiguousUnguarded
   field System.String InvalidParallelScope
   field System.String InvalidRegionBoundary
   field System.String InvalidSource
   field System.String InvalidTarget
 
-static class StateMachineLibrary.Core.Validation.HierarchyValidationCodes
+static class StateForge.Core.Validation.HierarchyValidationCodes
   field System.String AmbiguousCompletion
   field System.String AmbiguousDeepHistory
   field System.String AmbiguousTransition
@@ -1214,10 +1214,10 @@ static class StateMachineLibrary.Core.Validation.HierarchyValidationCodes
   field System.String SelfParent
   field System.String UnreachableNestedState
 
-static class StateMachineLibrary.Core.Validation.MachineDefinitionValidator
-  method StateMachineLibrary.Core.Validation.ValidationResult Validate<TState, TEvent>(StateMachineDefinition<TState, TEvent> definition)
+static class StateForge.Core.Validation.MachineDefinitionValidator
+  method StateForge.Core.Validation.ValidationResult Validate<TState, TEvent>(StateMachineDefinition<TState, TEvent> definition)
 
-static class StateMachineLibrary.Core.Validation.ParallelValidationCodes
+static class StateForge.Core.Validation.ParallelValidationCodes
   field System.String AmbiguousEvent
   field System.String BlankRegionName
   field System.String DirectHistoryUnsupported
@@ -1236,9 +1236,9 @@ static class StateMachineLibrary.Core.Validation.ParallelValidationCodes
   field System.String UnreachableRegionalState
   field System.String ZeroRegions
 
-class StateMachineLibrary.Core.Validation.ValidationFinding : System.IEquatable<StateMachineLibrary.Core.Validation.ValidationFinding>
-  ctor (StateMachineLibrary.Core.Validation.ValidationSeverity Severity, System.String Code, System.String Message, System.String AffectedElement, System.String SuggestedResolution, System.Object CompositeState, System.String RegionId, System.String RegionName, System.Object SourceState, System.Object TargetState, System.Object Event, System.String TransitionId)
-  property StateMachineLibrary.Core.Validation.ValidationSeverity Severity {get;set;}
+class StateForge.Core.Validation.ValidationFinding : System.IEquatable<StateForge.Core.Validation.ValidationFinding>
+  ctor (StateForge.Core.Validation.ValidationSeverity Severity, System.String Code, System.String Message, System.String AffectedElement, System.String SuggestedResolution, System.Object CompositeState, System.String RegionId, System.String RegionName, System.Object SourceState, System.Object TargetState, System.Object Event, System.String TransitionId)
+  property StateForge.Core.Validation.ValidationSeverity Severity {get;set;}
   property System.Object CompositeState {get;set;}
   property System.Object Event {get;set;}
   property System.Object SourceState {get;set;}
@@ -1251,17 +1251,17 @@ class StateMachineLibrary.Core.Validation.ValidationFinding : System.IEquatable<
   property System.String SuggestedResolution {get;set;}
   property System.String TransitionId {get;set;}
 
-class StateMachineLibrary.Core.Validation.ValidationResult
-  ctor (System.Collections.Generic.IEnumerable<StateMachineLibrary.Core.Validation.ValidationFinding> findings, System.Collections.Generic.IEnumerable<StateMachineLibrary.Core.Diagnostics.TransitionConflictDiagnostic> conflictDiagnostics)
-  property StateMachineLibrary.Core.Validation.ValidationResult Valid {get;}
+class StateForge.Core.Validation.ValidationResult
+  ctor (System.Collections.Generic.IEnumerable<StateForge.Core.Validation.ValidationFinding> findings, System.Collections.Generic.IEnumerable<StateForge.Core.Diagnostics.TransitionConflictDiagnostic> conflictDiagnostics)
+  property StateForge.Core.Validation.ValidationResult Valid {get;}
   property System.Boolean IsValid {get;}
-  property System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Core.Diagnostics.TransitionConflictDiagnostic> ConflictDiagnostics {get;}
-  property System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Core.Validation.ValidationFinding> Errors {get;}
-  property System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Core.Validation.ValidationFinding> Findings {get;}
-  property System.Collections.Generic.IReadOnlyList<StateMachineLibrary.Core.Validation.ValidationFinding> Warnings {get;}
+  property System.Collections.Generic.IReadOnlyList<StateForge.Core.Diagnostics.TransitionConflictDiagnostic> ConflictDiagnostics {get;}
+  property System.Collections.Generic.IReadOnlyList<StateForge.Core.Validation.ValidationFinding> Errors {get;}
+  property System.Collections.Generic.IReadOnlyList<StateForge.Core.Validation.ValidationFinding> Findings {get;}
+  property System.Collections.Generic.IReadOnlyList<StateForge.Core.Validation.ValidationFinding> Warnings {get;}
 
-enum StateMachineLibrary.Core.Validation.ValidationSeverity : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
-  field StateMachineLibrary.Core.Validation.ValidationSeverity Error
-  field StateMachineLibrary.Core.Validation.ValidationSeverity Warning
+enum StateForge.Core.Validation.ValidationSeverity : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  field StateForge.Core.Validation.ValidationSeverity Error
+  field StateForge.Core.Validation.ValidationSeverity Warning
   enum Error
   enum Warning

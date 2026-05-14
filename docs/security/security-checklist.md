@@ -2,7 +2,7 @@
 
 ## Scope
 
-- Feature: Repository baseline for .NET State Machine Library specs and release-capable packages
+- Feature: Repository baseline for .NET StateForge specs and release-capable packages
 - Owner: Maintainers
 - Review date: 2026-05-13
 - Primary language(s): C#, Bash, PowerShell
@@ -148,3 +148,26 @@
 - NIST SSDF/CWE-20: malformed declarations are covered by deterministic diagnostic tests.
 - Safe diagnostics: messages avoid environment-specific values and callback internals.
 - N/A surfaces: no web, auth, crypto, serializer, network, or hosted service surface was added.
+
+## Feature Planning: Application Integration Adapters (2026-05-14)
+
+- NIST SSDF: applicable. The feature adds production-bound optional integration packages and should carry traceable requirements, tests, documentation, dependency review, package-boundary evidence, public API snapshot review, and release validation.
+- CWE Top 25: applicable primarily through CWE-20 input validation for names, typed identities, factory registrations, filters, event identifiers, scopes, and startup validation configuration; CWE-532-style safe logging review is also required even though it is outside the Top 25 table above.
+- Safe diagnostics/logging: planned log entries should include stable machine, state, event, transition, outcome, validation, and registration identifiers needed for remediation only; defaults must not expose secrets, environment data, local paths, callback internals, raw serialized event payloads, persistence provider details, exporter configuration, or stack traces.
+- Surface review: no authentication, authorization, cryptography, network I/O, user-controlled file I/O, serializer, telemetry exporter, persistence provider, hosted service endpoint, browser, image-rendering, command execution, or workflow orchestration surface is in scope. Dependency injection, logging, startup validation, and provider-neutral persistence coordination are in scope as optional package surfaces.
+- Evidence artifacts to update: `docs/security/msl-applicability.md`, `docs/security/security-checklist.md`, `docs/security/dependency-audit.md`, `docs/security/supply-chain-evidence.md`, and `docs/security/asvs-verification.md`; update `docs/security/secure-coding-language-rules.md` if planning establishes new safe logging/configuration rules; create `docs/security/vex/` records only if advisory status requires them.
+
+## Feature 022 application integration adapters
+
+- Registration validation rejects duplicate names, ambiguous typed lookup, unknown selected identities, and invalid/null inputs.
+- Startup validation is explicit and validates definitions without runtime creation.
+- Logging defaults project stable identifiers/reason codes and redact or truncate unsafe diagnostic content.
+- Logging filters are evaluated before emission/formatting.
+
+## Feature 023 efcore persistence adapter
+
+- CWE-20: load/save inputs, required record fields, definition identity, and expected-version comparison validated.
+- CWE-89: no raw SQL construction APIs used; adapter relies on EF Core query/update APIs.
+- CWE-502: no unsafe binary/object graph deserialization; default converters are string/enum/json.
+- Safe diagnostics: default diagnostics avoid payload/secret/connection-string/provider-exception leakage.
+- No new auth/crypto/network surfaces were introduced.

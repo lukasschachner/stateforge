@@ -1,5 +1,5 @@
-using StateMachineLibrary.Core.Definitions;
-using StateMachineLibrary.Core.Introspection;
+using StateForge.Core.Definitions;
+using StateForge.Core.Introspection;
 
 namespace Graph.RenderingSample;
 

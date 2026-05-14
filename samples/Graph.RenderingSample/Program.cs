@@ -1,8 +1,8 @@
 using Graph.RenderingSample;
-using StateMachineLibrary.Core.Introspection;
-using StateMachineLibrary.Visualization.Graphviz.Rendering;
-using StateMachineLibrary.Visualization.Mermaid.Rendering;
-using StateMachineLibrary.Visualization.PlantUML.Rendering;
+using StateForge.Core.Introspection;
+using StateForge.Visualization.Graphviz.Rendering;
+using StateForge.Visualization.Mermaid.Rendering;
+using StateForge.Visualization.PlantUML.Rendering;
 
 var outputDirectory = Path.Combine("artifacts", "graph-rendering");
 Directory.CreateDirectory(outputDirectory);

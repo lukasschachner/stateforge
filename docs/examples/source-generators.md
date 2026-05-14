@@ -1,11 +1,11 @@
 # Source Generator Examples
 
-The optional `StateMachineLibrary.SourceGenerators` analyzer package lets a consumer declare finite state machine definitions at compile time. Generated code still builds `StateMachineDefinition<TState,TEvent>` from the Core package, so validation, introspection, graph export, and runtime behavior remain unchanged.
+The optional `StateForge.SourceGenerators` analyzer package lets a consumer declare finite state machine definitions at compile time. Generated code still builds `StateMachineDefinition<TState,TEvent>` from the Core package, so validation, introspection, graph export, and runtime behavior remain unchanged.
 
 ## Attribute declaration
 
 ```csharp
-using StateMachineLibrary.SourceGeneration;
+using StateForge.SourceGeneration;
 
 public enum OrderState { Created, Paid, Shipped, Cancelled }
 public enum OrderEvent { Pay, Ship, Cancel }
@@ -33,7 +33,7 @@ var freshDefinition = OrderMachine.CreateDefinition();
 ## Compact DSL declaration
 
 ```csharp
-using StateMachineLibrary.SourceGeneration;
+using StateForge.SourceGeneration;
 
 [StateMachine(typeof(OrderState), typeof(OrderEvent))]
 public static partial class OrderMachineDsl
@@ -58,7 +58,7 @@ The DSL method is parsed, not executed. Use only recognized declaration calls wi
 Advanced declaration syntax can express the same hierarchy, history, terminal, and parallel-region metadata as the Core fluent builder. Attribute declarations remain explicit about events:
 
 ```csharp
-using StateMachineLibrary.SourceGeneration;
+using StateForge.SourceGeneration;
 
 public enum OrderState { Draft, Operational, Pick, PickDone, Pay, PayDone }
 public enum OrderEvent { Start, Picked, Paid }
@@ -109,8 +109,8 @@ public static partial class PayloadOrderMachine { }
 ## Conditions and behaviors
 
 ```csharp
-using StateMachineLibrary.Core.Execution;
-using StateMachineLibrary.SourceGeneration;
+using StateForge.Core.Execution;
+using StateForge.SourceGeneration;
 
 [StateMachine(typeof(OrderState), typeof(OrderEvent))]
 public static partial class GuardedOrderMachine
@@ -141,4 +141,4 @@ A runnable source-generator declaration sample lives in `samples/SourceGenerator
 dotnet run --project samples/SourceGenerators.Sample/SourceGenerators.Sample.csproj --configuration Release
 ```
 
-The sample references `StateMachineLibrary.SourceGenerators` as an analyzer and consumes the generated Core definition at runtime.
+The sample references `StateForge.SourceGenerators` as an analyzer and consumes the generated Core definition at runtime.

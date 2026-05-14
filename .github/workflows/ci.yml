@@ -13,15 +13,15 @@ jobs:
         with:
           dotnet-version: '10.0.x'
       - name: restore
-        run: dotnet restore StateMachineLibrary.sln
+        run: dotnet restore StateForge.sln
       - name: build
-        run: dotnet build StateMachineLibrary.sln --configuration Release --no-restore
+        run: dotnet build StateForge.sln --configuration Release --no-restore
       - name: test
-        run: dotnet test --solution StateMachineLibrary.sln --configuration Release --no-build
+        run: dotnet test --solution StateForge.sln --configuration Release --no-build
       - name: format
-        run: dotnet format StateMachineLibrary.sln --verify-no-changes
+        run: dotnet format StateForge.sln --verify-no-changes
       - name: pack
-        run: dotnet pack StateMachineLibrary.sln --configuration Release --no-build --output artifacts/packages
+        run: dotnet pack StateForge.sln --configuration Release --no-build --output artifacts/packages
       - name: upload package artifacts
         uses: actions/upload-artifact@v4
         with:

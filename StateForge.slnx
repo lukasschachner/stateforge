@@ -1,0 +1,45 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/samples/">
+    <Project Path="samples/ApplicationIntegration.Sample/ApplicationIntegration.Sample.csproj" />
+    <Project Path="samples/Core.ActionsSample/Core.ActionsSample.csproj" />
+    <Project Path="samples/Core.FluentSample/Core.FluentSample.csproj" />
+    <Project Path="samples/Core.HierarchySample/Core.HierarchySample.csproj" />
+    <Project Path="samples/Core.ObservationSample/Core.ObservationSample.csproj" />
+    <Project Path="samples/Core.ParallelRegionsSample/Core.ParallelRegionsSample.csproj" />
+    <Project Path="samples/Graph.IntrospectionSample/Graph.IntrospectionSample.csproj" />
+    <Project Path="samples/Graph.RenderingSample/Graph.RenderingSample.csproj" />
+    <Project Path="samples/Interactive.ApiFrontendSample/Interactive.ApiFrontendSample.csproj" />
+    <Project Path="samples/OpenTelemetry.InstrumentationSample/OpenTelemetry.InstrumentationSample.csproj" />
+    <Project Path="samples/Persistence.EntityFrameworkCore.Sample/Persistence.EntityFrameworkCore.Sample.csproj" />
+    <Project Path="samples/Persistence.Sample/Persistence.Sample.csproj" />
+    <Project Path="samples/SourceGenerators.Sample/SourceGenerators.Sample.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/StateForge.Core/StateForge.Core.csproj" />
+    <Project Path="src/StateForge.DependencyInjection/StateForge.DependencyInjection.csproj" />
+    <Project Path="src/StateForge.Logging/StateForge.Logging.csproj" />
+    <Project Path="src/StateForge.OpenTelemetry/StateForge.OpenTelemetry.csproj" />
+    <Project Path="src/StateForge.Persistence.EntityFrameworkCore/StateForge.Persistence.EntityFrameworkCore.csproj" />
+    <Project Path="src/StateForge.Persistence/StateForge.Persistence.csproj" />
+    <Project Path="src/StateForge.SourceGenerators/StateForge.SourceGenerators.csproj" />
+    <Project Path="src/StateForge.Visualization.Graphviz/StateForge.Visualization.Graphviz.csproj" />
+    <Project Path="src/StateForge.Visualization.Mermaid/StateForge.Visualization.Mermaid.csproj" />
+    <Project Path="src/StateForge.Visualization.PlantUML/StateForge.Visualization.PlantUML.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Release.Tests/Release.Tests.csproj" />
+    <Project Path="tests/StateForge.Core.Tests/StateForge.Core.Tests.csproj" />
+    <Project Path="tests/StateForge.DependencyInjection.Tests/StateForge.DependencyInjection.Tests.csproj" />
+    <Project Path="tests/StateForge.Logging.Tests/StateForge.Logging.Tests.csproj" />
+    <Project Path="tests/StateForge.OpenTelemetry.Tests/StateForge.OpenTelemetry.Tests.csproj" />
+    <Project Path="tests/StateForge.Persistence.EntityFrameworkCore.Tests/StateForge.Persistence.EntityFrameworkCore.Tests.csproj" />
+    <Project Path="tests/StateForge.Persistence.Tests/StateForge.Persistence.Tests.csproj" />
+    <Project Path="tests/StateForge.SourceGenerators.Tests/StateForge.SourceGenerators.Tests.csproj" />
+    <Project Path="tests/StateForge.Visualization.Tests/StateForge.Visualization.Tests.csproj" />
+  </Folder>
+</Solution>

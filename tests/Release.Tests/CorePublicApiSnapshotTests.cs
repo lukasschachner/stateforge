@@ -1,5 +1,5 @@
 using Release.Tests.TestSupport;
-using StateMachineLibrary.Core.Definitions;
+using StateForge.Core.Definitions;
 
 namespace Release.Tests;
 

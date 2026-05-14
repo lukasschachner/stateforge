@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <LangVersion>latest</LangVersion>
+        <PackageId>StateForge.Persistence.EntityFrameworkCore</PackageId>
+        <Title>StateForge Persistence Entity Framework Core Adapter</Title>
+        <Description>Optional Entity Framework Core-backed snapshot store adapter for StateForge.Persistence that keeps provider and application infrastructure ownership with the consuming application.</Description>
+        <PackageTags>state-machine;fsm;persistence;entity-framework-core;ef-core;snapshots</PackageTags>
+        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+        <NoWarn>$(NoWarn);NU5104</NoWarn>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\StateForge.Core\StateForge.Core.csproj"/>
+        <ProjectReference Include="..\StateForge.Persistence\StateForge.Persistence.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.EntityFrameworkCore"/>
+    </ItemGroup>
+
+</Project>

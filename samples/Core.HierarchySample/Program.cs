@@ -1,4 +1,4 @@
-using StateMachineLibrary.Core.Definitions;
+using StateForge.Core.Definitions;
 
 var definition = StateMachineDefinition<DocumentState, DocumentEvent>.Create(builder =>
 {

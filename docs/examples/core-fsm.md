@@ -3,9 +3,9 @@
 The Core APIs remain the primary manual definition surface. The optional source-generator package can create equivalent `StateMachineDefinition<TState,TEvent>` instances from declarations, but it does not replace or change these manual APIs. The optional Persistence package builds on these Core contracts and does not change non-persistent Core usage.
 
 ```csharp
-using StateMachineLibrary.Core.Definitions;
-using StateMachineLibrary.Core.Execution;
-using StateMachineLibrary.Core.Introspection;
+using StateForge.Core.Definitions;
+using StateForge.Core.Execution;
+using StateForge.Core.Introspection;
 
 enum OrderState { Created, Paid, Shipped, Cancelled }
 

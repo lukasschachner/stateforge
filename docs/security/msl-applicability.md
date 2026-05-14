@@ -2,7 +2,7 @@
 
 ## Context
 
-- System or feature: .NET State Machine Library repository baseline
+- System or feature: .NET StateForge repository baseline
 - Primary implementation language: C# on .NET `net10.0` for runtime packages; source generator package may target `netstandard2.0` for analyzer-host compatibility while emitting C# for the runtime API
 - Reviewer: Spec Kit security-governance baseline
 - Date: 2026-05-11
@@ -98,3 +98,17 @@ MSL status is not treated as sufficient by itself. Feature plans and implementat
 ## Source generator validation feature evidence (2026-05-13)
 
 The source generator validation implementation remains C#/.NET only. No unsafe, native, manual-memory, or non-MSL component was introduced.
+
+## Feature Planning: Application Integration Adapters (2026-05-14)
+
+- MSL status: PASS. Planned production implementation remains in C#/.NET for optional application integration packages, tests, documentation, and release evidence.
+- Non-MSL justification: N/A; the feature does not require C, C++, Assembly, classic Objective-C, native extensions, or manual-memory implementation code.
+- Secure-coding follow-up: apply C#/.NET validation and safe diagnostic rules to registration identities, runtime factory configuration, startup validation findings, logging scopes, event identifiers, filters, and persistence coordination inputs.
+
+## Feature 022 application integration adapters
+
+Implementation remains C#/.NET only. No non-memory-safe language, native interop, manual memory management, or unsafe code is introduced by the DependencyInjection or Logging adapter packages.
+
+## Feature 023 efcore persistence adapter
+
+Implementation remains entirely C#/.NET and EF Core. No non-memory-safe language, native interop, unsafe blocks, or manual memory management was introduced.

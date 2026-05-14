@@ -1,28 +1,32 @@
-using StateMachineLibrary.Core.Definitions;
-using StateMachineLibrary.Core.Diagnostics;
-using StateMachineLibrary.Core.Execution;
-using StateMachineLibrary.Core.Introspection;
-using StateMachineLibrary.Visualization.Mermaid.Rendering;
+using StateForge.Core.Definitions;
+using StateForge.Core.Diagnostics;
+using StateForge.Core.Execution;
+using StateForge.Core.Introspection;
+using StateForge.DependencyInjection.Runtime;
+using StateForge.Logging;
+using StateForge.Logging.Configuration;
+using StateForge.Visualization.Mermaid.Rendering;
 
 namespace Interactive.ApiFrontendSample.Features.OrderWorkflow;
 
 internal sealed class OrderWorkflowRuntimeService : IAsyncDisposable
 {
     private readonly StateMachineDefinition<OrderDemoState, OrderDemoEvent> _definition;
+    private readonly IStateMachineRuntimeFactory<OrderDemoState, OrderDemoEvent> _runtimeFactory;
+    private readonly ITransitionObserver<OrderDemoState, OrderDemoEvent> _loggingObserver;
     private readonly SemaphoreSlim _gate = new(1, 1);
     private StateMachineRuntime<OrderDemoState, OrderDemoEvent> _runtime;
     private decimal _requiredPaymentAmount;
     private decimal _capturedPaymentAmount;
 
-    public OrderWorkflowRuntimeService()
+    public OrderWorkflowRuntimeService(
+        IStateMachineRuntimeFactoryResolver runtimeFactoryResolver,
+        ILogger<OrderWorkflowRuntimeService> logger)
     {
-        _definition = OrderWorkflowDefinition.Create();
-        var validation = _definition.Validate();
-        if (!validation.IsValid)
-            throw new InvalidOperationException(
-                "Order workflow definition is invalid: " +
-                string.Join("; ", validation.Errors.Select(error => $"{error.Code}:{error.Message}")));
-
+        _runtimeFactory = runtimeFactoryResolver.GetFactory<OrderDemoState, OrderDemoEvent>("interactive-order-workflow");
+        _definition = _runtimeFactory.Definition;
+        _loggingObserver = logger.CreateStateMachineLoggingObserver<OrderDemoState, OrderDemoEvent>(
+            new StateMachineLoggingOptions().UseDefaultSafeDiagnostics());
         _runtime = CreateRuntime();
         ResetPaymentProgress();
     }
@@ -134,7 +138,7 @@ internal sealed class OrderWorkflowRuntimeService : IAsyncDisposable
 
     private StateMachineRuntime<OrderDemoState, OrderDemoEvent> CreateRuntime()
     {
-        return _definition.CreateRuntime(OrderDemoState.Draft, ConcurrencyMode.Serialized);
+        return _runtimeFactory.Create(OrderDemoState.Draft, ConcurrencyMode.Serialized, _loggingObserver);
     }
 
     private async ValueTask<RuntimeStateResponse> BuildRuntimeStateResponseAsync(CancellationToken cancellationToken)

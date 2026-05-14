@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <LangVersion>latest</LangVersion>
+        <PackageId>StateForge.Persistence</PackageId>
+        <Title>StateForge Persistence</Title>
+        <Description>Provider-neutral finite state machine persistence contracts and apply-and-persist coordination built on StateForge.Core without built-in storage providers.</Description>
+        <PackageTags>state-machine;fsm;finite-state-machine;persistence;provider-neutral;snapshots</PackageTags>
+        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+        <NoWarn>$(NoWarn);NU5104</NoWarn>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\StateForge.Core\StateForge.Core.csproj"/>
+    </ItemGroup>
+
+</Project>

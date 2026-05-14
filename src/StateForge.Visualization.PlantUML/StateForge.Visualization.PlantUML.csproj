@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <LangVersion>latest</LangVersion>
+        <PackageId>StateForge.Visualization.PlantUML</PackageId>
+        <Title>StateForge PlantUML Visualization</Title>
+        <Description>Optional deterministic PlantUML state diagram text renderer for StateForge.Core definition graph exports.</Description>
+        <PackageTags>state-machine;fsm;visualization;plantuml;uml;graph;diagram</PackageTags>
+        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+        <PackageReleaseNotes>Adds deterministic PlantUML text rendering over Core graph exports without external Java services or image generation.</PackageReleaseNotes>
+        <NoWarn>$(NoWarn);NU5104</NoWarn>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\StateForge.Core\StateForge.Core.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Include="..\StateForge.Visualization.Shared\Rendering\GraphRenderingMetadataFormatter.cs" Link="Rendering\GraphRenderingMetadataFormatter.cs"/>
+    </ItemGroup>
+</Project>

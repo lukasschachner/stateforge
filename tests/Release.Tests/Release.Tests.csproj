@@ -9,12 +9,15 @@
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp"/>
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\..\src\Core\Core.csproj"/>
-        <ProjectReference Include="..\..\src\OpenTelemetry\OpenTelemetry.csproj"/>
-        <ProjectReference Include="..\..\src\Persistence\Persistence.csproj"/>
-        <ProjectReference Include="..\..\src\SourceGenerators\SourceGenerators.csproj"/>
-        <ProjectReference Include="..\..\src\Visualization.Mermaid\Visualization.Mermaid.csproj"/>
-        <ProjectReference Include="..\..\src\Visualization.Graphviz\Visualization.Graphviz.csproj"/>
-        <ProjectReference Include="..\..\src\Visualization.PlantUML\Visualization.PlantUML.csproj"/>
+        <ProjectReference Include="..\..\src\StateForge.Core\StateForge.Core.csproj"/>
+        <ProjectReference Include="..\..\src\StateForge.DependencyInjection\StateForge.DependencyInjection.csproj"/>
+        <ProjectReference Include="..\..\src\StateForge.Logging\StateForge.Logging.csproj"/>
+        <ProjectReference Include="..\..\src\StateForge.OpenTelemetry\StateForge.OpenTelemetry.csproj"/>
+        <ProjectReference Include="..\..\src\StateForge.Persistence\StateForge.Persistence.csproj"/>
+        <ProjectReference Include="..\..\src\StateForge.Persistence.EntityFrameworkCore\StateForge.Persistence.EntityFrameworkCore.csproj"/>
+        <ProjectReference Include="..\..\src\StateForge.SourceGenerators\StateForge.SourceGenerators.csproj"/>
+        <ProjectReference Include="..\..\src\StateForge.Visualization.Mermaid\StateForge.Visualization.Mermaid.csproj"/>
+        <ProjectReference Include="..\..\src\StateForge.Visualization.Graphviz\StateForge.Visualization.Graphviz.csproj"/>
+        <ProjectReference Include="..\..\src\StateForge.Visualization.PlantUML\StateForge.Visualization.PlantUML.csproj"/>
     </ItemGroup>
 </Project>

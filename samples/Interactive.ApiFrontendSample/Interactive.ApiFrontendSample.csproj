@@ -8,7 +8,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\Core\Core.csproj"/>
-        <ProjectReference Include="..\..\src\Visualization.Mermaid\Visualization.Mermaid.csproj"/>
+        <ProjectReference Include="..\..\src\StateForge.Core\StateForge.Core.csproj"/>
+        <ProjectReference Include="..\..\src\StateForge.DependencyInjection\StateForge.DependencyInjection.csproj"/>
+        <ProjectReference Include="..\..\src\StateForge.Logging\StateForge.Logging.csproj"/>
+        <ProjectReference Include="..\..\src\StateForge.Visualization.Mermaid\StateForge.Visualization.Mermaid.csproj"/>
     </ItemGroup>
 </Project>

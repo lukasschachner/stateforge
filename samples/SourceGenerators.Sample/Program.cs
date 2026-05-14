@@ -1,5 +1,5 @@
-using StateMachineLibrary.Core.Execution;
-using StateMachineLibrary.SourceGeneration;
+using StateForge.Core.Execution;
+using StateForge.SourceGeneration;
 
 internal static class Program
 {
@@ -63,6 +63,7 @@ public enum OrderEvent
 [Event(OrderEvent.Ship)]
 [Event(OrderEvent.Cancel)]
 [Transition(OrderState.Created, OrderEvent.Pay, OrderState.Paid)]
+[Transition(OrderState.Created, OrderEvent.Cancel, OrderState.Cancelled)]
 [Transition(OrderState.Paid, OrderEvent.Ship, OrderState.Shipped)]
 public static partial class GeneratedOrderMachine
 {

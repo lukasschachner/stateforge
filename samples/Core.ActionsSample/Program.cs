@@ -1,4 +1,4 @@
-using StateMachineLibrary.Core.Definitions;
+using StateForge.Core.Definitions;
 
 internal static class Program
 {

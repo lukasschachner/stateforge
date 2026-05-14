@@ -1,11 +1,11 @@
-# Public API snapshot for Visualization.PlantUML
-class StateMachineLibrary.Visualization.PlantUML.PlantUmlPublicApi
+# Public API snapshot for StateForge.Visualization.PlantUML
+class StateForge.Visualization.PlantUML.PlantUmlPublicApi
   ctor ()
 
-static class StateMachineLibrary.Visualization.PlantUML.Rendering.PlantUmlGraphRenderer
-  method System.String Render<TState, TEvent>(DefinitionGraph<TState, TEvent> graph, StateMachineLibrary.Visualization.PlantUML.Rendering.PlantUmlRenderOptions options)
+static class StateForge.Visualization.PlantUML.Rendering.PlantUmlGraphRenderer
+  method System.String Render<TState, TEvent>(DefinitionGraph<TState, TEvent> graph, StateForge.Visualization.PlantUML.Rendering.PlantUmlRenderOptions options)
 
-class StateMachineLibrary.Visualization.PlantUML.Rendering.PlantUmlRenderOptions
+class StateForge.Visualization.PlantUML.Rendering.PlantUmlRenderOptions
   ctor ()
   property System.Boolean IncludeMetadata {get;set;}
   property System.Boolean RenderRuntimeOverlay {get;set;}

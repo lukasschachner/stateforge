@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <LangVersion>latest</LangVersion>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\StateForge.Core\StateForge.Core.csproj"/>
+        <ProjectReference Include="..\..\src\StateForge.Visualization.Mermaid\StateForge.Visualization.Mermaid.csproj"/>
+        <ProjectReference Include="..\..\src\StateForge.Visualization.Graphviz\StateForge.Visualization.Graphviz.csproj"/>
+        <ProjectReference Include="..\..\src\StateForge.Visualization.PlantUML\StateForge.Visualization.PlantUML.csproj"/>
+    </ItemGroup>
+</Project>

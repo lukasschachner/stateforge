@@ -1,9 +1,9 @@
 # OpenTelemetry instrumentation
 
-`StateMachineLibrary.OpenTelemetry` provides an observer adapter that emits activities and metrics from Core transition observations. Core does not reference telemetry packages.
+`StateForge.OpenTelemetry` provides an observer adapter that emits activities and metrics from Core transition observations. Core does not reference telemetry packages.
 
 ```csharp
-using StateMachineLibrary.OpenTelemetry;
+using StateForge.OpenTelemetry;
 
 using var observer = new StateMachineTelemetryObserver<OrderState, OrderEvent>();
 var runtime = definition.CreateRuntime(OrderState.Created, observer: observer);
@@ -12,8 +12,8 @@ await runtime.ApplyAsync(new SubmitOrder());
 
 Stable names:
 
-- Activity source: `StateMachineLibrary.OpenTelemetry`
-- Meter: `StateMachineLibrary.OpenTelemetry`
+- Activity source: `StateForge.OpenTelemetry`
+- Meter: `StateForge.OpenTelemetry`
 - Activity: `state_machine.transition`
 - Counter: `state_machine.transition.attempts`
 - Histogram: `state_machine.transition.duration`

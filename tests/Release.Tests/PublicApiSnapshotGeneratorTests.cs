@@ -17,7 +17,7 @@ public sealed class PublicApiSnapshotGeneratorTests
         var snapshot =
             PublicApiSnapshotGenerator.Generate(PackableProject.All.Single(p => p.Name == "Core").MarkerType.Assembly);
         Assert.DoesNotContain("private", snapshot, StringComparison.OrdinalIgnoreCase);
-        Assert.DoesNotContain("StateMachineLibrary.Core.Execution.TransitionExecutor", snapshot,
+        Assert.DoesNotContain("StateForge.Core.Execution.TransitionExecutor", snapshot,
             StringComparison.Ordinal);
     }
 }

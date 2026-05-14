@@ -1,7 +1,7 @@
 {
   "packages": [
     {
-      "packageId": "StateMachineLibrary.Core",
+      "packageId": "StateForge.Core",
       "allowedDependencies": [],
       "forbiddenDependencyPatterns": [
         "Hosting",
@@ -28,19 +28,28 @@
         "tests/",
         "samples/",
         "specs/",
-        "StateMachineLibrary.sln"
+        "StateForge.sln"
       ],
       "analyzerAssetsRequired": false
     },
     {
-      "packageId": "StateMachineLibrary.SourceGenerators",
+      "packageId": "StateForge.Logging",
       "allowedDependencies": [
-        "Microsoft.CodeAnalysis.CSharp private build-time asset"
+        "StateForge.Core",
+        "Microsoft.Extensions.Logging.Abstractions"
       ],
       "forbiddenDependencyPatterns": [
-        "StateMachineLibrary.Persistence",
-        "StateMachineLibrary.OpenTelemetry",
-        "StateMachineLibrary.Visualization"
+        "Hosting",
+        "DependencyInjection",
+        "OpenTelemetry.Exporter",
+        "EntityFramework",
+        "Sql",
+        "Npgsql",
+        "Mongo",
+        "Visualization",
+        "Graphviz",
+        "PlantUML",
+        "SourceGenerators"
       ],
       "forbiddenFilePatterns": [
         ".git/",
@@ -50,14 +59,67 @@
         "tests/",
         "samples/",
         "specs/",
-        "StateMachineLibrary.sln"
+        "StateForge.sln"
+      ],
+      "analyzerAssetsRequired": false
+    },
+    {
+      "packageId": "StateForge.DependencyInjection",
+      "allowedDependencies": [
+        "StateForge.Core",
+        "Microsoft.Extensions.DependencyInjection.Abstractions"
+      ],
+      "forbiddenDependencyPatterns": [
+        "Hosting",
+        "Logging",
+        "OpenTelemetry",
+        "EntityFramework",
+        "Sql",
+        "Npgsql",
+        "Mongo",
+        "Visualization",
+        "Graphviz",
+        "PlantUML",
+        "SourceGenerators"
+      ],
+      "forbiddenFilePatterns": [
+        ".git/",
+        ".github/",
+        ".idea/",
+        "obj/",
+        "tests/",
+        "samples/",
+        "specs/",
+        "StateForge.sln"
+      ],
+      "analyzerAssetsRequired": false
+    },
+    {
+      "packageId": "StateForge.SourceGenerators",
+      "allowedDependencies": [
+        "Microsoft.CodeAnalysis.CSharp private build-time asset"
+      ],
+      "forbiddenDependencyPatterns": [
+        "StateForge.Persistence",
+        "StateForge.OpenTelemetry",
+        "StateForge.Visualization"
+      ],
+      "forbiddenFilePatterns": [
+        ".git/",
+        ".github/",
+        ".idea/",
+        "obj/",
+        "tests/",
+        "samples/",
+        "specs/",
+        "StateForge.sln"
       ],
       "analyzerAssetsRequired": true
     },
     {
-      "packageId": "StateMachineLibrary.Persistence",
+      "packageId": "StateForge.Persistence",
       "allowedDependencies": [
-        "StateMachineLibrary.Core"
+        "StateForge.Core"
       ],
       "forbiddenDependencyPatterns": [
         "Hosting",
@@ -82,14 +144,46 @@
         "tests/",
         "samples/",
         "specs/",
-        "StateMachineLibrary.sln"
+        "StateForge.sln"
       ],
       "analyzerAssetsRequired": false
     },
     {
-      "packageId": "StateMachineLibrary.OpenTelemetry",
+      "packageId": "StateForge.Persistence.EntityFrameworkCore",
       "allowedDependencies": [
-        "StateMachineLibrary.Core"
+        "StateForge.Core",
+        "StateForge.Persistence",
+        "Microsoft.EntityFrameworkCore"
+      ],
+      "forbiddenDependencyPatterns": [
+        "Hosting",
+        "Logging",
+        "DependencyInjection",
+        "OpenTelemetry",
+        "Sqlite",
+        "SqlServer",
+        "Npgsql",
+        "Mongo",
+        "Visualization",
+        "Graphviz",
+        "PlantUML"
+      ],
+      "forbiddenFilePatterns": [
+        ".git/",
+        ".github/",
+        ".idea/",
+        "obj/",
+        "tests/",
+        "samples/",
+        "specs/",
+        "StateForge.sln"
+      ],
+      "analyzerAssetsRequired": false
+    },
+    {
+      "packageId": "StateForge.OpenTelemetry",
+      "allowedDependencies": [
+        "StateForge.Core"
       ],
       "forbiddenDependencyPatterns": [
         "Hosting",
@@ -112,14 +206,14 @@
         "tests/",
         "samples/",
         "specs/",
-        "StateMachineLibrary.sln"
+        "StateForge.sln"
       ],
       "analyzerAssetsRequired": false
     },
     {
-      "packageId": "StateMachineLibrary.Visualization.Mermaid",
+      "packageId": "StateForge.Visualization.Mermaid",
       "allowedDependencies": [
-        "StateMachineLibrary.Core"
+        "StateForge.Core"
       ],
       "forbiddenDependencyPatterns": [
         "Hosting",
@@ -145,14 +239,14 @@
         "tests/",
         "samples/",
         "specs/",
-        "StateMachineLibrary.sln"
+        "StateForge.sln"
       ],
       "analyzerAssetsRequired": false
     },
     {
-      "packageId": "StateMachineLibrary.Visualization.Graphviz",
+      "packageId": "StateForge.Visualization.Graphviz",
       "allowedDependencies": [
-        "StateMachineLibrary.Core"
+        "StateForge.Core"
       ],
       "forbiddenDependencyPatterns": [
         "Hosting",
@@ -178,14 +272,14 @@
         "tests/",
         "samples/",
         "specs/",
-        "StateMachineLibrary.sln"
+        "StateForge.sln"
       ],
       "analyzerAssetsRequired": false
     },
     {
-      "packageId": "StateMachineLibrary.Visualization.PlantUML",
+      "packageId": "StateForge.Visualization.PlantUML",
       "allowedDependencies": [
-        "StateMachineLibrary.Core"
+        "StateForge.Core"
       ],
       "forbiddenDependencyPatterns": [
         "Hosting",
@@ -211,7 +305,7 @@
         "tests/",
         "samples/",
         "specs/",
-        "StateMachineLibrary.sln"
+        "StateForge.sln"
       ],
       "analyzerAssetsRequired": false
     }

@@ -1,32 +1,32 @@
-# Public API snapshot for SourceGenerators
-static class StateMachineLibrary.SourceGenerators.Declarations.AdvancedDeclarationValidator
-  method System.Void Validate(StateMachineLibrary.SourceGenerators.Declarations.MachineDeclaration declaration, StateMachineLibrary.SourceGenerators.Diagnostics.DiagnosticReporter reporter)
+# Public API snapshot for StateForge.SourceGenerators
+static class StateForge.SourceGenerators.Declarations.AdvancedDeclarationValidator
+  method System.Void Validate(StateForge.SourceGenerators.Declarations.MachineDeclaration declaration, StateForge.SourceGenerators.Diagnostics.DiagnosticReporter reporter)
 
-static class StateMachineLibrary.SourceGenerators.Declarations.AttributeDeclarationParser
-  method StateMachineLibrary.SourceGenerators.Declarations.MachineDeclaration Parse(Microsoft.CodeAnalysis.CSharp.Syntax.TypeDeclarationSyntax syntax, Microsoft.CodeAnalysis.SemanticModel semanticModel, System.Threading.CancellationToken cancellationToken)
+static class StateForge.SourceGenerators.Declarations.AttributeDeclarationParser
+  method StateForge.SourceGenerators.Declarations.MachineDeclaration Parse(Microsoft.CodeAnalysis.CSharp.Syntax.TypeDeclarationSyntax syntax, Microsoft.CodeAnalysis.SemanticModel semanticModel, System.Threading.CancellationToken cancellationToken)
 
-static class StateMachineLibrary.SourceGenerators.Declarations.AttributeDeclarationProvider
+static class StateForge.SourceGenerators.Declarations.AttributeDeclarationProvider
   method Microsoft.CodeAnalysis.CSharp.Syntax.TypeDeclarationSyntax Transform(Microsoft.CodeAnalysis.GeneratorSyntaxContext context, System.Threading.CancellationToken cancellationToken)
   method System.Boolean IsCandidate(Microsoft.CodeAnalysis.SyntaxNode node, System.Threading.CancellationToken cancellationToken)
 
-enum StateMachineLibrary.SourceGenerators.Declarations.BehaviorPhase : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
-  field StateMachineLibrary.SourceGenerators.Declarations.BehaviorPhase Entry
-  field StateMachineLibrary.SourceGenerators.Declarations.BehaviorPhase Exit
-  field StateMachineLibrary.SourceGenerators.Declarations.BehaviorPhase Transition
+enum StateForge.SourceGenerators.Declarations.BehaviorPhase : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  field StateForge.SourceGenerators.Declarations.BehaviorPhase Entry
+  field StateForge.SourceGenerators.Declarations.BehaviorPhase Exit
+  field StateForge.SourceGenerators.Declarations.BehaviorPhase Transition
   enum Entry
   enum Exit
   enum Transition
 
-class StateMachineLibrary.SourceGenerators.Declarations.BehaviorReference
-  ctor (System.String memberName, StateMachineLibrary.SourceGenerators.Declarations.BehaviorPhase phase, System.String displayName, Microsoft.CodeAnalysis.Location sourceLocation)
+class StateForge.SourceGenerators.Declarations.BehaviorReference
+  ctor (System.String memberName, StateForge.SourceGenerators.Declarations.BehaviorPhase phase, System.String displayName, Microsoft.CodeAnalysis.Location sourceLocation)
   property Microsoft.CodeAnalysis.Location SourceLocation {get;}
-  property StateMachineLibrary.SourceGenerators.Declarations.BehaviorPhase Phase {get;}
-  property StateMachineLibrary.SourceGenerators.Declarations.ReferenceSignatureStatus SignatureStatus {get;set;}
+  property StateForge.SourceGenerators.Declarations.BehaviorPhase Phase {get;}
+  property StateForge.SourceGenerators.Declarations.ReferenceSignatureStatus SignatureStatus {get;set;}
   property System.Boolean UseAsyncBuilder {get;set;}
   property System.String DisplayName {get;}
   property System.String MemberName {get;}
 
-class StateMachineLibrary.SourceGenerators.Declarations.CompletionDeclaration
+class StateForge.SourceGenerators.Declarations.CompletionDeclaration
   ctor (System.String sourceStateKey, System.String sourceExpression, System.String targetStateKey, System.String targetExpression, Microsoft.CodeAnalysis.Location sourceLocation)
   property Microsoft.CodeAnalysis.Location SourceLocation {get;}
   property System.String SourceExpression {get;}
@@ -34,12 +34,12 @@ class StateMachineLibrary.SourceGenerators.Declarations.CompletionDeclaration
   property System.String TargetExpression {get;}
   property System.String TargetStateKey {get;}
 
-class StateMachineLibrary.SourceGenerators.Declarations.CompositeDeclaration
+class StateForge.SourceGenerators.Declarations.CompositeDeclaration
   ctor (System.String compositeStateKey, System.String compositeStateExpression, Microsoft.CodeAnalysis.Location sourceLocation)
   property Microsoft.CodeAnalysis.Location HistoryLocation {get;set;}
   property Microsoft.CodeAnalysis.Location InitialChildLocation {get;set;}
   property Microsoft.CodeAnalysis.Location SourceLocation {get;}
-  property StateMachineLibrary.SourceGenerators.Declarations.DeclaredHistoryMode HistoryMode {get;set;}
+  property StateForge.SourceGenerators.Declarations.DeclaredHistoryMode HistoryMode {get;set;}
   property System.String CompositeStateExpression {get;}
   property System.String CompositeStateKey {get;}
   property System.String HistoryFallbackExpression {get;set;}
@@ -47,79 +47,79 @@ class StateMachineLibrary.SourceGenerators.Declarations.CompositeDeclaration
   property System.String InitialChildExpression {get;set;}
   property System.String InitialChildStateKey {get;set;}
 
-class StateMachineLibrary.SourceGenerators.Declarations.ConditionReference
+class StateForge.SourceGenerators.Declarations.ConditionReference
   ctor (System.String memberName, System.String displayName, Microsoft.CodeAnalysis.Location sourceLocation)
   property Microsoft.CodeAnalysis.Location SourceLocation {get;}
-  property StateMachineLibrary.SourceGenerators.Declarations.ReferenceSignatureStatus SignatureStatus {get;set;}
+  property StateForge.SourceGenerators.Declarations.ReferenceSignatureStatus SignatureStatus {get;set;}
   property System.Boolean UseAsyncBuilder {get;set;}
   property System.String DisplayName {get;}
   property System.String MemberName {get;}
 
-class StateMachineLibrary.SourceGenerators.Declarations.DeclarationIdentity
+class StateForge.SourceGenerators.Declarations.DeclarationIdentity
   ctor (System.String containingTypeMetadataName, System.String machineName)
   property System.String ContainingTypeMetadataName {get;}
   property System.String MachineName {get;}
   property System.String StableId {get;}
 
-class StateMachineLibrary.SourceGenerators.Declarations.DeclarationLocation
+class StateForge.SourceGenerators.Declarations.DeclarationLocation
   ctor (Microsoft.CodeAnalysis.Location primary, System.Collections.Generic.IReadOnlyList<Microsoft.CodeAnalysis.Location> related)
   property Microsoft.CodeAnalysis.Location Primary {get;}
   property System.Collections.Generic.IReadOnlyList<Microsoft.CodeAnalysis.Location> Related {get;}
 
-static class StateMachineLibrary.SourceGenerators.Declarations.DeclarationNormalizer
-  method StateMachineLibrary.SourceGenerators.Declarations.MachineDeclaration Normalize(StateMachineLibrary.SourceGenerators.Declarations.MachineDeclaration declaration)
+static class StateForge.SourceGenerators.Declarations.DeclarationNormalizer
+  method StateForge.SourceGenerators.Declarations.MachineDeclaration Normalize(StateForge.SourceGenerators.Declarations.MachineDeclaration declaration)
 
-static class StateMachineLibrary.SourceGenerators.Declarations.DeclarationOrdering
-  method System.Linq.IOrderedEnumerable<StateMachineLibrary.SourceGenerators.Declarations.DeclaredEvent> Events(System.Collections.Generic.IEnumerable<StateMachineLibrary.SourceGenerators.Declarations.DeclaredEvent> events)
-  method System.Linq.IOrderedEnumerable<StateMachineLibrary.SourceGenerators.Declarations.DeclaredState> States(System.Collections.Generic.IEnumerable<StateMachineLibrary.SourceGenerators.Declarations.DeclaredState> states)
-  method System.Linq.IOrderedEnumerable<StateMachineLibrary.SourceGenerators.Declarations.DeclaredTransition> Transitions(System.Collections.Generic.IEnumerable<StateMachineLibrary.SourceGenerators.Declarations.DeclaredTransition> transitions)
+static class StateForge.SourceGenerators.Declarations.DeclarationOrdering
+  method System.Linq.IOrderedEnumerable<StateForge.SourceGenerators.Declarations.DeclaredEvent> Events(System.Collections.Generic.IEnumerable<StateForge.SourceGenerators.Declarations.DeclaredEvent> events)
+  method System.Linq.IOrderedEnumerable<StateForge.SourceGenerators.Declarations.DeclaredState> States(System.Collections.Generic.IEnumerable<StateForge.SourceGenerators.Declarations.DeclaredState> states)
+  method System.Linq.IOrderedEnumerable<StateForge.SourceGenerators.Declarations.DeclaredTransition> Transitions(System.Collections.Generic.IEnumerable<StateForge.SourceGenerators.Declarations.DeclaredTransition> transitions)
 
-enum StateMachineLibrary.SourceGenerators.Declarations.DeclarationStyle : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
-  field StateMachineLibrary.SourceGenerators.Declarations.DeclarationStyle Attribute
-  field StateMachineLibrary.SourceGenerators.Declarations.DeclarationStyle CompactDsl
+enum StateForge.SourceGenerators.Declarations.DeclarationStyle : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  field StateForge.SourceGenerators.Declarations.DeclarationStyle Attribute
+  field StateForge.SourceGenerators.Declarations.DeclarationStyle CompactDsl
   enum Attribute
   enum CompactDsl
 
-static class StateMachineLibrary.SourceGenerators.Declarations.DeclarationValidator
-  method System.Void Validate(StateMachineLibrary.SourceGenerators.Declarations.MachineDeclaration declaration, StateMachineLibrary.SourceGenerators.Diagnostics.DiagnosticReporter reporter)
+static class StateForge.SourceGenerators.Declarations.DeclarationValidator
+  method System.Void Validate(StateForge.SourceGenerators.Declarations.MachineDeclaration declaration, StateForge.SourceGenerators.Diagnostics.DiagnosticReporter reporter)
 
-class StateMachineLibrary.SourceGenerators.Declarations.DeclaredEvent
-  ctor (System.String name, StateMachineLibrary.SourceGenerators.Declarations.DeclaredEventKind eventKind, System.String identityKey, System.String generatedIdentifier, System.String valueExpression, System.String payloadType, Microsoft.CodeAnalysis.Location sourceLocation)
+class StateForge.SourceGenerators.Declarations.DeclaredEvent
+  ctor (System.String name, StateForge.SourceGenerators.Declarations.DeclaredEventKind eventKind, System.String identityKey, System.String generatedIdentifier, System.String valueExpression, System.String payloadType, Microsoft.CodeAnalysis.Location sourceLocation)
   property Microsoft.CodeAnalysis.Location SourceLocation {get;}
-  property StateMachineLibrary.SourceGenerators.Declarations.DeclaredEventKind EventKind {get;}
-  property System.Collections.Generic.List<StateMachineLibrary.SourceGenerators.Declarations.MetadataEntry> Metadata {get;}
+  property StateForge.SourceGenerators.Declarations.DeclaredEventKind EventKind {get;}
+  property System.Collections.Generic.List<StateForge.SourceGenerators.Declarations.MetadataEntry> Metadata {get;}
   property System.String GeneratedIdentifier {get;}
   property System.String IdentityKey {get;}
   property System.String Name {get;}
   property System.String PayloadType {get;}
   property System.String ValueExpression {get;}
 
-enum StateMachineLibrary.SourceGenerators.Declarations.DeclaredEventKind : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
-  field StateMachineLibrary.SourceGenerators.Declarations.DeclaredEventKind PayloadType
-  field StateMachineLibrary.SourceGenerators.Declarations.DeclaredEventKind Value
+enum StateForge.SourceGenerators.Declarations.DeclaredEventKind : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  field StateForge.SourceGenerators.Declarations.DeclaredEventKind PayloadType
+  field StateForge.SourceGenerators.Declarations.DeclaredEventKind Value
   enum PayloadType
   enum Value
 
-enum StateMachineLibrary.SourceGenerators.Declarations.DeclaredHistoryMode : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
-  field StateMachineLibrary.SourceGenerators.Declarations.DeclaredHistoryMode Deep
-  field StateMachineLibrary.SourceGenerators.Declarations.DeclaredHistoryMode None
-  field StateMachineLibrary.SourceGenerators.Declarations.DeclaredHistoryMode Shallow
-  field StateMachineLibrary.SourceGenerators.Declarations.DeclaredHistoryMode Unsupported
+enum StateForge.SourceGenerators.Declarations.DeclaredHistoryMode : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  field StateForge.SourceGenerators.Declarations.DeclaredHistoryMode Deep
+  field StateForge.SourceGenerators.Declarations.DeclaredHistoryMode None
+  field StateForge.SourceGenerators.Declarations.DeclaredHistoryMode Shallow
+  field StateForge.SourceGenerators.Declarations.DeclaredHistoryMode Unsupported
   enum Deep
   enum None
   enum Shallow
   enum Unsupported
 
-class StateMachineLibrary.SourceGenerators.Declarations.DeclaredState
+class StateForge.SourceGenerators.Declarations.DeclaredState
   ctor (System.String name, System.String valueExpression, System.String identityKey, System.String generatedIdentifier, System.Boolean isTerminal, Microsoft.CodeAnalysis.Location sourceLocation)
   property Microsoft.CodeAnalysis.Location HistoryLocation {get;set;}
   property Microsoft.CodeAnalysis.Location InitialChildLocation {get;set;}
   property Microsoft.CodeAnalysis.Location ParentLocation {get;set;}
   property Microsoft.CodeAnalysis.Location SourceLocation {get;}
-  property StateMachineLibrary.SourceGenerators.Declarations.DeclaredHistoryMode HistoryMode {get;set;}
+  property StateForge.SourceGenerators.Declarations.DeclaredHistoryMode HistoryMode {get;set;}
   property System.Boolean IsParallelComposite {get;set;}
   property System.Boolean IsTerminal {get;set;}
-  property System.Collections.Generic.List<StateMachineLibrary.SourceGenerators.Declarations.MetadataEntry> Metadata {get;}
+  property System.Collections.Generic.List<StateForge.SourceGenerators.Declarations.MetadataEntry> Metadata {get;}
   property System.String GeneratedIdentifier {get;}
   property System.String HistoryFallbackExpression {get;set;}
   property System.String HistoryFallbackStateKey {get;set;}
@@ -131,80 +131,80 @@ class StateMachineLibrary.SourceGenerators.Declarations.DeclaredState
   property System.String ParentStateKey {get;set;}
   property System.String ValueExpression {get;}
 
-class StateMachineLibrary.SourceGenerators.Declarations.DeclaredTransition
-  ctor (System.String transitionId, System.String sourceStateKey, System.String eventKey, System.String targetStateKey, System.String targetExpression, StateMachineLibrary.SourceGenerators.Declarations.DeclaredTransitionKind transitionKind, Microsoft.CodeAnalysis.Location sourceLocation)
+class StateForge.SourceGenerators.Declarations.DeclaredTransition
+  ctor (System.String transitionId, System.String sourceStateKey, System.String eventKey, System.String targetStateKey, System.String targetExpression, StateForge.SourceGenerators.Declarations.DeclaredTransitionKind transitionKind, Microsoft.CodeAnalysis.Location sourceLocation)
   property Microsoft.CodeAnalysis.Location SourceLocation {get;}
-  property StateMachineLibrary.SourceGenerators.Declarations.DeclaredTransitionKind TransitionKind {get;}
-  property System.Collections.Generic.List<StateMachineLibrary.SourceGenerators.Declarations.BehaviorReference> Behaviors {get;}
-  property System.Collections.Generic.List<StateMachineLibrary.SourceGenerators.Declarations.ConditionReference> Conditions {get;}
-  property System.Collections.Generic.List<StateMachineLibrary.SourceGenerators.Declarations.MetadataEntry> Metadata {get;}
+  property StateForge.SourceGenerators.Declarations.DeclaredTransitionKind TransitionKind {get;}
+  property System.Collections.Generic.List<StateForge.SourceGenerators.Declarations.BehaviorReference> Behaviors {get;}
+  property System.Collections.Generic.List<StateForge.SourceGenerators.Declarations.ConditionReference> Conditions {get;}
+  property System.Collections.Generic.List<StateForge.SourceGenerators.Declarations.MetadataEntry> Metadata {get;}
   property System.String EventKey {get;}
   property System.String SourceStateKey {get;}
   property System.String TargetExpression {get;}
   property System.String TargetStateKey {get;}
   property System.String TransitionId {get;}
 
-enum StateMachineLibrary.SourceGenerators.Declarations.DeclaredTransitionKind : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
-  field StateMachineLibrary.SourceGenerators.Declarations.DeclaredTransitionKind External
-  field StateMachineLibrary.SourceGenerators.Declarations.DeclaredTransitionKind Internal
-  field StateMachineLibrary.SourceGenerators.Declarations.DeclaredTransitionKind Self
+enum StateForge.SourceGenerators.Declarations.DeclaredTransitionKind : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  field StateForge.SourceGenerators.Declarations.DeclaredTransitionKind External
+  field StateForge.SourceGenerators.Declarations.DeclaredTransitionKind Internal
+  field StateForge.SourceGenerators.Declarations.DeclaredTransitionKind Self
   enum External
   enum Internal
   enum Self
 
-static class StateMachineLibrary.SourceGenerators.Declarations.DslDeclarationParser
-  method System.Void ParseDsl(Microsoft.CodeAnalysis.CSharp.Syntax.TypeDeclarationSyntax syntax, Microsoft.CodeAnalysis.SemanticModel semanticModel, StateMachineLibrary.SourceGenerators.Declarations.MachineDeclaration declaration, StateMachineLibrary.SourceGenerators.Diagnostics.DiagnosticReporter reporter, System.Threading.CancellationToken cancellationToken)
+static class StateForge.SourceGenerators.Declarations.DslDeclarationParser
+  method System.Void ParseDsl(Microsoft.CodeAnalysis.CSharp.Syntax.TypeDeclarationSyntax syntax, Microsoft.CodeAnalysis.SemanticModel semanticModel, StateForge.SourceGenerators.Declarations.MachineDeclaration declaration, StateForge.SourceGenerators.Diagnostics.DiagnosticReporter reporter, System.Threading.CancellationToken cancellationToken)
 
-static class StateMachineLibrary.SourceGenerators.Declarations.DslDeclarationProvider
+static class StateForge.SourceGenerators.Declarations.DslDeclarationProvider
   method System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.CSharp.Syntax.MethodDeclarationSyntax> FindDeclarationMethods(Microsoft.CodeAnalysis.CSharp.Syntax.TypeDeclarationSyntax type)
 
-static class StateMachineLibrary.SourceGenerators.Declarations.DslSyntaxValidator
+static class StateForge.SourceGenerators.Declarations.DslSyntaxValidator
   method System.Boolean IsUnsupportedStatement(Microsoft.CodeAnalysis.CSharp.Syntax.StatementSyntax statement)
-  method System.Void ReportUnsupported(Microsoft.CodeAnalysis.CSharp.Syntax.StatementSyntax statement, StateMachineLibrary.SourceGenerators.Diagnostics.DiagnosticReporter reporter)
+  method System.Void ReportUnsupported(Microsoft.CodeAnalysis.CSharp.Syntax.StatementSyntax statement, StateForge.SourceGenerators.Diagnostics.DiagnosticReporter reporter)
 
-class StateMachineLibrary.SourceGenerators.Declarations.DslTransitionParser
+class StateForge.SourceGenerators.Declarations.DslTransitionParser
   ctor (Microsoft.CodeAnalysis.SemanticModel semanticModel, System.Threading.CancellationToken cancellationToken)
-  method StateMachineLibrary.SourceGenerators.Declarations.DeclaredTransition CreateTransition(System.String sourceKey, System.String eventKey, System.String targetKey, System.String targetExpression, StateMachineLibrary.SourceGenerators.Declarations.DeclaredTransitionKind kind, Microsoft.CodeAnalysis.Location location)
+  method StateForge.SourceGenerators.Declarations.DeclaredTransition CreateTransition(System.String sourceKey, System.String eventKey, System.String targetKey, System.String targetExpression, StateForge.SourceGenerators.Declarations.DeclaredTransitionKind kind, Microsoft.CodeAnalysis.Location location)
   method System.String Identity(Microsoft.CodeAnalysis.CSharp.Syntax.ExpressionSyntax expression)
   method System.String Text(Microsoft.CodeAnalysis.CSharp.Syntax.ExpressionSyntax expression)
 
-static class StateMachineLibrary.SourceGenerators.Declarations.EventDeclarationNormalizer
-  method System.Void EnsureTransitionEvents(StateMachineLibrary.SourceGenerators.Declarations.MachineDeclaration declaration)
+static class StateForge.SourceGenerators.Declarations.EventDeclarationNormalizer
+  method System.Void EnsureTransitionEvents(StateForge.SourceGenerators.Declarations.MachineDeclaration declaration)
 
-class StateMachineLibrary.SourceGenerators.Declarations.GeneratedEventMetadata
-  ctor (System.String identityKey, System.String displayName, StateMachineLibrary.SourceGenerators.Declarations.DeclaredEventKind eventKind, StateMachineLibrary.SourceGenerators.Declarations.GeneratedHelperAvailability helperAvailability, StateMachineLibrary.SourceGenerators.Declarations.GeneratedHelperSkippedReason skippedReason)
-  property StateMachineLibrary.SourceGenerators.Declarations.DeclaredEventKind EventKind {get;}
-  property StateMachineLibrary.SourceGenerators.Declarations.GeneratedHelperAvailability HelperAvailability {get;}
-  property StateMachineLibrary.SourceGenerators.Declarations.GeneratedHelperSkippedReason SkippedReason {get;}
+class StateForge.SourceGenerators.Declarations.GeneratedEventMetadata
+  ctor (System.String identityKey, System.String displayName, StateForge.SourceGenerators.Declarations.DeclaredEventKind eventKind, StateForge.SourceGenerators.Declarations.GeneratedHelperAvailability helperAvailability, StateForge.SourceGenerators.Declarations.GeneratedHelperSkippedReason skippedReason)
+  property StateForge.SourceGenerators.Declarations.DeclaredEventKind EventKind {get;}
+  property StateForge.SourceGenerators.Declarations.GeneratedHelperAvailability HelperAvailability {get;}
+  property StateForge.SourceGenerators.Declarations.GeneratedHelperSkippedReason SkippedReason {get;}
   property System.String DisplayName {get;}
   property System.String IdentityKey {get;}
 
-static class StateMachineLibrary.SourceGenerators.Declarations.GeneratedGraphMetadataBuilder
-  method StateMachineLibrary.SourceGenerators.Declarations.StaticDeclarationGraph Build(StateMachineLibrary.SourceGenerators.Declarations.MachineDeclaration declaration)
+static class StateForge.SourceGenerators.Declarations.GeneratedGraphMetadataBuilder
+  method StateForge.SourceGenerators.Declarations.StaticDeclarationGraph Build(StateForge.SourceGenerators.Declarations.MachineDeclaration declaration)
 
-static class StateMachineLibrary.SourceGenerators.Declarations.GeneratedHelperAnalyzer
-  method System.Void Analyze(StateMachineLibrary.SourceGenerators.Declarations.MachineDeclaration declaration)
+static class StateForge.SourceGenerators.Declarations.GeneratedHelperAnalyzer
+  method System.Void Analyze(StateForge.SourceGenerators.Declarations.MachineDeclaration declaration)
 
-enum StateMachineLibrary.SourceGenerators.Declarations.GeneratedHelperAvailability : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
-  field StateMachineLibrary.SourceGenerators.Declarations.GeneratedHelperAvailability Generated
-  field StateMachineLibrary.SourceGenerators.Declarations.GeneratedHelperAvailability Skipped
+enum StateForge.SourceGenerators.Declarations.GeneratedHelperAvailability : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  field StateForge.SourceGenerators.Declarations.GeneratedHelperAvailability Generated
+  field StateForge.SourceGenerators.Declarations.GeneratedHelperAvailability Skipped
   enum Generated
   enum Skipped
 
-class StateMachineLibrary.SourceGenerators.Declarations.GeneratedHelperModel
-  ctor (System.String eventKey, System.String helperName, StateMachineLibrary.SourceGenerators.Declarations.GeneratedHelperAvailability availability, StateMachineLibrary.SourceGenerators.Declarations.GeneratedHelperSkippedReason skippedReason)
-  property StateMachineLibrary.SourceGenerators.Declarations.GeneratedHelperAvailability Availability {get;}
-  property StateMachineLibrary.SourceGenerators.Declarations.GeneratedHelperSkippedReason SkippedReason {get;}
+class StateForge.SourceGenerators.Declarations.GeneratedHelperModel
+  ctor (System.String eventKey, System.String helperName, StateForge.SourceGenerators.Declarations.GeneratedHelperAvailability availability, StateForge.SourceGenerators.Declarations.GeneratedHelperSkippedReason skippedReason)
+  property StateForge.SourceGenerators.Declarations.GeneratedHelperAvailability Availability {get;}
+  property StateForge.SourceGenerators.Declarations.GeneratedHelperSkippedReason SkippedReason {get;}
   property System.String EventKey {get;}
   property System.String HelperName {get;}
 
-enum StateMachineLibrary.SourceGenerators.Declarations.GeneratedHelperSkippedReason : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
-  field StateMachineLibrary.SourceGenerators.Declarations.GeneratedHelperSkippedReason AmbiguousHelperCandidate
-  field StateMachineLibrary.SourceGenerators.Declarations.GeneratedHelperSkippedReason DuplicateEventIdentity
-  field StateMachineLibrary.SourceGenerators.Declarations.GeneratedHelperSkippedReason GeneratedNameConflict
-  field StateMachineLibrary.SourceGenerators.Declarations.GeneratedHelperSkippedReason None
-  field StateMachineLibrary.SourceGenerators.Declarations.GeneratedHelperSkippedReason RequiredMemberConflict
-  field StateMachineLibrary.SourceGenerators.Declarations.GeneratedHelperSkippedReason UnsupportedEventShape
+enum StateForge.SourceGenerators.Declarations.GeneratedHelperSkippedReason : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  field StateForge.SourceGenerators.Declarations.GeneratedHelperSkippedReason AmbiguousHelperCandidate
+  field StateForge.SourceGenerators.Declarations.GeneratedHelperSkippedReason DuplicateEventIdentity
+  field StateForge.SourceGenerators.Declarations.GeneratedHelperSkippedReason GeneratedNameConflict
+  field StateForge.SourceGenerators.Declarations.GeneratedHelperSkippedReason None
+  field StateForge.SourceGenerators.Declarations.GeneratedHelperSkippedReason RequiredMemberConflict
+  field StateForge.SourceGenerators.Declarations.GeneratedHelperSkippedReason UnsupportedEventShape
   enum AmbiguousHelperCandidate
   enum DuplicateEventIdentity
   enum GeneratedNameConflict
@@ -212,83 +212,83 @@ enum StateMachineLibrary.SourceGenerators.Declarations.GeneratedHelperSkippedRea
   enum RequiredMemberConflict
   enum UnsupportedEventShape
 
-static class StateMachineLibrary.SourceGenerators.Declarations.GeneratedMetadataBuilder
-  method StateMachineLibrary.SourceGenerators.Declarations.GeneratedMetadataModel Build(StateMachineLibrary.SourceGenerators.Declarations.MachineDeclaration declaration)
+static class StateForge.SourceGenerators.Declarations.GeneratedMetadataBuilder
+  method StateForge.SourceGenerators.Declarations.GeneratedMetadataModel Build(StateForge.SourceGenerators.Declarations.MachineDeclaration declaration)
 
-class StateMachineLibrary.SourceGenerators.Declarations.GeneratedMetadataModel
-  ctor (System.String machineId, System.Collections.Generic.IReadOnlyList<StateMachineLibrary.SourceGenerators.Declarations.GeneratedStateMetadata> states, System.Collections.Generic.IReadOnlyList<StateMachineLibrary.SourceGenerators.Declarations.GeneratedEventMetadata> events, System.Collections.Generic.IReadOnlyList<StateMachineLibrary.SourceGenerators.Declarations.GeneratedTransitionMetadata> transitions)
-  property System.Collections.Generic.IReadOnlyList<StateMachineLibrary.SourceGenerators.Declarations.GeneratedEventMetadata> Events {get;}
-  property System.Collections.Generic.IReadOnlyList<StateMachineLibrary.SourceGenerators.Declarations.GeneratedStateMetadata> States {get;}
-  property System.Collections.Generic.IReadOnlyList<StateMachineLibrary.SourceGenerators.Declarations.GeneratedTransitionMetadata> Transitions {get;}
+class StateForge.SourceGenerators.Declarations.GeneratedMetadataModel
+  ctor (System.String machineId, System.Collections.Generic.IReadOnlyList<StateForge.SourceGenerators.Declarations.GeneratedStateMetadata> states, System.Collections.Generic.IReadOnlyList<StateForge.SourceGenerators.Declarations.GeneratedEventMetadata> events, System.Collections.Generic.IReadOnlyList<StateForge.SourceGenerators.Declarations.GeneratedTransitionMetadata> transitions)
+  property System.Collections.Generic.IReadOnlyList<StateForge.SourceGenerators.Declarations.GeneratedEventMetadata> Events {get;}
+  property System.Collections.Generic.IReadOnlyList<StateForge.SourceGenerators.Declarations.GeneratedStateMetadata> States {get;}
+  property System.Collections.Generic.IReadOnlyList<StateForge.SourceGenerators.Declarations.GeneratedTransitionMetadata> Transitions {get;}
   property System.String MachineId {get;}
 
-class StateMachineLibrary.SourceGenerators.Declarations.GeneratedStateMetadata
+class StateForge.SourceGenerators.Declarations.GeneratedStateMetadata
   ctor (System.String identityKey, System.String displayName, System.Boolean isTerminal)
   property System.Boolean IsTerminal {get;}
   property System.String DisplayName {get;}
   property System.String IdentityKey {get;}
 
-class StateMachineLibrary.SourceGenerators.Declarations.GeneratedTransitionMetadata
-  ctor (System.String transitionId, System.String sourceStateKey, System.String eventKey, System.String targetStateKey, StateMachineLibrary.SourceGenerators.Declarations.DeclaredTransitionKind transitionKind)
-  property StateMachineLibrary.SourceGenerators.Declarations.DeclaredTransitionKind TransitionKind {get;}
+class StateForge.SourceGenerators.Declarations.GeneratedTransitionMetadata
+  ctor (System.String transitionId, System.String sourceStateKey, System.String eventKey, System.String targetStateKey, StateForge.SourceGenerators.Declarations.DeclaredTransitionKind transitionKind)
+  property StateForge.SourceGenerators.Declarations.DeclaredTransitionKind TransitionKind {get;}
   property System.String EventKey {get;}
   property System.String SourceStateKey {get;}
   property System.String TargetStateKey {get;}
   property System.String TransitionId {get;}
 
-class StateMachineLibrary.SourceGenerators.Declarations.MachineDeclaration
-  ctor (StateMachineLibrary.SourceGenerators.Declarations.DeclarationIdentity declarationId, Microsoft.CodeAnalysis.INamedTypeSymbol containingType, System.String stateTypeName, System.String eventTypeName, StateMachineLibrary.SourceGenerators.Declarations.DeclarationStyle declarationStyle, Microsoft.CodeAnalysis.Location sourceLocation)
+class StateForge.SourceGenerators.Declarations.MachineDeclaration
+  ctor (StateForge.SourceGenerators.Declarations.DeclarationIdentity declarationId, Microsoft.CodeAnalysis.INamedTypeSymbol containingType, System.String stateTypeName, System.String eventTypeName, StateForge.SourceGenerators.Declarations.DeclarationStyle declarationStyle, Microsoft.CodeAnalysis.Location sourceLocation)
   property Microsoft.CodeAnalysis.INamedTypeSymbol ContainingType {get;}
   property Microsoft.CodeAnalysis.Location SourceLocation {get;}
-  property StateMachineLibrary.SourceGenerators.Declarations.DeclarationIdentity DeclarationId {get;}
-  property StateMachineLibrary.SourceGenerators.Declarations.DeclarationStyle DeclarationStyle {get;}
-  property StateMachineLibrary.SourceGenerators.Declarations.GeneratedMetadataModel GeneratedMetadata {get;set;}
-  property StateMachineLibrary.SourceGenerators.Declarations.StaticDeclarationGraph StaticGraph {get;set;}
-  property System.Collections.Generic.List<StateMachineLibrary.SourceGenerators.Declarations.CompletionDeclaration> CompletionDeclarations {get;}
-  property System.Collections.Generic.List<StateMachineLibrary.SourceGenerators.Declarations.CompositeDeclaration> Composites {get;}
-  property System.Collections.Generic.List<StateMachineLibrary.SourceGenerators.Declarations.DeclaredEvent> Events {get;}
-  property System.Collections.Generic.List<StateMachineLibrary.SourceGenerators.Declarations.DeclaredState> States {get;}
-  property System.Collections.Generic.List<StateMachineLibrary.SourceGenerators.Declarations.DeclaredTransition> Transitions {get;}
-  property System.Collections.Generic.List<StateMachineLibrary.SourceGenerators.Declarations.GeneratedHelperModel> GeneratedHelpers {get;}
-  property System.Collections.Generic.List<StateMachineLibrary.SourceGenerators.Declarations.MetadataEntry> Metadata {get;}
-  property System.Collections.Generic.List<StateMachineLibrary.SourceGenerators.Declarations.ParallelCompositeDeclaration> ParallelComposites {get;}
-  property System.Collections.Generic.List<StateMachineLibrary.SourceGenerators.Declarations.RegionDeclaration> Regions {get;}
-  property System.Collections.Generic.List<StateMachineLibrary.SourceGenerators.Declarations.RegionMembership> RegionMemberships {get;}
+  property StateForge.SourceGenerators.Declarations.DeclarationIdentity DeclarationId {get;}
+  property StateForge.SourceGenerators.Declarations.DeclarationStyle DeclarationStyle {get;}
+  property StateForge.SourceGenerators.Declarations.GeneratedMetadataModel GeneratedMetadata {get;set;}
+  property StateForge.SourceGenerators.Declarations.StaticDeclarationGraph StaticGraph {get;set;}
+  property System.Collections.Generic.List<StateForge.SourceGenerators.Declarations.CompletionDeclaration> CompletionDeclarations {get;}
+  property System.Collections.Generic.List<StateForge.SourceGenerators.Declarations.CompositeDeclaration> Composites {get;}
+  property System.Collections.Generic.List<StateForge.SourceGenerators.Declarations.DeclaredEvent> Events {get;}
+  property System.Collections.Generic.List<StateForge.SourceGenerators.Declarations.DeclaredState> States {get;}
+  property System.Collections.Generic.List<StateForge.SourceGenerators.Declarations.DeclaredTransition> Transitions {get;}
+  property System.Collections.Generic.List<StateForge.SourceGenerators.Declarations.GeneratedHelperModel> GeneratedHelpers {get;}
+  property System.Collections.Generic.List<StateForge.SourceGenerators.Declarations.MetadataEntry> Metadata {get;}
+  property System.Collections.Generic.List<StateForge.SourceGenerators.Declarations.ParallelCompositeDeclaration> ParallelComposites {get;}
+  property System.Collections.Generic.List<StateForge.SourceGenerators.Declarations.RegionDeclaration> Regions {get;}
+  property System.Collections.Generic.List<StateForge.SourceGenerators.Declarations.RegionMembership> RegionMemberships {get;}
   property System.String EventTypeName {get;}
   property System.String StateTypeName {get;}
 
-static class StateMachineLibrary.SourceGenerators.Declarations.MemberReferenceResolver
-  method System.Void Validate(StateMachineLibrary.SourceGenerators.Declarations.MachineDeclaration declaration, StateMachineLibrary.SourceGenerators.Diagnostics.DiagnosticReporter reporter)
+static class StateForge.SourceGenerators.Declarations.MemberReferenceResolver
+  method System.Void Validate(StateForge.SourceGenerators.Declarations.MachineDeclaration declaration, StateForge.SourceGenerators.Diagnostics.DiagnosticReporter reporter)
 
-class StateMachineLibrary.SourceGenerators.Declarations.MetadataEntry
+class StateForge.SourceGenerators.Declarations.MetadataEntry
   ctor (System.String key, System.String valueExpression, Microsoft.CodeAnalysis.Location sourceLocation)
   property Microsoft.CodeAnalysis.Location SourceLocation {get;}
   property System.String Key {get;}
   property System.String ValueExpression {get;}
 
-class StateMachineLibrary.SourceGenerators.Declarations.ParallelCompositeDeclaration
+class StateForge.SourceGenerators.Declarations.ParallelCompositeDeclaration
   ctor (System.String compositeStateKey, System.String compositeStateExpression, Microsoft.CodeAnalysis.Location sourceLocation)
   property Microsoft.CodeAnalysis.Location SourceLocation {get;}
   property System.String CompositeStateExpression {get;}
   property System.String CompositeStateKey {get;}
 
-enum StateMachineLibrary.SourceGenerators.Declarations.ReferenceSignatureStatus : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
-  field StateMachineLibrary.SourceGenerators.Declarations.ReferenceSignatureStatus Compatible
-  field StateMachineLibrary.SourceGenerators.Declarations.ReferenceSignatureStatus Incompatible
-  field StateMachineLibrary.SourceGenerators.Declarations.ReferenceSignatureStatus Unknown
-  field StateMachineLibrary.SourceGenerators.Declarations.ReferenceSignatureStatus Unresolved
+enum StateForge.SourceGenerators.Declarations.ReferenceSignatureStatus : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  field StateForge.SourceGenerators.Declarations.ReferenceSignatureStatus Compatible
+  field StateForge.SourceGenerators.Declarations.ReferenceSignatureStatus Incompatible
+  field StateForge.SourceGenerators.Declarations.ReferenceSignatureStatus Unknown
+  field StateForge.SourceGenerators.Declarations.ReferenceSignatureStatus Unresolved
   enum Compatible
   enum Incompatible
   enum Unknown
   enum Unresolved
 
-class StateMachineLibrary.SourceGenerators.Declarations.RegionDeclaration
+class StateForge.SourceGenerators.Declarations.RegionDeclaration
   ctor (System.String ownerCompositeStateKey, System.String ownerCompositeExpression, System.String regionName, System.Int32 order, System.Boolean isExplicit, Microsoft.CodeAnalysis.Location sourceLocation)
   property Microsoft.CodeAnalysis.Location InitialLocation {get;set;}
   property Microsoft.CodeAnalysis.Location SourceLocation {get;}
   property System.Boolean IsExplicit {get;set;}
   property System.Collections.Generic.IReadOnlyList<Microsoft.CodeAnalysis.Location> RelatedLocations {get;}
-  property System.Collections.Generic.IReadOnlyList<StateMachineLibrary.SourceGenerators.Declarations.RegionMembership> Memberships {get;}
+  property System.Collections.Generic.IReadOnlyList<StateForge.SourceGenerators.Declarations.RegionMembership> Memberships {get;}
   property System.Int32 Order {get;}
   property System.String InitialStateExpression {get;set;}
   property System.String InitialStateKey {get;set;}
@@ -296,7 +296,7 @@ class StateMachineLibrary.SourceGenerators.Declarations.RegionDeclaration
   property System.String OwnerCompositeStateKey {get;}
   property System.String RegionName {get;}
 
-class StateMachineLibrary.SourceGenerators.Declarations.RegionMembership
+class StateForge.SourceGenerators.Declarations.RegionMembership
   ctor (System.String stateKey, System.String stateExpression, System.String ownerCompositeStateKey, System.String ownerCompositeExpression, System.String regionName, System.Boolean isInitial, System.Boolean isTerminal, Microsoft.CodeAnalysis.Location sourceLocation)
   property Microsoft.CodeAnalysis.Location SourceLocation {get;}
   property System.Boolean IsInitial {get;}
@@ -307,51 +307,51 @@ class StateMachineLibrary.SourceGenerators.Declarations.RegionMembership
   property System.String StateExpression {get;}
   property System.String StateKey {get;}
 
-class StateMachineLibrary.SourceGenerators.Declarations.StaticDeclarationGraph
-  ctor (System.Collections.Generic.IReadOnlyList<StateMachineLibrary.SourceGenerators.Declarations.StaticDeclarationGraphNode> nodes, System.Collections.Generic.IReadOnlyList<StateMachineLibrary.SourceGenerators.Declarations.StaticDeclarationGraphEdge> edges, System.Collections.Generic.IReadOnlyList<System.String> initialRoots)
-  property System.Collections.Generic.IReadOnlyList<StateMachineLibrary.SourceGenerators.Declarations.StaticDeclarationGraphEdge> Edges {get;}
-  property System.Collections.Generic.IReadOnlyList<StateMachineLibrary.SourceGenerators.Declarations.StaticDeclarationGraphNode> Nodes {get;}
+class StateForge.SourceGenerators.Declarations.StaticDeclarationGraph
+  ctor (System.Collections.Generic.IReadOnlyList<StateForge.SourceGenerators.Declarations.StaticDeclarationGraphNode> nodes, System.Collections.Generic.IReadOnlyList<StateForge.SourceGenerators.Declarations.StaticDeclarationGraphEdge> edges, System.Collections.Generic.IReadOnlyList<System.String> initialRoots)
+  property System.Collections.Generic.IReadOnlyList<StateForge.SourceGenerators.Declarations.StaticDeclarationGraphEdge> Edges {get;}
+  property System.Collections.Generic.IReadOnlyList<StateForge.SourceGenerators.Declarations.StaticDeclarationGraphNode> Nodes {get;}
   property System.Collections.Generic.IReadOnlyList<System.String> InitialRoots {get;}
 
-static class StateMachineLibrary.SourceGenerators.Declarations.StaticDeclarationGraphAnalyzer
-  method System.Void Analyze(StateMachineLibrary.SourceGenerators.Declarations.StaticDeclarationGraph graph, StateMachineLibrary.SourceGenerators.Diagnostics.DiagnosticReporter reporter)
+static class StateForge.SourceGenerators.Declarations.StaticDeclarationGraphAnalyzer
+  method System.Void Analyze(StateForge.SourceGenerators.Declarations.StaticDeclarationGraph graph, StateForge.SourceGenerators.Diagnostics.DiagnosticReporter reporter)
 
-static class StateMachineLibrary.SourceGenerators.Declarations.StaticDeclarationGraphBuilder
-  method StateMachineLibrary.SourceGenerators.Declarations.StaticDeclarationGraph Build(StateMachineLibrary.SourceGenerators.Declarations.MachineDeclaration declaration)
+static class StateForge.SourceGenerators.Declarations.StaticDeclarationGraphBuilder
+  method StateForge.SourceGenerators.Declarations.StaticDeclarationGraph Build(StateForge.SourceGenerators.Declarations.MachineDeclaration declaration)
 
-class StateMachineLibrary.SourceGenerators.Declarations.StaticDeclarationGraphEdge
-  ctor (System.String sourceStateKey, System.String targetStateKey, StateMachineLibrary.SourceGenerators.Declarations.StaticDeclarationGraphEdgeKind kind, Microsoft.CodeAnalysis.Location location)
+class StateForge.SourceGenerators.Declarations.StaticDeclarationGraphEdge
+  ctor (System.String sourceStateKey, System.String targetStateKey, StateForge.SourceGenerators.Declarations.StaticDeclarationGraphEdgeKind kind, Microsoft.CodeAnalysis.Location location)
   property Microsoft.CodeAnalysis.Location Location {get;}
-  property StateMachineLibrary.SourceGenerators.Declarations.StaticDeclarationGraphEdgeKind Kind {get;}
+  property StateForge.SourceGenerators.Declarations.StaticDeclarationGraphEdgeKind Kind {get;}
   property System.String SourceStateKey {get;}
   property System.String TargetStateKey {get;}
 
-enum StateMachineLibrary.SourceGenerators.Declarations.StaticDeclarationGraphEdgeKind : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
-  field StateMachineLibrary.SourceGenerators.Declarations.StaticDeclarationGraphEdgeKind Completion
-  field StateMachineLibrary.SourceGenerators.Declarations.StaticDeclarationGraphEdgeKind HistoryFallback
-  field StateMachineLibrary.SourceGenerators.Declarations.StaticDeclarationGraphEdgeKind InitialChild
-  field StateMachineLibrary.SourceGenerators.Declarations.StaticDeclarationGraphEdgeKind RegionInitial
-  field StateMachineLibrary.SourceGenerators.Declarations.StaticDeclarationGraphEdgeKind Transition
+enum StateForge.SourceGenerators.Declarations.StaticDeclarationGraphEdgeKind : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  field StateForge.SourceGenerators.Declarations.StaticDeclarationGraphEdgeKind Completion
+  field StateForge.SourceGenerators.Declarations.StaticDeclarationGraphEdgeKind HistoryFallback
+  field StateForge.SourceGenerators.Declarations.StaticDeclarationGraphEdgeKind InitialChild
+  field StateForge.SourceGenerators.Declarations.StaticDeclarationGraphEdgeKind RegionInitial
+  field StateForge.SourceGenerators.Declarations.StaticDeclarationGraphEdgeKind Transition
   enum Completion
   enum HistoryFallback
   enum InitialChild
   enum RegionInitial
   enum Transition
 
-class StateMachineLibrary.SourceGenerators.Declarations.StaticDeclarationGraphNode
+class StateForge.SourceGenerators.Declarations.StaticDeclarationGraphNode
   ctor (System.String stateKey, System.String displayName, System.Boolean isTerminal, Microsoft.CodeAnalysis.Location location)
   property Microsoft.CodeAnalysis.Location Location {get;}
   property System.Boolean IsTerminal {get;}
   property System.String DisplayName {get;}
   property System.String StateKey {get;}
 
-static class StateMachineLibrary.SourceGenerators.Declarations.TerminalStateDeclarationValidator
-  method System.Void Validate(StateMachineLibrary.SourceGenerators.Declarations.MachineDeclaration declaration, StateMachineLibrary.SourceGenerators.Diagnostics.DiagnosticReporter reporter)
+static class StateForge.SourceGenerators.Declarations.TerminalStateDeclarationValidator
+  method System.Void Validate(StateForge.SourceGenerators.Declarations.MachineDeclaration declaration, StateForge.SourceGenerators.Diagnostics.DiagnosticReporter reporter)
 
-static class StateMachineLibrary.SourceGenerators.Declarations.TransitionDeclarationValidator
-  method System.Void Validate(StateMachineLibrary.SourceGenerators.Declarations.MachineDeclaration declaration, StateMachineLibrary.SourceGenerators.Diagnostics.DiagnosticReporter reporter)
+static class StateForge.SourceGenerators.Declarations.TransitionDeclarationValidator
+  method System.Void Validate(StateForge.SourceGenerators.Declarations.MachineDeclaration declaration, StateForge.SourceGenerators.Diagnostics.DiagnosticReporter reporter)
 
-class StateMachineLibrary.SourceGenerators.Diagnostics.DiagnosticReporter
+class StateForge.SourceGenerators.Diagnostics.DiagnosticReporter
   ctor ()
   property System.Boolean HasErrors {get;}
   property System.Collections.Generic.IReadOnlyList<Microsoft.CodeAnalysis.Diagnostic> Diagnostics {get;}
@@ -375,7 +375,7 @@ class StateMachineLibrary.SourceGenerators.Diagnostics.DiagnosticReporter
   method System.Void UnsupportedDsl(System.String syntax, Microsoft.CodeAnalysis.Location location)
   method System.Void UnsupportedHistory(System.String state, Microsoft.CodeAnalysis.Location location)
 
-static class StateMachineLibrary.SourceGenerators.Diagnostics.StateMachineGeneratorDiagnostics
+static class StateForge.SourceGenerators.Diagnostics.StateMachineGeneratorDiagnostics
   field Microsoft.CodeAnalysis.DiagnosticDescriptor AmbiguousTransition
   field Microsoft.CodeAnalysis.DiagnosticDescriptor DeadEndState
   field Microsoft.CodeAnalysis.DiagnosticDescriptor DuplicateDeclaration
@@ -395,56 +395,56 @@ static class StateMachineLibrary.SourceGenerators.Diagnostics.StateMachineGenera
   field Microsoft.CodeAnalysis.DiagnosticDescriptor UnsupportedDslSyntax
   field Microsoft.CodeAnalysis.DiagnosticDescriptor UnsupportedHistoryMode
 
-static class StateMachineLibrary.SourceGenerators.Emission.BehaviorReferenceEmitter
-  method System.String Emit(StateMachineLibrary.SourceGenerators.Declarations.BehaviorReference reference)
+static class StateForge.SourceGenerators.Emission.BehaviorReferenceEmitter
+  method System.String Emit(StateForge.SourceGenerators.Declarations.BehaviorReference reference)
 
-static class StateMachineLibrary.SourceGenerators.Emission.ConditionReferenceEmitter
-  method System.String Emit(StateMachineLibrary.SourceGenerators.Declarations.ConditionReference reference)
+static class StateForge.SourceGenerators.Emission.ConditionReferenceEmitter
+  method System.String Emit(StateForge.SourceGenerators.Declarations.ConditionReference reference)
 
-static class StateMachineLibrary.SourceGenerators.Emission.DeclarationApiSource
+static class StateForge.SourceGenerators.Emission.DeclarationApiSource
   field System.String HintName
   field System.String Source
 
-static class StateMachineLibrary.SourceGenerators.Emission.DefinitionMemberEmitter
+static class StateForge.SourceGenerators.Emission.DefinitionMemberEmitter
   method System.String EmitMembers(System.String stateTypeName, System.String eventTypeName, System.String createBody, System.String indent)
 
-static class StateMachineLibrary.SourceGenerators.Emission.DefinitionSourceEmitter
-  method System.String Emit(StateMachineLibrary.SourceGenerators.Declarations.MachineDeclaration declaration)
+static class StateForge.SourceGenerators.Emission.DefinitionSourceEmitter
+  method System.String Emit(StateForge.SourceGenerators.Declarations.MachineDeclaration declaration)
 
-static class StateMachineLibrary.SourceGenerators.Emission.EventHelperEmitter
-  method System.String Emit(StateMachineLibrary.SourceGenerators.Declarations.MachineDeclaration declaration, System.String indent)
+static class StateForge.SourceGenerators.Emission.EventHelperEmitter
+  method System.String Emit(StateForge.SourceGenerators.Declarations.MachineDeclaration declaration, System.String indent)
 
-static class StateMachineLibrary.SourceGenerators.Emission.GeneratedGraphEmitter
-  method System.String Emit(StateMachineLibrary.SourceGenerators.Declarations.MachineDeclaration declaration, System.String indent)
+static class StateForge.SourceGenerators.Emission.GeneratedGraphEmitter
+  method System.String Emit(StateForge.SourceGenerators.Declarations.MachineDeclaration declaration, System.String indent)
 
-class StateMachineLibrary.SourceGenerators.Emission.GeneratedMachineDefinition
-  ctor (StateMachineLibrary.SourceGenerators.Declarations.MachineDeclaration declaration, System.String generatedSourceName, System.String source)
-  property StateMachineLibrary.SourceGenerators.Declarations.MachineDeclaration Declaration {get;}
+class StateForge.SourceGenerators.Emission.GeneratedMachineDefinition
+  ctor (StateForge.SourceGenerators.Declarations.MachineDeclaration declaration, System.String generatedSourceName, System.String source)
+  property StateForge.SourceGenerators.Declarations.MachineDeclaration Declaration {get;}
   property System.String GeneratedSourceName {get;}
   property System.String Source {get;}
 
-static class StateMachineLibrary.SourceGenerators.Emission.GeneratedMemberCatalog
+static class StateForge.SourceGenerators.Emission.GeneratedMemberCatalog
   field System.String CreateDefinition
   field System.String Definition
   field System.String GeneratedGraph
   field System.String GeneratedMetadata
   property System.Collections.Generic.IReadOnlyCollection<System.String> RequiredMemberNames {get;}
 
-static class StateMachineLibrary.SourceGenerators.Emission.GeneratedMetadataEmitter
-  method System.String Emit(StateMachineLibrary.SourceGenerators.Declarations.MachineDeclaration declaration, System.String indent)
+static class StateForge.SourceGenerators.Emission.GeneratedMetadataEmitter
+  method System.String Emit(StateForge.SourceGenerators.Declarations.MachineDeclaration declaration, System.String indent)
 
-static class StateMachineLibrary.SourceGenerators.Emission.GeneratedNameHelper
-  method System.String EventHelperName(StateMachineLibrary.SourceGenerators.Declarations.DeclaredEvent declaredEvent)
+static class StateForge.SourceGenerators.Emission.GeneratedNameHelper
+  method System.String EventHelperName(StateForge.SourceGenerators.Declarations.DeclaredEvent declaredEvent)
   method System.String IdentifierFromExpression(System.String expression, System.String prefix)
   method System.String ShortHash(System.String input)
-  method System.String SourceName(StateMachineLibrary.SourceGenerators.Declarations.MachineDeclaration declaration)
+  method System.String SourceName(StateForge.SourceGenerators.Declarations.MachineDeclaration declaration)
 
-static class StateMachineLibrary.SourceGenerators.Emission.MetadataEmitter
-  method System.String Emit(System.Collections.Generic.IEnumerable<StateMachineLibrary.SourceGenerators.Declarations.MetadataEntry> metadata)
+static class StateForge.SourceGenerators.Emission.MetadataEmitter
+  method System.String Emit(System.Collections.Generic.IEnumerable<StateForge.SourceGenerators.Declarations.MetadataEntry> metadata)
 
-static class StateMachineLibrary.SourceGenerators.SourceGeneratorsPublicApi
+static class StateForge.SourceGenerators.SourceGeneratorsPublicApi
   field System.String Namespace
 
-class StateMachineLibrary.SourceGenerators.StateMachineGenerator : Microsoft.CodeAnalysis.IIncrementalGenerator
+class StateForge.SourceGenerators.StateMachineGenerator : Microsoft.CodeAnalysis.IIncrementalGenerator
   ctor ()
   method System.Void Initialize(Microsoft.CodeAnalysis.IncrementalGeneratorInitializationContext context)

@@ -20,7 +20,7 @@ Feature-level plans that add, update, or remove dependencies must update this do
 | Name | Version | Source | Maintained? | Known critical CVEs? | License OK? | Decision |
 |------|---------|--------|-------------|----------------------|-------------|----------|
 | .NET SDK / runtime | `10.0.x` target | Microsoft | Yes | Review before release | Yes for intended use | Approved baseline platform |
-| Microsoft.CodeAnalysis.CSharp / Roslyn | See `src/SourceGenerators/SourceGenerators.csproj` | NuGet | Yes | Review before release | Yes for analyzer/source-generator use | Approved build/analyzer dependency; keep private to SourceGenerators package |
+| Microsoft.CodeAnalysis.CSharp / Roslyn | See `src/StateForge.SourceGenerators/StateForge.SourceGenerators.csproj` | NuGet | Yes | Review before release | Yes for analyzer/source-generator use | Approved build/analyzer dependency; keep private to SourceGenerators package |
 | xUnit and test tooling | See test project files | NuGet | Yes | Review before release | Yes for test use | Approved test-only dependency |
 | GitHub Actions `actions/checkout` | `v4` | GitHub Actions marketplace | Yes | Review before release | Yes for CI use | Approved CI action; pinning hardening may be added later |
 | GitHub Actions `actions/setup-dotnet` | `v4` | GitHub Actions marketplace | Yes | Review before release | Yes for CI use | Approved CI action; pinning hardening may be added later |
@@ -97,7 +97,7 @@ Static dependency audits are supplementary, not a replacement for continuous mon
 
 ## Feature Implementation: Parallel Regions Documentation and Sample (2026-05-13)
 
-- Dependency change: none. The new sample references `src/Core/Core.csproj` only and adds no NuGet package, build tool, CI action, renderer dependency, hosting dependency, persistence provider, network client, crypto library, or source-generator dependency.
+- Dependency change: none. The new sample references `src/StateForge.Core/StateForge.Core.csproj` only and adds no NuGet package, build tool, CI action, renderer dependency, hosting dependency, persistence provider, network client, crypto library, or source-generator dependency.
 - Package-boundary expectation: Core remains dependency-light; the sample demonstrates renderer-neutral graph metadata without referencing Mermaid, Graphviz, PlantUML, browser tooling, image rendering, persistence providers, hosted services, workflow orchestration, or external services.
 - Validation evidence: release tests run the sample and assert stable active-region, completion, graph metadata, invalid diagnostic, and completion-label output.
 
@@ -111,7 +111,7 @@ Static dependency audits are supplementary, not a replacement for continuous mon
 
 - Dependency change: none. The implementation uses existing Core definition/runtime/validation components, BCL collections, xUnit tests, documentation, and release-test infrastructure only.
 - Package-boundary expectation: Core remains dependency-light with no logging, dependency-injection, hosting, persistence-provider, telemetry-exporter, workflow, visualization-rendering, network, crypto, serializer, or external parser dependency added.
-- Validation evidence: Core package-boundary tests and `src/Core/Core.csproj` review remain the release gate; public API snapshot changed intentionally for additive preview/diagnostic contracts.
+- Validation evidence: Core package-boundary tests and `src/StateForge.Core/StateForge.Core.csproj` review remain the release gate; public API snapshot changed intentionally for additive preview/diagnostic contracts.
 
 ## Feature Planning: Source Generator Validation (2026-05-13)
 
@@ -122,3 +122,24 @@ Static dependency audits are supplementary, not a replacement for continuous mon
 ## Source generator validation dependency evidence (2026-05-13)
 
 No new package dependency was added. Roslyn remains a private analyzer dependency and SourceGenerators has no runtime visualization dependency.
+
+## Feature Planning: Application Integration Adapters (2026-05-14)
+
+- Dependency change expected: yes. Optional integration packages are expected to introduce application-composition and logging abstractions as dependencies scoped to those packages only.
+- Package-boundary expectation: Core remains dependency-light with no dependency on dependency injection, logging, hosting, telemetry exporters, persistence providers, application startup infrastructure, network clients, crypto libraries, serializers, or workflow orchestration packages.
+- Per-dependency review required during planning/implementation: confirm each new package dependency is maintained, license-compatible, minimally scoped, not transitively pulling hosted/exporter/provider infrastructure into Core, and represented in release package-boundary tests.
+- Re-audit trigger: revisit before implementation completion and before release if package identities, dependency versions, logging abstractions, startup validation approach, persistence coordination contracts, or release workflow/package metadata change.
+
+## Feature 022 application integration adapters
+
+New dependencies are limited to `Microsoft.Extensions.DependencyInjection.Abstractions` for the DI adapter and `Microsoft.Extensions.Logging.Abstractions` for the Logging adapter. Tests and the sample use `Microsoft.Extensions.DependencyInjection` to build a local service provider. Core receives no new dependencies. These Microsoft packages are maintained as part of the .NET platform ecosystem and introduce no provider/exporter/database dependency.
+
+## Feature 023 efcore persistence adapter
+
+Added dependency review entries:
+
+- `Microsoft.EntityFrameworkCore` (runtime adapter dependency): approved.
+- `Microsoft.EntityFrameworkCore.Sqlite` (test/sample-only): approved for deterministic tests and sample.
+- `Microsoft.EntityFrameworkCore.InMemory` (test/sample-only): approved for deterministic tests and sample.
+
+No EF provider dependency is shipped by `StateForge.Persistence.EntityFrameworkCore`; provider packages remain test/sample-only.

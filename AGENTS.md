@@ -3,7 +3,7 @@
 Guidance for AI coding agents working in this repository.
 
 <!-- SPECKIT START -->
-Active Spec Kit plan: `specs/021-source-generator-validation/plan.md`.
+Active Spec Kit plan: `specs/023-efcore-persistence-adapter/plan.md`.
 For feature-specific implementation context, read this plan and the feature directory referenced by `.specify/feature.json`, especially when implementing a `/speckit.*` task.
 <!-- SPECKIT END -->
 
@@ -15,7 +15,7 @@ The project is governed by Spec Kit and a project constitution. Treat the librar
 
 Important top-level files and directories:
 
-- `StateMachineLibrary.sln` — main solution.
+- `StateForge.sln` — main solution.
 - `Directory.Build.props` — common target framework, version, package metadata, documentation XML, deterministic build settings.
 - `src/` — packable library projects.
 - `tests/` — xUnit test projects and release validation tests.
@@ -36,7 +36,7 @@ Read `.specify/memory/constitution.md` before substantial work. Key requirements
 - Keep Core generic and type-safe over `TState` and `TEvent`.
 - Prefer async-first APIs with explicit cancellation semantics.
 - Preserve performance and avoid hidden synchronization/allocation costs.
-- Keep `StateMachineLibrary.Core` dependency-light with no external runtime dependencies.
+- Keep `StateForge.Core` dependency-light with no external runtime dependencies.
 - Add tests, docs, and public API snapshots for public behavior changes.
 - Consider security governance docs under `docs/security/` for behavior-changing work.
 
@@ -46,18 +46,18 @@ Read `.specify/memory/constitution.md` before substantial work. Key requirements
 
 Packable projects live under `src/`:
 
-- `src/Core/Core.csproj` — primary FSM package.
+- `src/StateForge.Core/StateForge.Core.csproj` — primary FSM package.
   - `Definitions/` — immutable definition model and fluent builders.
   - `Execution/` — runtimes, transition execution, active state, hierarchy, history, parallel regions, completion, observers.
   - `Validation/` — definition and snapshot validators plus validation codes.
   - `Introspection/` — definition introspection, graph export, permitted-event queries.
   - `CorePublicApi.cs` — marker used by release/API snapshot tests.
-- `src/Persistence/Persistence.csproj` — provider-neutral persistence contracts and persistent runtime wrappers over Core.
-- `src/OpenTelemetry/OpenTelemetry.csproj` — optional instrumentation via Core `ITransitionObserver`.
-- `src/SourceGenerators/SourceGenerators.csproj` — Roslyn incremental-style analyzer/generator package targeting `netstandard2.0`; Roslyn dependencies are private build-time assets.
-- `src/Visualization.Mermaid/Visualization.Mermaid.csproj` — deterministic Mermaid text renderer for Core graph data.
-- `src/Visualization.Graphviz/Visualization.Graphviz.csproj` — deterministic Graphviz DOT text renderer.
-- `src/Visualization.PlantUML/Visualization.PlantUML.csproj` — deterministic PlantUML text renderer.
+- `src/StateForge.Persistence/StateForge.Persistence.csproj` — provider-neutral persistence contracts and persistent runtime wrappers over Core.
+- `src/StateForge.OpenTelemetry/StateForge.OpenTelemetry.csproj` — optional instrumentation via Core `ITransitionObserver`.
+- `src/StateForge.SourceGenerators/StateForge.SourceGenerators.csproj` — Roslyn incremental-style analyzer/generator package targeting `netstandard2.0`; Roslyn dependencies are private build-time assets.
+- `src/StateForge.Visualization.Mermaid/StateForge.Visualization.Mermaid.csproj` — deterministic Mermaid text renderer for Core graph data.
+- `src/StateForge.Visualization.Graphviz/StateForge.Visualization.Graphviz.csproj` — deterministic Graphviz DOT text renderer.
+- `src/StateForge.Visualization.PlantUML/StateForge.Visualization.PlantUML.csproj` — deterministic PlantUML text renderer.
 
 ### Test Projects
 
@@ -109,11 +109,11 @@ Use repo root as working directory.
 Common commands:
 
 ```bash
-dotnet restore StateMachineLibrary.sln
-dotnet build StateMachineLibrary.sln --configuration Release --no-restore
-dotnet test --solution StateMachineLibrary.sln --configuration Release --no-build
-dotnet format StateMachineLibrary.sln --verify-no-changes
-dotnet pack StateMachineLibrary.sln --configuration Release --no-build --output artifacts/packages
+dotnet restore StateForge.sln
+dotnet build StateForge.sln --configuration Release --no-restore
+dotnet test --solution StateForge.sln --configuration Release --no-build
+dotnet format StateForge.sln --verify-no-changes
+dotnet pack StateForge.sln --configuration Release --no-build --output artifacts/packages
 ```
 
 For quick local iteration, Debug builds/tests are acceptable, but release validation must use Release configuration where scripts require it.
@@ -293,18 +293,18 @@ Common patterns:
 Focused commands examples:
 
 ```bash
-dotnet test --project tests/Core.Tests/Core.Tests.csproj --filter Completion
-dotnet test --project tests/Core.Tests/Core.Tests.csproj --filter Parallel
-dotnet test --project tests/Visualization.Tests/Visualization.Tests.csproj --filter Rendering
+dotnet test --project tests/StateForge.Core.Tests/StateForge.Core.Tests.csproj --filter Completion
+dotnet test --project tests/StateForge.Core.Tests/StateForge.Core.Tests.csproj --filter Parallel
+dotnet test --project tests/StateForge.Visualization.Tests/StateForge.Visualization.Tests.csproj --filter Rendering
 dotnet test --project tests/Release.Tests/Release.Tests.csproj --filter PublicApi
 ```
 
 Before considering a feature complete, run:
 
 ```bash
-dotnet format StateMachineLibrary.sln --verify-no-changes
-dotnet test --solution StateMachineLibrary.sln
-dotnet pack StateMachineLibrary.sln --configuration Release --output artifacts/packages
+dotnet format StateForge.sln --verify-no-changes
+dotnet test --solution StateForge.sln
+dotnet pack StateForge.sln --configuration Release --output artifacts/packages
 ```
 
 ## Documentation Guidelines

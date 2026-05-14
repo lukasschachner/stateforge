@@ -3,7 +3,7 @@
 The source-generator package can build a Core definition from declarative attributes or the compact declaration DSL.
 
 ```csharp
-using StateMachineLibrary.SourceGeneration;
+using StateForge.SourceGeneration;
 
 [StateMachine(typeof(OrderState), typeof(OrderEvent))]
 [State(OrderState.Created)]

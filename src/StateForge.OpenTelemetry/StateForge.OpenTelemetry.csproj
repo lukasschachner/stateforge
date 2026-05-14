@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <LangVersion>latest</LangVersion>
+        <PackageId>StateForge.OpenTelemetry</PackageId>
+        <Title>StateForge OpenTelemetry Instrumentation</Title>
+        <Description>Optional OpenTelemetry-compatible activity and metric instrumentation for StateForge.Core transition observations. Consumers own exporter, hosting, and telemetry pipeline setup.</Description>
+        <PackageTags>state-machine;fsm;opentelemetry;instrumentation;metrics;tracing</PackageTags>
+        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+        <PackageReleaseNotes>Adds optional activity and metric instrumentation over Core transition observations without exporter, hosted service, dependency injection, or startup configuration.</PackageReleaseNotes>
+        <NoWarn>$(NoWarn);NU5104</NoWarn>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\StateForge.Core\StateForge.Core.csproj"/>
+    </ItemGroup>
+</Project>

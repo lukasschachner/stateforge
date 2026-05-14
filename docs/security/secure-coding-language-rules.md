@@ -2,7 +2,7 @@
 
 ## Context
 
-- Feature or component: .NET State Machine Library repository baseline
+- Feature or component: .NET StateForge repository baseline
 - Primary language(s): C#, Bash, PowerShell
 - Frameworks involved: .NET `net10.0`, `netstandard2.0` analyzer/source-generator target where required by compiler hosts, GitHub Actions, shell/PowerShell validation scripts
 - Reviewer: Spec Kit security-governance baseline
@@ -92,3 +92,10 @@ Additional .NET rules for this repository:
 ## Source generator validation feature evidence (2026-05-13)
 
 The generator inspects compiler syntax/semantic data and does not execute user guards, actions, transition behaviors, renderers, shell commands, network calls, or arbitrary file I/O. Diagnostics and generated metadata use declared identifiers and deterministic strings, avoiding stack traces, environment values, temporary paths, and serialized payload contents.
+
+## Feature 023 efcore persistence adapter rules
+
+- Use EF Core query/update APIs only; avoid raw SQL construction in adapter code paths.
+- Validate persisted record required fields and definition identity before constructing loaded snapshots.
+- Use safe conversion boundaries for state/payload conversion; avoid unsafe binary deserialization.
+- Keep diagnostics high-level and redacted; do not expose payloads, connection strings, secrets, stack traces, or provider exception text by default.

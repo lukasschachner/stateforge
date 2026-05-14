@@ -2,7 +2,7 @@
 
 ## Context
 
-- System or product: .NET State Machine Library and related NuGet package artifacts
+- System or product: .NET StateForge and related NuGet package artifacts
 - Released version(s) covered: No public release version covered by this baseline
 - Reviewer: Spec Kit security-governance baseline
 - Date: 2026-05-11

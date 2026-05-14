@@ -7,12 +7,12 @@ Release readiness validates package artifacts before publication. The standard l
 Run the same command categories used by CI:
 
 ```bash
-dotnet restore StateMachineLibrary.sln
-dotnet build StateMachineLibrary.sln --configuration Release --no-restore
-dotnet test --solution StateMachineLibrary.sln --configuration Release --no-build
+dotnet restore StateForge.sln
+dotnet build StateForge.sln --configuration Release --no-restore
+dotnet test --solution StateForge.sln --configuration Release --no-build
 dotnet run --project samples/Core.HierarchySample/Core.HierarchySample.csproj --configuration Release --no-build
-dotnet format StateMachineLibrary.sln --verify-no-changes
-dotnet pack StateMachineLibrary.sln --configuration Release --no-build --output artifacts/packages
+dotnet format StateForge.sln --verify-no-changes
+dotnet pack StateForge.sln --configuration Release --no-build --output artifacts/packages
 ```
 
 Or run the helper script:
@@ -38,7 +38,7 @@ Release tests compare generated public API snapshots with approved files under `
 
 If validation fails, review whether the public contract changed intentionally. For intentional changes, update the approved snapshot together with documentation or versioning notes. Do not update snapshots as a mechanical fix for an accidental breaking change.
 
-Structured transition conflict diagnostics intentionally add Core public API in `StateMachineLibrary.Core.Diagnostics` and
+Structured transition conflict diagnostics intentionally add Core public API in `StateForge.Core.Diagnostics` and
 additive `ConflictDiagnostics` properties on validation/runtime result types. Release review should confirm those
 additions remain dependency-light, renderer-neutral, and compatible with existing readable summaries before accepting the
 Core snapshot update.
@@ -62,7 +62,7 @@ The CI workflow in `.github/workflows/ci.yml` runs restore, build, test, format 
 The release workflow in `.github/workflows/release.yml` adds secure-release controls for tagged/manual releases:
 
 - dependency vulnerability gate (`dotnet list ... --vulnerable --include-transitive --format json` + `eng/check-vulnerabilities.py`);
-- CycloneDX SBOM generation to `artifacts/sbom/StateMachineLibrary.cdx.json`;
+- CycloneDX SBOM generation to `artifacts/sbom/StateForge.cdx.json`;
 - author signing of `.nupkg` artifacts via `dotnet nuget sign` using environment-scoped signing certificate secrets (`NUGET_SIGN_CERT_PFX_B64`, `NUGET_SIGN_CERT_PASSWORD`) and RFC3161 timestamping (see `docs/security/signing.md`);
 - signature verification of signed `.nupkg` artifacts via `dotnet nuget verify --all`;
 - provenance attestation for signed package and SBOM artifacts via `actions/attest-build-provenance`;
@@ -95,7 +95,7 @@ Release validation includes Core tests for history restore/fallback behavior, co
 
 ## Completion Transition Release Readiness
 
-Before release, validate completion transitions with focused Core execution/validation/introspection tests, visualization rendering tests, public API snapshots, `dotnet format StateMachineLibrary.sln --verify-no-changes`, full `dotnet test --solution StateMachineLibrary.sln`, and `dotnet pack StateMachineLibrary.sln --configuration Release --output artifacts/packages`.
+Before release, validate completion transitions with focused Core execution/validation/introspection tests, visualization rendering tests, public API snapshots, `dotnet format StateForge.sln --verify-no-changes`, full `dotnet test --solution StateForge.sln`, and `dotnet pack StateForge.sln --configuration Release --output artifacts/packages`.
 
 ## Source Generator Hierarchy and Regions Release Readiness
 
@@ -113,3 +113,15 @@ Release review must include `tests/Release.Tests/PublicApi/SourceGenerators.appr
 ## Source generator validation evidence
 
 Source generator release readiness includes focused generator diagnostics/helper/metadata tests, public API snapshot review for the analyzer assembly, sample execution, and package-boundary checks confirming Roslyn remains private and no runtime visualization dependency is introduced.
+
+## Application integration adapters
+
+- Added optional `StateForge.DependencyInjection` and `StateForge.Logging` packages.
+- Release validation includes public API snapshots and package-boundary rules for both packages.
+- Core remains dependency-light and does not reference `Microsoft.Extensions.*`.
+
+## EF Core persistence adapter
+
+- Added optional `StateForge.Persistence.EntityFrameworkCore` package and release coverage.
+- Release validation includes package-boundary tests, public API snapshot tests, adapter sample existence, and focused adapter test suite coverage.
+- Adapter package depends on `Microsoft.EntityFrameworkCore` plus StateForge Core/Persistence only; provider packages remain test/sample-only.

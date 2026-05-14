@@ -1,0 +1,19 @@
+using StateForge.Core.Tests.History;
+using StateForge.Core.Definitions;
+
+namespace StateForge.Core.Tests.Introspection;
+
+public class HistoryDefinitionIntrospectionTests
+{
+    [Fact]
+    public void IntrospectionExposesHistoryMetadata()
+    {
+        var introspection = HistoryTestDomain.CreateOperationalMachine().Introspect();
+
+        Assert.True(introspection.HasHistory);
+        var state = Assert.Single(introspection.HistoryEnabledStates);
+        Assert.Equal(HistoryState.Operational, state.Value);
+        Assert.True(state.HasHistory);
+        Assert.Equal(HistoryMode.Shallow, state.HistoryMode);
+    }
+}

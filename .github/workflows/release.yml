@@ -34,25 +34,25 @@ jobs:
         run: mkdir -p artifacts/packages artifacts/sbom artifacts/security
 
       - name: restore
-        run: dotnet restore StateMachineLibrary.sln
+        run: dotnet restore StateForge.sln
 
       - name: build
-        run: dotnet build StateMachineLibrary.sln --configuration Release --no-restore
+        run: dotnet build StateForge.sln --configuration Release --no-restore
 
       - name: test
-        run: dotnet test --solution StateMachineLibrary.sln --configuration Release --no-build
+        run: dotnet test --solution StateForge.sln --configuration Release --no-build
 
       - name: dependency vulnerability report
-        run: dotnet list StateMachineLibrary.sln package --vulnerable --include-transitive --format json > artifacts/security/vulnerabilities.json
+        run: dotnet list StateForge.sln package --vulnerable --include-transitive --format json > artifacts/security/vulnerabilities.json
 
       - name: enforce vulnerability gate
         run: python3 eng/check-vulnerabilities.py artifacts/security/vulnerabilities.json
 
       - name: pack
-        run: dotnet pack StateMachineLibrary.sln --configuration Release --no-build --output artifacts/packages
+        run: dotnet pack StateForge.sln --configuration Release --no-build --output artifacts/packages
 
       - name: generate cyclonedx sbom
-        run: dotnet CycloneDX StateMachineLibrary.sln --configuration Release --exclude-test-projects --output-format Json --output artifacts/sbom --filename StateMachineLibrary.cdx.json
+        run: dotnet CycloneDX StateForge.sln --configuration Release --exclude-test-projects --output-format Json --output artifacts/sbom --filename StateForge.cdx.json
 
       - name: upload package artifacts
         uses: actions/upload-artifact@v4
@@ -168,7 +168,7 @@ jobs:
       - name: attest sbom provenance
         uses: actions/attest-build-provenance@v2
         with:
-          subject-path: artifacts/sbom/StateMachineLibrary.cdx.json
+          subject-path: artifacts/sbom/StateForge.cdx.json
 
       - name: publish packages to nuget
         env:

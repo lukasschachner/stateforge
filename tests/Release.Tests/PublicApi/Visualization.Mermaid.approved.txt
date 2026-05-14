@@ -1,11 +1,11 @@
-# Public API snapshot for Visualization.Mermaid
-class StateMachineLibrary.Visualization.Mermaid.MermaidPublicApi
+# Public API snapshot for StateForge.Visualization.Mermaid
+class StateForge.Visualization.Mermaid.MermaidPublicApi
   ctor ()
 
-static class StateMachineLibrary.Visualization.Mermaid.Rendering.MermaidGraphRenderer
-  method System.String Render<TState, TEvent>(DefinitionGraph<TState, TEvent> graph, StateMachineLibrary.Visualization.Mermaid.Rendering.MermaidRenderOptions options)
+static class StateForge.Visualization.Mermaid.Rendering.MermaidGraphRenderer
+  method System.String Render<TState, TEvent>(DefinitionGraph<TState, TEvent> graph, StateForge.Visualization.Mermaid.Rendering.MermaidRenderOptions options)
 
-class StateMachineLibrary.Visualization.Mermaid.Rendering.MermaidRenderOptions
+class StateForge.Visualization.Mermaid.Rendering.MermaidRenderOptions
   ctor ()
   property System.Boolean IncludeMetadata {get;set;}
   property System.Boolean RenderRuntimeOverlay {get;set;}

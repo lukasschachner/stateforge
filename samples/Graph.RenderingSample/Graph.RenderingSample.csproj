@@ -8,9 +8,9 @@
         <IsPackable>false</IsPackable>
     </PropertyGroup>
     <ItemGroup>
-        <ProjectReference Include="..\..\src\Core\Core.csproj"/>
-        <ProjectReference Include="..\..\src\Visualization.Mermaid\Visualization.Mermaid.csproj"/>
-        <ProjectReference Include="..\..\src\Visualization.Graphviz\Visualization.Graphviz.csproj"/>
-        <ProjectReference Include="..\..\src\Visualization.PlantUML\Visualization.PlantUML.csproj"/>
+        <ProjectReference Include="..\..\src\StateForge.Core\StateForge.Core.csproj"/>
+        <ProjectReference Include="..\..\src\StateForge.Visualization.Mermaid\StateForge.Visualization.Mermaid.csproj"/>
+        <ProjectReference Include="..\..\src\StateForge.Visualization.Graphviz\StateForge.Visualization.Graphviz.csproj"/>
+        <ProjectReference Include="..\..\src\StateForge.Visualization.PlantUML\StateForge.Visualization.PlantUML.csproj"/>
     </ItemGroup>
 </Project>

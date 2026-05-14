@@ -2,7 +2,7 @@
 
 ## Context
 
-- System or feature: .NET State Machine Library repository baseline
+- System or feature: .NET StateForge repository baseline
 - Reviewer: Spec Kit security-governance baseline
 - Date: 2026-05-11
 - ASVS version used: OWASP ASVS 4.x family; exact version to be selected if ASVS becomes applicable
@@ -97,3 +97,17 @@ Verification focus remains CWE-20 declarative input validation, safe diagnostic 
 ## Source generator validation ASVS rationale (2026-05-13)
 
 ASVS remains not applicable: this feature introduces no web application, HTTP API, authentication, authorization, session management, or browser-facing service surface.
+
+## Feature Planning: Application Integration Adapters (2026-05-14)
+
+Selected Level: N/A. The feature adds in-process optional library integration packages for application composition, structured logging, startup validation checks, and provider-neutral persistence coordination. It introduces no web application, HTTP API, authentication, authorization, session management, browser-facing service, hosted endpoint, user-account surface, or multi-user access-control surface.
+
+Verification focus remains secure configuration validation, safe diagnostic/log content, dependency boundaries, and package supply-chain evidence under the project security checklist rather than ASVS control testing.
+
+## Feature 022 application integration adapters
+
+ASVS remains not applicable. The feature adds in-process library adapters only and introduces no web endpoint, HTTP API, authentication, authorization, session management, browser, or hosted service surface.
+
+## Feature 023 efcore persistence adapter
+
+ASVS remains not applicable. The adapter is an in-process persistence package and introduces no web/API/auth/session surface.

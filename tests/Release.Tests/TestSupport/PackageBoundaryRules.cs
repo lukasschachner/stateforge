@@ -12,7 +12,7 @@ internal sealed record PackageBoundaryRule(
 internal static class PackageBoundaryRules
 {
     public static string[] CommonForbiddenFiles { get; } =
-        [".git/", ".github/", ".idea/", "obj/", "tests/", "samples/", "specs/", "StateMachineLibrary.sln"];
+        [".git/", ".github/", ".idea/", "obj/", "tests/", "samples/", "specs/", "StateForge.sln"];
 
     public static IReadOnlyDictionary<string, PackageBoundaryRule> Load()
     {
@@ -60,8 +60,8 @@ internal static class PackageBoundaryRules
             ],
             "SourceGenerators" =>
             [
-                "StateMachineLibrary.Persistence", "StateMachineLibrary.OpenTelemetry",
-                "StateMachineLibrary.Visualization"
+                "StateForge.Persistence", "StateForge.OpenTelemetry",
+                "StateForge.Visualization"
             ],
             "Visualization.Mermaid" =>
             [

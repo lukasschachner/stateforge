@@ -2,7 +2,7 @@
 
 ## Context
 
-- System or release: .NET State Machine Library release-capable package set
+- System or release: .NET StateForge release-capable package set
 - Reviewer: Spec Kit security-governance baseline
 - Date: 2026-05-13
 - Released version(s) covered: No public release version covered by this baseline; applies to release-candidate readiness work
@@ -11,7 +11,7 @@
 
 - Format used (CycloneDX, SPDX): CycloneDX JSON.
 - Generator and version: `cyclonedx` .NET local tool (`6.2.0`).
-- Storage location of the SBOM artefact: `artifacts/sbom/StateMachineLibrary.cdx.json` in release workflow artifacts.
+- Storage location of the SBOM artefact: `artifacts/sbom/StateForge.cdx.json` in release workflow artifacts.
 - Generated per release artefact set: yes in `.github/workflows/release.yml`.
 - Published externally: N/A at baseline because no public package publication is in scope yet; reassess before public release.
 
@@ -75,7 +75,7 @@
 ## Feature review: 016-transition-conflict-diagnostics
 
 - Package/dependency changes: none expected; no package-boundary expansion.
-- Release snapshot trigger: Core public API snapshot updated for `StateMachineLibrary.Core.Diagnostics` types and additive `ConflictDiagnostics` properties.
+- Release snapshot trigger: Core public API snapshot updated for `StateForge.Core.Diagnostics` types and additive `ConflictDiagnostics` properties.
 - SBOM/VEX/provenance impact: no dependency inventory change; normal release SBOM/provenance/signing evidence remains required before publication.
 
 ## Feature Evidence: Runtime Graph Overlays (2026-05-13)
@@ -129,3 +129,18 @@
 ## Source generator validation supply-chain evidence (2026-05-13)
 
 No dependency inventory change or advisory status requiring VEX was introduced. Package-boundary tests cover analyzer packaging, private Roslyn assets, and no runtime visualization dependency.
+
+## Feature Planning: Application Integration Adapters (2026-05-14)
+
+- SBOM: relevant for release packaging because the feature adds optional distributable packages and expected dependency inventory changes; release SBOM generation must include the new packages and dependencies.
+- VEX: relevant for release governance; no feature-specific VEX statement is expected unless an advisory or dependency vulnerability status applies before release.
+- SLSA: relevant for package provenance because new distributable artifacts, package metadata, package-boundary evidence, signing, and provenance attestations must cover the integration packages.
+- Release snapshot trigger: public API snapshots should be reviewed for additive integration package contracts, logging configuration contracts, validation startup-check contracts, and provider-neutral persistence coordination contracts before release approval.
+
+## Feature 022 application integration adapters
+
+Two new distributable packages are included in packable-project discovery: `StateForge.DependencyInjection` and `StateForge.Logging`. Package-boundary rules limit each package to Core plus its relevant Microsoft.Extensions abstraction package. Public API snapshots and package validation cover both packages. No vulnerability advisory currently requires a VEX statement for this feature.
+
+## Feature 023 efcore persistence adapter
+
+A new distributable package `StateForge.Persistence.EntityFrameworkCore` is included in packable-project discovery and release validation. SBOM/provenance/signing coverage follows existing release workflow controls. No current advisory requires a feature-specific VEX entry.

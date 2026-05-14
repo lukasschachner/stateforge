@@ -1,5 +1,5 @@
-using StateMachineLibrary.Core.Definitions;
-using StateMachineLibrary.Core.Execution;
+using StateForge.Core.Definitions;
+using StateForge.Core.Execution;
 
 var observer = new ConsoleObserver<OrderState, OrderEvent>();
 var definition = StateMachineDefinition<OrderState, OrderEvent>.Create(builder =>

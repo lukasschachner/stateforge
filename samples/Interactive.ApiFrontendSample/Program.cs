@@ -1,4 +1,5 @@
 using Interactive.ApiFrontendSample.Features.OrderWorkflow;
+using StateForge.DependencyInjection.Validation;
 
 if (args.Contains("--smoke-test", StringComparer.OrdinalIgnoreCase))
 {
@@ -7,9 +8,12 @@ if (args.Contains("--smoke-test", StringComparer.OrdinalIgnoreCase))
 }
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddSingleton<OrderWorkflowRuntimeService>();
+builder.Services.AddOrderWorkflowDemo();
 
 var app = builder.Build();
+var validation = await app.Services.GetRequiredService<IStateMachineRegistrationValidator>().ValidateAsync();
+if (!validation.Succeeded)
+    throw new InvalidOperationException(validation.ToDisplayString());
 app.UseDefaultFiles();
 app.UseStaticFiles();
 app.MapOrderWorkflowApi();

@@ -7,9 +7,9 @@ cd "$repo_root"
 rm -rf artifacts/packages
 mkdir -p artifacts/packages
 
-dotnet restore StateMachineLibrary.sln
-dotnet build StateMachineLibrary.sln --configuration Release --no-restore
-dotnet test --solution StateMachineLibrary.sln --configuration Release --no-build
+dotnet restore StateForge.sln
+dotnet build StateForge.sln --configuration Release --no-restore
+dotnet test --solution StateForge.sln --configuration Release --no-build
 hierarchy_output="$(dotnet run --project samples/Core.HierarchySample/Core.HierarchySample.csproj --configuration Release --no-build)"
 printf '%s\n' "$hierarchy_output"
 grep -q "History restored path: Reviewing -> LegalReview" <<< "$hierarchy_output"
@@ -25,7 +25,7 @@ grep -q "Parallel history definition:" <<< "$graph_output"
 grep -q "Active snapshot kind:" <<< "$graph_output"
 grep -q "Introspection snapshot kind:" <<< "$graph_output"
 grep -q "Recorded parallel history:" <<< "$graph_output"
-dotnet format StateMachineLibrary.sln --verify-no-changes
-dotnet pack StateMachineLibrary.sln --configuration Release --no-build --output artifacts/packages
+dotnet format StateForge.sln --verify-no-changes
+dotnet pack StateForge.sln --configuration Release --no-build --output artifacts/packages
 
 echo "Release validation completed. Artifacts are in artifacts/packages. No publish step was run."

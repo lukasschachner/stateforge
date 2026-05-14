@@ -1,15 +1,13 @@
 using System.Diagnostics;
 using System.Diagnostics.Metrics;
-using StateMachineLibrary.Core.Definitions;
-using StateMachineLibrary.OpenTelemetry;
+using StateForge.Core.Definitions;
+using StateForge.OpenTelemetry;
 
 var activities = new List<Activity>();
-using var activityListener = new ActivityListener
-{
-    ShouldListenTo = source => source.Name == StateMachineTelemetryNames.ActivitySourceName,
-    Sample = (ref _) => ActivitySamplingResult.AllDataAndRecorded,
-    ActivityStopped = activity => activities.Add(activity)
-};
+using var activityListener = new ActivityListener();
+activityListener.ShouldListenTo = source => source.Name == StateMachineTelemetryNames.ActivitySourceName;
+activityListener.Sample = (ref _) => ActivitySamplingResult.AllDataAndRecorded;
+activityListener.ActivityStopped = activity => activities.Add(activity);
 ActivitySource.AddActivityListener(activityListener);
 
 using var meterListener = new MeterListener();

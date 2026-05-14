@@ -7,7 +7,7 @@ public sealed class SourceGeneratorPackageShapeTests
     [Fact]
     public void SourceGeneratorRoslynDependencyIsPrivateAndPackagedAsAnalyzer()
     {
-        var project = ProjectFileAssertions.LoadProject("src/SourceGenerators/SourceGenerators.csproj");
+        var project = ProjectFileAssertions.LoadProject("src/StateForge.SourceGenerators/StateForge.SourceGenerators.csproj");
         Assert.Equal("Analyzer", ProjectFileAssertions.RequiredProperty(project, "PackageType"));
         Assert.Equal("false", ProjectFileAssertions.RequiredProperty(project, "IncludeBuildOutput"));
         var roslyn = project.Descendants("PackageReference")

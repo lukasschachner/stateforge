@@ -1,8 +1,8 @@
-using StateMachineLibrary.Core.Definitions;
-using StateMachineLibrary.Persistence;
-using StateMachineLibrary.Persistence.Execution;
-using StateMachineLibrary.Persistence.Snapshots;
-using StateMachineLibrary.Persistence.Storage;
+using StateForge.Core.Definitions;
+using StateForge.Persistence;
+using StateForge.Persistence.Execution;
+using StateForge.Persistence.Snapshots;
+using StateForge.Persistence.Storage;
 
 internal static class Program
 {
