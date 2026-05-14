@@ -27,6 +27,7 @@ Choose only the packages needed by your application:
 | `StateForge.Core`                   | You need fluent finite state machine definitions, validation, runtime execution, outcomes, permitted-event queries, introspection, and graph data.                     |
 | `StateForge.SourceGenerators`       | You want optional build-time declaration syntax that generates Core definitions. It is an analyzer/source-generator package and is not a runtime replacement for Core. |
 | `StateForge.Persistence`            | You need provider-neutral persistence contracts and apply-and-persist coordination while keeping storage in application-owned code.                                    |
+| `StateForge.Persistence.EntityFrameworkCore` | You want an optional EF Core-backed snapshot store adapter while keeping provider, migrations, and DbContext ownership in your application.                          |
 | `StateForge.OpenTelemetry`          | You want optional OpenTelemetry-compatible activities and metrics from Core transition observations while owning all exporter and pipeline setup.                      |
 | `StateForge.Visualization.Mermaid`  | You want deterministic Mermaid state diagram text from exported Core definition graphs.                                                                                |
 | `StateForge.Visualization.Graphviz` | You want deterministic Graphviz DOT text from exported Core definition graphs.                                                                                         |
@@ -36,6 +37,7 @@ Choose only the packages needed by your application:
 dotnet add package StateForge.Core --prerelease
 dotnet add package StateForge.SourceGenerators --prerelease
 dotnet add package StateForge.Persistence --prerelease
+dotnet add package StateForge.Persistence.EntityFrameworkCore --prerelease
 dotnet add package StateForge.OpenTelemetry --prerelease
 dotnet add package StateForge.Visualization.Mermaid --prerelease
 dotnet add package StateForge.Visualization.Graphviz --prerelease

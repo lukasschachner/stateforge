@@ -9,7 +9,7 @@ public sealed class PackageMetadataTests
     {
         Assert.Equal(
         [
-            "Core", "DependencyInjection", "Logging", "SourceGenerators", "Persistence", "OpenTelemetry", "Visualization.Mermaid",
+            "Core", "DependencyInjection", "Logging", "SourceGenerators", "Persistence", "Persistence.EntityFrameworkCore", "OpenTelemetry", "Visualization.Mermaid",
             "Visualization.Graphviz", "Visualization.PlantUML"
         ], PackableProject.All.Select(p => p.Name).ToArray());
     }

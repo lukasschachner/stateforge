@@ -34,25 +34,25 @@ jobs:
         run: mkdir -p artifacts/packages artifacts/sbom artifacts/security
 
       - name: restore
-        run: dotnet restore StateForge.sln
+        run: dotnet restore StateForge.slnx
 
       - name: build
-        run: dotnet build StateForge.sln --configuration Release --no-restore
+        run: dotnet build StateForge.slnx --configuration Release --no-restore
 
       - name: test
-        run: dotnet test --solution StateForge.sln --configuration Release --no-build
+        run: dotnet test --solution StateForge.slnx --configuration Release --no-build
 
       - name: dependency vulnerability report
-        run: dotnet list StateForge.sln package --vulnerable --include-transitive --format json > artifacts/security/vulnerabilities.json
+        run: dotnet list StateForge.slnx package --vulnerable --include-transitive --format json > artifacts/security/vulnerabilities.json
 
       - name: enforce vulnerability gate
         run: python3 eng/check-vulnerabilities.py artifacts/security/vulnerabilities.json
 
       - name: pack
-        run: dotnet pack StateForge.sln --configuration Release --no-build --output artifacts/packages
+        run: dotnet pack StateForge.slnx --configuration Release --no-build --output artifacts/packages
 
       - name: generate cyclonedx sbom
-        run: dotnet CycloneDX StateForge.sln --configuration Release --exclude-test-projects --output-format Json --output artifacts/sbom --filename StateForge.cdx.json
+        run: dotnet CycloneDX StateForge.slnx --configuration Release --exclude-test-projects --output-format Json --output artifacts/sbom --filename StateForge.cdx.json
 
       - name: upload package artifacts
         uses: actions/upload-artifact@v4

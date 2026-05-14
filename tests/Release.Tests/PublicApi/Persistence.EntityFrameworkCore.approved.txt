@@ -1,0 +1,42 @@
+# Public API snapshot for StateForge.Persistence.EntityFrameworkCore
+class StateForge.Persistence.EntityFrameworkCore.Configuration.StateForgeEntityFrameworkCoreOptions<TState>
+  ctor ()
+  property IStateValueConverter<TState> StateValueConverter {get;set;}
+  property StateForge.Persistence.EntityFrameworkCore.Serialization.ISnapshotPayloadConverter SnapshotPayloadConverter {get;set;}
+  property System.Func<Microsoft.EntityFrameworkCore.DbContext, Microsoft.EntityFrameworkCore.DbSet<StateForge.Persistence.EntityFrameworkCore.Storage.StateForgeSnapshotRecord>> SnapshotSetResolver {get;set;}
+  property System.Int64 CreateExpectedVersion {get;set;}
+  property System.String Schema {get;set;}
+  property System.String TableName {get;set;}
+  method System.Void Validate()
+
+static class StateForge.Persistence.EntityFrameworkCore.Configuration.StateForgeModelBuilderExtensions
+  method Microsoft.EntityFrameworkCore.ModelBuilder ConfigureStateForgeSnapshotRecord(Microsoft.EntityFrameworkCore.ModelBuilder modelBuilder, System.String tableName, System.String schema)
+
+static class StateForge.Persistence.EntityFrameworkCore.EntityFrameworkCorePublicApi
+
+interface StateForge.Persistence.EntityFrameworkCore.Serialization.ISnapshotPayloadConverter
+  method StateForge.Persistence.Snapshots.PersistencePropertyBag ConvertFromStorage(System.String payload)
+  method System.String ConvertToStorage(StateForge.Persistence.Snapshots.PersistencePropertyBag properties)
+
+interface StateForge.Persistence.EntityFrameworkCore.Serialization.IStateValueConverter<TState>
+  method System.String ConvertToStorage(TState state)
+  method TState ConvertFromStorage(System.String value)
+
+static class StateForge.Persistence.EntityFrameworkCore.Serialization.StateValueConverters
+  method IStateValueConverter<TState> CreateDefault<TState>()
+  method StateForge.Persistence.EntityFrameworkCore.Serialization.ISnapshotPayloadConverter CreateDefaultPayloadConverter()
+
+class StateForge.Persistence.EntityFrameworkCore.Storage.EntityFrameworkCoreSnapshotStore<TState> : IStateSnapshotStore<TState>
+  ctor (Microsoft.EntityFrameworkCore.DbContext dbContext, StateForgeEntityFrameworkCoreOptions<TState> options)
+  method ValueTask<SnapshotLoadResult<TState>> LoadAsync(System.String instanceId, System.String definitionId, System.Threading.CancellationToken cancellationToken)
+  method ValueTask<SnapshotSaveResult<TState>> SaveAsync(StateForge.Persistence.Snapshots.PersistenceVersion expectedVersion, StateSnapshot<TState> proposedSnapshot, System.Threading.CancellationToken cancellationToken)
+
+class StateForge.Persistence.EntityFrameworkCore.Storage.StateForgeSnapshotRecord
+  ctor ()
+  property System.DateTimeOffset CreatedAtUtc {get;set;}
+  property System.DateTimeOffset UpdatedAtUtc {get;set;}
+  property System.Int64 Version {get;set;}
+  property System.String ActiveState {get;set;}
+  property System.String DefinitionId {get;set;}
+  property System.String InstanceId {get;set;}
+  property System.String Payload {get;set;}
