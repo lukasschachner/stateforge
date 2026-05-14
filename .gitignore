@@ -14,3 +14,7 @@ Thumbs.db
 *.swp
 .vscode/
 .idea/
+.firecrawl/
+.pi/
+.specify/
+specs/
