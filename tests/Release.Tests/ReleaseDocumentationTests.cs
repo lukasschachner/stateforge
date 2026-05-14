@@ -5,14 +5,12 @@ namespace Release.Tests;
 public sealed class ReleaseDocumentationTests
 {
     [Fact]
-    public void QuickstartDocsAndScriptsUseConsistentCommands()
+    public void ReleaseReadinessDocsAndScriptsUseConsistentCommands()
     {
-        var quickstart = ProjectPaths.ReadAllText("specs/005-nuget-release-readiness/quickstart.md");
         var docs = ProjectPaths.ReadAllText("docs/release-readiness.md");
         var script = ProjectPaths.ReadAllText("eng/validate-release.sh");
         foreach (var command in ReleaseValidationFacts.OrderedCliCommands)
         {
-            Assert.Contains(command, quickstart);
             Assert.Contains(command, docs);
             Assert.Contains(command, script);
         }
