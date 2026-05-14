@@ -7,12 +7,12 @@ Release readiness validates package artifacts before publication. The standard l
 Run the same command categories used by CI:
 
 ```bash
-dotnet restore StateForge.sln
-dotnet build StateForge.sln --configuration Release --no-restore
-dotnet test --solution StateForge.sln --configuration Release --no-build
+dotnet restore StateForge.slnx
+dotnet build StateForge.slnx --configuration Release --no-restore
+dotnet test --solution StateForge.slnx --configuration Release --no-build
 dotnet run --project samples/Core.HierarchySample/Core.HierarchySample.csproj --configuration Release --no-build
-dotnet format StateForge.sln --verify-no-changes
-dotnet pack StateForge.sln --configuration Release --no-build --output artifacts/packages
+dotnet format StateForge.slnx --verify-no-changes
+dotnet pack StateForge.slnx --configuration Release --no-build --output artifacts/packages
 ```
 
 Or run the helper script:
@@ -95,7 +95,7 @@ Release validation includes Core tests for history restore/fallback behavior, co
 
 ## Completion Transition Release Readiness
 
-Before release, validate completion transitions with focused Core execution/validation/introspection tests, visualization rendering tests, public API snapshots, `dotnet format StateForge.sln --verify-no-changes`, full `dotnet test --solution StateForge.sln`, and `dotnet pack StateForge.sln --configuration Release --output artifacts/packages`.
+Before release, validate completion transitions with focused Core execution/validation/introspection tests, visualization rendering tests, public API snapshots, `dotnet format StateForge.slnx --verify-no-changes`, full `dotnet test --solution StateForge.slnx`, and `dotnet pack StateForge.slnx --configuration Release --output artifacts/packages`.
 
 ## Source Generator Hierarchy and Regions Release Readiness
 

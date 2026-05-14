@@ -6,9 +6,14 @@ Set-Location $RepoRoot
 if (Test-Path artifacts/packages) { Remove-Item -Recurse -Force artifacts/packages }
 New-Item -ItemType Directory -Force artifacts/packages | Out-Null
 
-dotnet restore StateForge.sln
-dotnet build StateForge.sln --configuration Release --no-restore
-dotnet test --solution StateForge.sln --configuration Release --no-build
+$SolutionFile = "StateForge.slnx"
+if (-not (Test-Path $SolutionFile) -and (Test-Path "StateForge.sln")) {
+    $SolutionFile = "StateForge.sln"
+}
+
+dotnet restore $SolutionFile
+dotnet build $SolutionFile --configuration Release --no-restore
+dotnet test --solution $SolutionFile --configuration Release --no-build
 $HierarchyOutput = dotnet run --project samples/Core.HierarchySample/Core.HierarchySample.csproj --configuration Release --no-build
 $HierarchyOutput | Write-Host
 $HierarchyOutputText = $HierarchyOutput -join [Environment]::NewLine
@@ -26,7 +31,7 @@ if ($GraphOutputText -notmatch 'Parallel history definition:') { throw 'Graph in
 if ($GraphOutputText -notmatch 'Active snapshot kind:') { throw 'Graph introspection sample did not print active snapshot metadata.' }
 if ($GraphOutputText -notmatch 'Introspection snapshot kind:') { throw 'Graph introspection sample did not print snapshot vocabulary metadata.' }
 if ($GraphOutputText -notmatch 'Recorded parallel history:') { throw 'Graph introspection sample did not print recorded parallel history.' }
-dotnet format StateForge.sln --verify-no-changes
-dotnet pack StateForge.sln --configuration Release --no-build --output artifacts/packages
+dotnet format $SolutionFile --verify-no-changes
+dotnet pack $SolutionFile --configuration Release --no-build --output artifacts/packages
 
 Write-Host "Release validation completed. Artifacts are in artifacts/packages. No publish step was run."

@@ -15,7 +15,7 @@ The project is governed by Spec Kit and a project constitution. Treat the librar
 
 Important top-level files and directories:
 
-- `StateForge.sln` — main solution.
+- `StateForge.slnx` — main solution (modern SDK-style solution format).
 - `Directory.Build.props` — common target framework, version, package metadata, documentation XML, deterministic build settings.
 - `src/` — packable library projects.
 - `tests/` — xUnit test projects and release validation tests.
@@ -109,11 +109,11 @@ Use repo root as working directory.
 Common commands:
 
 ```bash
-dotnet restore StateForge.sln
-dotnet build StateForge.sln --configuration Release --no-restore
-dotnet test --solution StateForge.sln --configuration Release --no-build
-dotnet format StateForge.sln --verify-no-changes
-dotnet pack StateForge.sln --configuration Release --no-build --output artifacts/packages
+dotnet restore StateForge.slnx
+dotnet build StateForge.slnx --configuration Release --no-restore
+dotnet test --solution StateForge.slnx --configuration Release --no-build
+dotnet format StateForge.slnx --verify-no-changes
+dotnet pack StateForge.slnx --configuration Release --no-build --output artifacts/packages
 ```
 
 For quick local iteration, Debug builds/tests are acceptable, but release validation must use Release configuration where scripts require it.
@@ -302,9 +302,9 @@ dotnet test --project tests/Release.Tests/Release.Tests.csproj --filter PublicAp
 Before considering a feature complete, run:
 
 ```bash
-dotnet format StateForge.sln --verify-no-changes
-dotnet test --solution StateForge.sln
-dotnet pack StateForge.sln --configuration Release --output artifacts/packages
+dotnet format StateForge.slnx --verify-no-changes
+dotnet test --solution StateForge.slnx
+dotnet pack StateForge.slnx --configuration Release --output artifacts/packages
 ```
 
 ## Documentation Guidelines

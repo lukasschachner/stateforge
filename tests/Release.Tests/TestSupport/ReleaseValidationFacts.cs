@@ -6,11 +6,11 @@ internal static class ReleaseValidationFacts
 
     public static readonly string[] OrderedCliCommands =
     [
-        "dotnet restore StateForge.sln",
-        "dotnet build StateForge.sln --configuration Release --no-restore",
-        "dotnet test --solution StateForge.sln --configuration Release --no-build",
-        "dotnet format StateForge.sln --verify-no-changes",
-        "dotnet pack StateForge.sln --configuration Release --no-build --output artifacts/packages"
+        "dotnet restore StateForge.slnx",
+        "dotnet build StateForge.slnx --configuration Release --no-restore",
+        "dotnet test --solution StateForge.slnx --configuration Release --no-build",
+        "dotnet format StateForge.slnx --verify-no-changes",
+        "dotnet pack StateForge.slnx --configuration Release --no-build --output artifacts/packages"
     ];
 
     public static void AssertCommandsInOrder(string text)

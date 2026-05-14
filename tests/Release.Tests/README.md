@@ -13,7 +13,7 @@ dotnet build tests/Release.Tests/Release.Tests.csproj --configuration Release
 Create artifacts before package-content inspection:
 
 ```bash
-dotnet pack StateForge.sln --configuration Release --output artifacts/packages
+dotnet pack StateForge.slnx --configuration Release --output artifacts/packages
 ```
 
 Expected artifact inventory:
@@ -81,10 +81,10 @@ OpenTelemetry, and Visualization renderer packages emit symbol packages.
 Completion-transition release validation should run:
 
 ```bash
-dotnet test --solution StateForge.sln --filter Completion
-dotnet test --solution StateForge.sln --filter CorePublicApiSnapshotTests
-dotnet format StateForge.sln --verify-no-changes
-dotnet pack StateForge.sln --configuration Release --output artifacts/packages
+dotnet test --solution StateForge.slnx --filter Completion
+dotnet test --solution StateForge.slnx --filter CorePublicApiSnapshotTests
+dotnet format StateForge.slnx --verify-no-changes
+dotnet pack StateForge.slnx --configuration Release --output artifacts/packages
 ```
 
 Expected outcome: completion runtime, validation, graph export, visualization, and public API snapshot checks pass with no new Core runtime dependencies.
